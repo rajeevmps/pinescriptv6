@@ -33,7 +33,7 @@ errors/            6 pages     Error-code explanations
 faq/              13 pages     Task-shaped recipes from TradingView
 migration-guides/  6 pages     v5 → v6 and older migrations
 release-notes.md               Full version history
-reference/        13 files     The API dictionary — 884 entries
+reference/        14 files     The API dictionary — 941 entries
 LLM_MANIFEST.md                The map. Start here.
 ```
 
@@ -79,8 +79,8 @@ tells it which page answers which kind of question.
 5. **No invented syntax.** If an identifier is not in `reference/`, it very likely
    does not exist in v6 or was renamed — check
    [`migration-guides/to-pine-version-6.md`](migration-guides/to-pine-version-6.md).
-   Note the [known reference gaps](reference/README.md#known-gaps) before concluding
-   something is missing.
+   The reference is complete as of 2026-08-20 — every function carries its
+   official signature and argument list.
 
 ---
 

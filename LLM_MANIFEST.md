@@ -130,14 +130,14 @@ order, types, scoping, control flow, or data structures.*
 
 ## 7. API reference (the dictionary)
 
-See [`reference/README.md`](reference/README.md) for the full breakdown and the
-list of known gaps.
+See [`reference/README.md`](reference/README.md) for the full breakdown, coverage
+details, and how to refresh it.
 
 - [`reference/variables.md`](reference/variables.md) — `close`, `bar_index`, `syminfo.*`
 - [`reference/constants.md`](reference/constants.md) — `color.red`, `shape.*`, `plot.style_*`
 - [`reference/keywords.md`](reference/keywords.md) · [`reference/types.md`](reference/types.md) · [`reference/operators.md`](reference/operators.md) · [`reference/annotations.md`](reference/annotations.md)
 - [`reference/functions/ta.md`](reference/functions/ta.md) · [`strategy.md`](reference/functions/strategy.md) · [`request.md`](reference/functions/request.md) · [`collections.md`](reference/functions/collections.md) · [`drawing.md`](reference/functions/drawing.md) · [`general.md`](reference/functions/general.md)
-- [`reference/full-reference.md`](reference/full-reference.md) — all 884 entries in one file
+- [`reference/full-reference.md`](reference/full-reference.md) — all 941 entries in one file
 
 ## 8. Version history and migration
 

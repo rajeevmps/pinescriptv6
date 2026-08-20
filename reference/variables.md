@@ -8,7 +8,7 @@ Retrieved: 2026-08-20
 
 Read-only values the runtime updates on every bar: prices, volume, bar state, symbol and timeframe info.
 
-**160 variables** · Source: [Pine Script® v6 Reference Manual](https://www.tradingview.com/pine-script-reference/v6/)
+**161 entries** · Source: [Pine Script® v6 Reference Manual](https://www.tradingview.com/pine-script-reference/v6/)
 
 ## Index
 
@@ -112,6 +112,7 @@ Read-only values the runtime updates on every bar: prices, volume, bar state, sy
 - [`syminfo.employees`](#syminfoemployees)
 - [`syminfo.expiration_date`](#syminfoexpirationdate)
 - [`syminfo.industry`](#syminfoindustry)
+- [`syminfo.isin`](#syminfoisin)
 - [`syminfo.main_tickerid`](#syminfomaintickerid)
 - [`syminfo.mincontract`](#syminfomincontract)
 - [`syminfo.minmove`](#syminfominmove)
@@ -176,24 +177,24 @@ Read-only values the runtime updates on every bar: prices, volume, bar state, sy
 ---
 
 ## ask
-
 The ask price at the time of the current tick, which represents the lowest price an active seller will accept for the instrument at its current value. This information is available only on the "1T" timeframe. On other timeframes, the variable's value is na.
 
-**Type:** series float
+### Type
+series float
 
 ### Remarks
 If the bid/ask values change since the last tick but no new trades are made, these changes will not be reflected in the value of this variable. It is only updated on new ticks.
 
+### See also
+`open`, `high`, `low`, `volume`, `time()`, `hl2`, `hlc3`, `hlcc4`, `ohlc4`, `bid`
+
 ## bar_index
-
-**Type:** series int
-
 Current bar index. Numbering is zero-based, index of the first bar is 0.
 
-### Remarks
-Note that bar_index has replaced n variable in version 4. Note that bar indexing starts from 0 on the first historical bar. Please note that using this variable/function can cause indicator repainting.
+### Type
+series int
 
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("bar_index")
@@ -201,88 +202,124 @@ plot(bar_index)
 plot(bar_index > 5000 ? close : 0)
 ```
 
+### Remarks
+Note that bar_index has replaced n variable in version 4.
+Note that bar indexing starts from 0 on the first historical bar.
+Please note that using this variable/function can cause indicator repainting.
+
+### See also
+`last_bar_index`, `barstate.isfirst`, `barstate.islast`, `barstate.isrealtime`
+
 ## barstate.isconfirmed
-
-**Type:** series bool
-
 Returns true if the script is calculating the last (closing) update of the current bar. The next script calculation will be on the new bar data.
 
+### Type
+series bool
+
 ### Remarks
-Pine Script® code that uses this variable could calculate differently on history and real-time data. It is NOT recommended to use barstate.isconfirmed in request.security expression. Its value requested from request.security is unpredictable. Please note that using this variable/function can cause indicator repainting.
+Pine Script® code that uses this variable could calculate differently on history and real-time data.
+It is NOT recommended to use barstate.isconfirmed in request.security() expression. Its value requested from request.security() is unpredictable.
+
+### See also
+`barstate.isfirst`, `barstate.islast`, `barstate.ishistory`, `barstate.isrealtime`, `barstate.isnew`, `barstate.islastconfirmedhistory`
 
 ## barstate.isfirst
-
-**Type:** series bool
-
 Returns true if current bar is first bar in barset, false otherwise.
 
+### Type
+series bool
+
 ### Remarks
-Pine Script® code that uses this variable could calculate differently on history and real-time data. Please note that using this variable/function can cause indicator repainting.
+Pine Script® code that uses this variable could calculate differently on history and real-time data.
+Please note that using this variable/function can cause indicator repainting.
+
+### See also
+`barstate.islast`, `barstate.ishistory`, `barstate.isrealtime`, `barstate.isnew`, `barstate.isconfirmed`, `barstate.islastconfirmedhistory`
 
 ## barstate.ishistory
-
-**Type:** series bool
-
 Returns true if current bar is a historical bar, false otherwise.
 
+### Type
+series bool
+
 ### Remarks
-Pine Script® code that uses this variable could calculate differently on history and real-time data. Please note that using this variable/function can cause indicator repainting.
+Pine Script® code that uses this variable could calculate differently on history and real-time data.
+Please note that using this variable/function can cause indicator repainting.
+
+### See also
+`barstate.isfirst`, `barstate.islast`, `barstate.isrealtime`, `barstate.isnew`, `barstate.isconfirmed`, `barstate.islastconfirmedhistory`
 
 ## barstate.islast
-
-**Type:** series bool
-
 Returns true if current bar is the last bar in barset, false otherwise. This condition is true for all real-time bars in barset.
 
+### Type
+series bool
+
 ### Remarks
-Pine Script® code that uses this variable could calculate differently on history and real-time data. Please note that using this variable/function can cause indicator repainting.
+Pine Script® code that uses this variable could calculate differently on history and real-time data.
+Please note that using this variable/function can cause indicator repainting.
+
+### See also
+`barstate.isfirst`, `barstate.ishistory`, `barstate.isrealtime`, `barstate.isnew`, `barstate.isconfirmed`, `barstate.islastconfirmedhistory`
 
 ## barstate.islastconfirmedhistory
-
-**Type:** series bool
-
 Returns true if script is executing on the dataset's last bar when market is closed, or script is executing on the bar immediately preceding the real-time bar, if market is open. Returns false otherwise.
 
+### Type
+series bool
+
 ### Remarks
-Pine Script® code that uses this variable could calculate differently on history and real-time data. Please note that using this variable/function can cause indicator repainting.
+Pine Script® code that uses this variable could calculate differently on history and real-time data.
+Please note that using this variable/function can cause indicator repainting.
+
+### See also
+`barstate.isfirst`, `barstate.islast`, `barstate.ishistory`, `barstate.isrealtime`, `barstate.isnew`
 
 ## barstate.isnew
-
-**Type:** series bool
-
 Returns true if script is currently calculating on new bar, false otherwise. This variable is true when calculating on historical bars or on first update of a newly generated real-time bar.
 
+### Type
+series bool
+
 ### Remarks
-Pine Script® code that uses this variable could calculate differently on history and real-time data. Please note that using this variable/function can cause indicator repainting.
+Pine Script® code that uses this variable could calculate differently on history and real-time data.
+Please note that using this variable/function can cause indicator repainting.
+
+### See also
+`barstate.isfirst`, `barstate.islast`, `barstate.ishistory`, `barstate.isrealtime`, `barstate.isconfirmed`, `barstate.islastconfirmedhistory`
 
 ## barstate.isrealtime
-
-**Type:** series bool
-
 Returns true if current bar is a real-time bar, false otherwise.
 
+### Type
+series bool
+
 ### Remarks
-Pine Script® code that uses this variable could calculate differently on history and real-time data. Please note that using this variable/function can cause indicator repainting.
+Pine Script® code that uses this variable could calculate differently on history and real-time data.
+Please note that using this variable/function can cause indicator repainting.
+
+### See also
+`barstate.isfirst`, `barstate.islast`, `barstate.ishistory`, `barstate.isnew`, `barstate.isconfirmed`, `barstate.islastconfirmedhistory`
 
 ## bid
-
-**Type:** series float
-
 The bid price at the time of the current tick, which represents the highest price an active buyer is willing to pay for the instrument at its current value. This information is available only on the "1T" timeframe. On other timeframes, the variable's value is na.
+
+### Type
+series float
 
 ### Remarks
 If the bid/ask values change since the last tick but no new trades are made, these changes will not be reflected in the value of this variable. It is only updated on new ticks.
 
+### See also
+`open`, `high`, `low`, `volume`, `time()`, `hl2`, `hlc3`, `hlcc4`, `ohlc4`, `ask`
+
 ## box.all
-
-**Type:** array<box>
-
 Returns an array filled with all the current boxes drawn by the script.
 
-### Remarks
-The array is read-only. Index zero of the array is the ID of the oldest object on the chart.
+### Type
+array<box>
 
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("box.all")
@@ -294,152 +331,184 @@ if array.size(a_allBoxes) > 0
         box.delete(array.get(a_allBoxes, i))
 ```
 
+### Remarks
+The array is read-only. Index zero of the array is the ID of the oldest object on the chart.
+
+### See also
+`box.new()`, `line.all`, `label.all`, `table.all`
+
 ## chart.bg_color
-
-**Type:** input color
-
 Returns the color of the chart's background from the "Chart settings/Appearance/Background" field. When a gradient is selected, the middle point of the gradient is returned.
 
+### Type
+input color
+
+### See also
+`chart.fg_color`
+
 ## chart.fg_color
-
-**Type:** input color
-
 Returns a color providing optimal contrast with chart.bg_color.
+
+### Type
+input color
+
+### See also
+`chart.bg_color`
 
 ## chart.is_heikinashi
 
-**Type:** simple bool
+### Type
+simple bool
 
 ### Returns
 Returns true if the chart type is Heikin Ashi, false otherwise.
 
+### See also
+`chart.is_renko`, `chart.is_linebreak`, `chart.is_kagi`, `chart.is_pnf`, `chart.is_range`
+
 ## chart.is_kagi
 
-**Type:** simple bool
+### Type
+simple bool
 
 ### Returns
 Returns true if the chart type is Kagi, false otherwise.
 
+### See also
+`chart.is_renko`, `chart.is_linebreak`, `chart.is_heikinashi`, `chart.is_pnf`, `chart.is_range`
+
 ## chart.is_linebreak
 
-**Type:** simple bool
+### Type
+simple bool
 
 ### Returns
 Returns true if the chart type is Line break, false otherwise.
 
+### See also
+`chart.is_renko`, `chart.is_heikinashi`, `chart.is_kagi`, `chart.is_pnf`, `chart.is_range`
+
 ## chart.is_pnf
 
-**Type:** simple bool
+### Type
+simple bool
 
 ### Returns
 Returns true if the chart type is Point & figure, false otherwise.
 
+### See also
+`chart.is_renko`, `chart.is_linebreak`, `chart.is_kagi`, `chart.is_heikinashi`, `chart.is_range`
+
 ## chart.is_range
 
-**Type:** simple bool
+### Type
+simple bool
 
 ### Returns
 Returns true if the chart type is Range, false otherwise.
 
+### See also
+`chart.is_renko`, `chart.is_linebreak`, `chart.is_kagi`, `chart.is_pnf`, `chart.is_heikinashi`
+
 ## chart.is_renko
 
-**Type:** simple bool
+### Type
+simple bool
 
 ### Returns
 Returns true if the chart type is Renko, false otherwise.
 
+### See also
+`chart.is_heikinashi`, `chart.is_linebreak`, `chart.is_kagi`, `chart.is_pnf`, `chart.is_range`
+
 ## chart.is_standard
 
-**Type:** simple bool
+### Type
+simple bool
 
 ### Returns
 Returns true if the chart type is not one of the following: Renko, Kagi, Line break, Point & figure, Range, Heikin Ashi; false otherwise.
 
+### See also
+`chart.is_renko`, `chart.is_linebreak`, `chart.is_kagi`, `chart.is_pnf`, `chart.is_range`, `chart.is_heikinashi`
+
 ## chart.left_visible_bar_time
-
-**Type:** input int
-
 The time of the leftmost bar currently visible on the chart.
 
+### Type
+input int
+
 ### Remarks
-Scripts using this variable will automatically re-execute when its value updates to reflect changes in the chart, which can be caused by users scrolling the chart, or new real-time bars. Alerts created on a script that includes this variable will only use the value assigned to the variable at the moment of the alert's creation, regardless of whether the value changes afterward, which may lead to repainting.
+Scripts using this variable will automatically re-execute when its value updates to reflect changes in the chart, which can be caused by users scrolling the chart, or new real-time bars.
+Alerts created on a script that includes this variable will only use the value assigned to the variable at the moment of the alert's creation, regardless of whether the value changes afterward, which may lead to repainting.
+
+### See also
+`chart.right_visible_bar_time`
 
 ## chart.right_visible_bar_time
-
-**Type:** input int
-
 The time of the rightmost bar currently visible on the chart.
 
+### Type
+input int
+
 ### Remarks
-Scripts using this variable will automatically re-execute when its value updates to reflect changes in the chart, which can be caused by users scrolling the chart, or new real-time bars. Alerts created on a script that includes this variable will only use the value assigned to the variable at the moment of the alert's creation, regardless of whether the value changes afterward, which may lead to repainting.
+Scripts using this variable will automatically re-execute when its value updates to reflect changes in the chart, which can be caused by users scrolling the chart, or new real-time bars.
+Alerts created on a script that includes this variable will only use the value assigned to the variable at the moment of the alert's creation, regardless of whether the value changes afterward, which may lead to repainting.
+
+### See also
+`chart.left_visible_bar_time`
 
 ## close
-
-**Type:** series float
-
 Close price of the current bar when it has closed, or last traded price of a yet incomplete, realtime bar.
+
+### Type
+series float
 
 ### Remarks
 Previous values may be accessed with square brackets operator [], e.g. close[1], close[2].
 
+### See also
+`open`, `high`, `low`, `volume`, `time()`, `hl2`, `hlc3`, `hlcc4`, `ohlc4`, `ask`, `bid`
+
 ## dayofmonth
+The day number of the month, in the exchange time zone, calculated from the bar's opening UNIX timestamp.
 
-**Type:** series int
-
-Date of current bar time in exchange timezone.
-
-### Syntax
-
-```pine
-dayofmonth(time, timezone) → series int
-```
-
-### Arguments
-
-- `time` (*series int*) — UNIX time in milliseconds.
-- `timezone` (*series string*, default `syminfo.timezone`) — Allows adjusting the returned value to a time zone specified in either UTC/GMT notation (e.g., "UTC-5", "GMT+0530") or as an IANA time zone database name (e.g., "America/New_York"). Optional. The default is [syminfo.timezone](https://www.tradingview.com/pine-script-reference/v6/#var_syminfo.timezone).
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
+### Type
+series int
 
 ### Remarks
-Note that this variable returns the day based on the time of the bar's open. For overnight sessions (e.g. EURUSD, where Monday session starts on Sunday, 17:00) this value can be lower by 1 than the day of the trading day.
+This variable always references the day number corresponding to the bar's opening time. Consequently, for symbols with overnight sessions (e.g., "EURUSD", where the "Monday" session starts on Sunday at 17:00 in exchange time), the value may represent a day from the previous week rather than the session's primary trading day.
+
+### See also
+`dayofmonth()`, `dayofweek`, `weekofyear`, `time`, `year`, `month`, `hour`, `minute`, `second`
 
 ## dayofweek
+The day number of the week, in the exchange time zone, calculated from the bar's opening UNIX timestamp.
 
-**Type:** series int
-
-Day of week for current bar time in exchange timezone.
-
-### Syntax
-
-```pine
-dayofweek(time, timezone) → series int
-```
-
-### Arguments
-
-- `time` (*series int*) — UNIX time in milliseconds.
-- `timezone` (*series string*, default `syminfo.timezone`) — Allows adjusting the returned value to a time zone specified in either UTC/GMT notation (e.g., "UTC-5", "GMT+0530") or as an IANA time zone database name (e.g., "America/New_York"). Optional. The default is [syminfo.timezone](https://www.tradingview.com/pine-script-reference/v6/#var_syminfo.timezone).
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
+### Type
+series int
 
 ### Remarks
-Note that this variable returns the day based on the time of the bar's open. For overnight sessions (e.g. EURUSD, where Monday session starts on Sunday, 17:00) this value can be lower by 1 than the day of the trading day. You can use dayofweek.sunday, dayofweek.monday, dayofweek.tuesday, dayofweek.wednesday, dayofweek.thursday, dayofweek.friday and dayofweek.saturday variables for comparisons.
+This variable always references the day number corresponding to the bar's opening time. Consequently, for symbols with overnight sessions (e.g., "EURUSD", where the "Monday" session starts on Sunday at 17:00 in exchange time), the value may represent a day from the previous week rather than the session's primary trading day.
+You can use dayofweek.sunday, dayofweek.monday, dayofweek.tuesday, dayofweek.wednesday, dayofweek.thursday, dayofweek.friday and dayofweek.saturday variables for comparisons.
+
+### See also
+`dayofweek()`, `time`, `year`, `month`, `weekofyear`, `dayofmonth`, `hour`, `minute`, `second`
 
 ## dividends.future_amount
-
-**Type:** series float
-
 Returns the payment amount of the upcoming dividend in the currency of the current instrument, or na if this data isn't available.
+
+### Type
+series float
 
 ### Remarks
 This value is only fetched once during the script's initial calculation. The variable will return the same value until the script is recalculated, even after the expected Payment date of the next dividend.
 
 ## dividends.future_ex_date
-
-**Type:** series int
-
 Returns the Ex-dividend date (Ex-date) of the current instrument's next dividend payment, or na if this data isn't available. Ex-dividend date signifies when investors are no longer entitled to a payout from the most recent dividend. Only those who purchased shares before this day are entitled to the dividend payment.
+
+### Type
+series int
 
 ### Returns
 UNIX time, expressed in milliseconds.
@@ -448,10 +517,10 @@ UNIX time, expressed in milliseconds.
 This value is only fetched once during the script's initial calculation. The variable will return the same value until the script is recalculated, even after the expected Payment date of the next dividend.
 
 ## dividends.future_pay_date
-
-**Type:** series int
-
 Returns the Payment date (Pay date) of the current instrument's next dividend payment, or na if this data isn't available. Payment date signifies the day when eligible investors will receive the dividend payment.
+
+### Type
+series int
 
 ### Returns
 UNIX time, expressed in milliseconds.
@@ -460,40 +529,49 @@ UNIX time, expressed in milliseconds.
 This value is only fetched once during the script's initial calculation. The variable will return the same value until the script is recalculated, even after the expected Payment date of the next dividend.
 
 ## earnings.future_eps
-
-**Type:** series float
-
 Returns the estimated Earnings per Share of the next earnings report in the currency of the instrument, or na if this data isn't available.
 
+### Type
+series float
+
 ### Remarks
 This value is only fetched once during the script's initial calculation. The variable will return the same value until the script is recalculated, even after the expected time of the next earnings report.
+
+### See also
+`request.earnings()`
 
 ## earnings.future_period_end_time
-
-**Type:** series int
-
 Checks the data for the next earnings report and returns the UNIX timestamp of the day when the financial period covered by those earnings ends, or na if this data isn't available.
 
+### Type
+series int
+
 ### Returns
 UNIX time, expressed in milliseconds.
 
 ### Remarks
 This value is only fetched once during the script's initial calculation. The variable will return the same value until the script is recalculated, even after the expected time of the next earnings report.
+
+### See also
+`request.earnings()`
 
 ## earnings.future_revenue
-
-**Type:** series float
-
 Returns the estimated Revenue of the next earnings report in the currency of the instrument, or na if this data isn't available.
+
+### Type
+series float
 
 ### Remarks
 This value is only fetched once during the script's initial calculation. The variable will return the same value until the script is recalculated, even after the expected time of the next earnings report.
 
+### See also
+`request.earnings()`
+
 ## earnings.future_time
-
-**Type:** series int
-
 Returns a UNIX timestamp indicating the expected time of the next earnings report, or na if this data isn't available.
+
+### Type
+series int
 
 ### Returns
 UNIX time, expressed in milliseconds.
@@ -501,61 +579,64 @@ UNIX time, expressed in milliseconds.
 ### Remarks
 This value is only fetched once during the script's initial calculation. The variable will return the same value until the script is recalculated, even after the expected time of the next earnings report.
 
+### See also
+`request.earnings()`
+
 ## high
-
-**Type:** series float
-
 Current high price.
+
+### Type
+series float
 
 ### Remarks
 Previous values may be accessed with square brackets operator [], e.g. high[1], high[2].
 
+### See also
+`open`, `low`, `close`, `volume`, `time()`, `hl2`, `hlc3`, `hlcc4`, `ohlc4`, `ask`, `bid`
+
 ## hl2
-
-**Type:** series float
-
 Is a shortcut for (high + low)/2
 
+### Type
+series float
+
+### See also
+`open`, `high`, `low`, `close`, `volume`, `time()`, `hlc3`, `hlcc4`, `ohlc4`, `ask`, `bid`
+
 ## hlc3
-
-**Type:** series float
-
 Is a shortcut for (high + low + close)/3
 
+### Type
+series float
+
+### See also
+`open`, `high`, `low`, `close`, `volume`, `time()`, `hl2`, `hlcc4`, `ohlc4`, `ask`, `bid`
+
 ## hlcc4
-
-**Type:** series float
-
 Is a shortcut for (high + low + close + close)/4
 
+### Type
+series float
+
+### See also
+`open`, `high`, `low`, `close`, `volume`, `time()`, `hl2`, `hlc3`, `ohlc4`, `ask`, `bid`
+
 ## hour
-
-**Type:** series int
-
 Current bar hour in exchange timezone.
-### Syntax
 
-```pine
-hour(time, timezone) → series int
-```
+### Type
+series int
 
-### Arguments
-
-- `time` (*series int*) — UNIX time in milliseconds.
-- `timezone` (*series string*, default `syminfo.timezone`) — Allows adjusting the returned value to a time zone specified in either UTC/GMT notation (e.g., "UTC-5", "GMT+0530") or as an IANA time zone database name (e.g., "America/New_York"). Optional. The default is [syminfo.timezone](https://www.tradingview.com/pine-script-reference/v6/#var_syminfo.timezone).
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
+### See also
+`hour()`, `time`, `year`, `month`, `weekofyear`, `dayofmonth`, `dayofweek`, `minute`, `second`
 
 ## label.all
-
-**Type:** array<label>
-
 Returns an array filled with all the current labels drawn by the script.
 
-### Remarks
-The array is read-only. Index zero of the array is the ID of the oldest object on the chart.
+### Type
+array<label>
 
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("label.all")
@@ -567,19 +648,19 @@ if array.size(a_allLabels) > 0
         label.delete(array.get(a_allLabels, i))
 ```
 
+### Remarks
+The array is read-only. Index zero of the array is the ID of the oldest object on the chart.
+
+### See also
+`label.new()`, `line.all`, `box.all`, `table.all`
+
 ## last_bar_index
-
-**Type:** series int
-
 Bar index of the last chart bar. Bar indices begin at zero on the first bar.
 
-### Returns
-Last historical bar index for closed markets, or the real-time bar index for open markets.
+### Type
+series int
 
-### Remarks
-Please note that using this variable can cause indicator repainting.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("Mark Last X Bars For Backtesting", overlay = true, calc_on_every_tick = true)
@@ -592,25 +673,35 @@ allowedToTrade = (lastbar - bar_index <= lastBarsFilterInput) or barstate.isreal
 bgcolor(allowedToTrade ? color.new(color.green, 80) : na)
 ```
 
+### Returns
+Last historical bar index for closed markets, or the real-time bar index for open markets.
+
+### Remarks
+Please note that using this variable can cause indicator repainting.
+
+### See also
+`bar_index`, `last_bar_time`, `barstate.ishistory`, `barstate.isrealtime`
+
 ## last_bar_time
-
-**Type:** series int
-
 Time in UNIX format of the last chart bar. It is the number of milliseconds that have elapsed since 00:00:00 UTC, 1 January 1970.
 
+### Type
+series int
+
 ### Remarks
-Please note that using this variable/function can cause indicator repainting. Note that this variable returns the timestamp based on the time of the bar's open.
+Please note that using this variable/function can cause indicator repainting.
+Note that this variable returns the timestamp based on the time of the bar's open.
+
+### See also
+`time`, `timenow`, `timestamp()`, `last_bar_index`
 
 ## line.all
-
-**Type:** array<line>
-
 Returns an array filled with all the current lines drawn by the script.
 
-### Remarks
-The array is read-only. Index zero of the array is the ID of the oldest object on the chart.
+### Type
+array<line>
 
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("line.all")
@@ -622,86 +713,61 @@ if array.size(a_allLines) > 0
         line.delete(array.get(a_allLines, i))
 ```
 
+### Remarks
+The array is read-only. Index zero of the array is the ID of the oldest object on the chart.
+
+### See also
+`line.new()`, `label.all`, `box.all`, `table.all`
+
 ## linefill.all
-
-**Type:** array<linefill>
-
 Returns an array filled with all the current linefill objects drawn by the script.
+
+### Type
+array<linefill>
 
 ### Remarks
 The array is read-only. Index zero of the array is the ID of the oldest object on the chart.
 
 ## low
-
-**Type:** series float
-
 Current low price.
+
+### Type
+series float
 
 ### Remarks
 Previous values may be accessed with square brackets operator [], e.g. low[1], low[2].
 
+### See also
+`open`, `high`, `close`, `volume`, `time()`, `hl2`, `hlc3`, `hlcc4`, `ohlc4`, `ask`, `bid`
+
 ## minute
-
-**Type:** series int
-
 Current bar minute in exchange timezone.
-### Syntax
 
-```pine
-minute(time, timezone) → series int
-```
+### Type
+series int
 
-### Arguments
-
-- `time` (*series int*) — UNIX time in milliseconds.
-- `timezone` (*series string*, default `syminfo.timezone`) — Allows adjusting the returned value to a time zone specified in either UTC/GMT notation (e.g., "UTC-5", "GMT+0530") or as an IANA time zone database name (e.g., "America/New_York"). Optional. The default is [syminfo.timezone](https://www.tradingview.com/pine-script-reference/v6/#var_syminfo.timezone).
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
+### See also
+`minute()`, `time`, `year`, `month`, `weekofyear`, `dayofmonth`, `dayofweek`, `hour`, `second`
 
 ## month
-
-**Type:** series int
-
 Current bar month in exchange timezone.
 
-### Syntax
-
-```pine
-month(time, timezone) → series int
-```
-
-### Arguments
-
-- `time` (*series int*) — UNIX time in milliseconds.
-- `timezone` (*series string*, default `syminfo.timezone`) — Allows adjusting the returned value to a time zone specified in either UTC/GMT notation (e.g., "UTC-5", "GMT+0530") or as an IANA time zone database name (e.g., "America/New_York"). Optional. The default is [syminfo.timezone](https://www.tradingview.com/pine-script-reference/v6/#var_syminfo.timezone).
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
+### Type
+series int
 
 ### Remarks
 Note that this variable returns the month based on the time of the bar's open. For overnight sessions (e.g. EURUSD, where Monday session starts on Sunday, 17:00) this value can be lower by 1 than the month of the trading day.
 
+### See also
+`month()`, `time`, `year`, `weekofyear`, `dayofmonth`, `dayofweek`, `hour`, `minute`, `second`
+
 ## na
-
-**Type:** simple na
-
 A keyword signifying "not available", indicating that a variable has no assigned value.
 
-### Syntax
+### Type
+simple na
 
-```pine
-na(x) → series bool
-```
-
-### Arguments
-
-- `x` (*series any*) — Value to be tested.
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
-### Remarks
-Do not use this variable with comparison operators to test values for na, as it might lead to unexpected behavior. Instead, use the na function. Note that na can be used to initialize variables when the initialization statement also specifies the variable's type.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("na")
@@ -727,61 +793,64 @@ plot(na(close[1]) ? close : close[1])
 plot(nz(close[1], close))
 ```
 
+### Remarks
+Do not use this variable with comparison operators to test values for na, as it might lead to unexpected behavior. Instead, use the na() function. Note that na can be used to initialize variables when the initialization statement also specifies the variable's type.
+
+### See also
+`na()`, `nz()`, `fixnan()`
+
 ## ohlc4
-
-**Type:** series float
-
 Is a shortcut for (open + high + low + close)/4
 
+### Type
+series float
+
+### See also
+`open`, `high`, `low`, `close`, `volume`, `time()`, `hl2`, `hlc3`, `hlcc4`
+
 ## open
-
-**Type:** series float
-
 Current open price.
+
+### Type
+series float
 
 ### Remarks
 Previous values may be accessed with square brackets operator [], e.g. open[1], open[2].
 
+### See also
+`high`, `low`, `close`, `volume`, `time()`, `hl2`, `hlc3`, `hlcc4`, `ohlc4`, `ask`, `bid`
+
 ## polyline.all
-
-**Type:** array<polyline>
-
 Returns an array containing all current polyline instances drawn by the script.
+
+### Type
+array<polyline>
 
 ### Remarks
 The array is read-only. Index zero of the array references the ID of the oldest polyline object on the chart.
 
 ## second
-
-**Type:** series int
-
 Current bar second in exchange timezone.
-### Syntax
 
-```pine
-second(time, timezone) → series int
-```
+### Type
+series int
 
-### Arguments
-
-- `time` (*series int*) — UNIX time in milliseconds.
-- `timezone` (*series string*, default `syminfo.timezone`) — Allows adjusting the returned value to a time zone specified in either UTC/GMT notation (e.g., "UTC-5", "GMT+0530") or as an IANA time zone database name (e.g., "America/New_York"). Optional. The default is [syminfo.timezone](https://www.tradingview.com/pine-script-reference/v6/#var_syminfo.timezone).
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
+### See also
+`second()`, `time`, `year`, `month`, `weekofyear`, `dayofmonth`, `dayofweek`, `hour`, `minute`
 
 ## session.isfirstbar
-
-**Type:** series bool
-
 Returns true if the current bar is the first bar of the day's session, false otherwise. If extended session information is used, only returns true on the first bar of the pre-market bars.
 
-### Code Example
+### Type
+series bool
+
+### Example
 ```pine
 //@version=6
 strategy("`session.isfirstbar` Example", overlay = true)
 longCondition = year >= 2022
 // Place a long order at the `close` of the trading session's first bar.
-if session.isfirstbar and longCondition 
+if session.isfirstbar and longCondition
     strategy.entry("Long", strategy.long)
 
 // Close the long position at the `close` of the trading session's last bar.
@@ -789,13 +858,16 @@ if session.islastbar and barstate.isconfirmed
     strategy.close("Long", immediately = true)
 ```
 
+### See also
+`session.isfirstbar_regular`, `session.islastbar`, `session.islastbar_regular`
+
 ## session.isfirstbar_regular
-
-**Type:** series bool
-
 Returns true on the first regular session bar of the day, false otherwise. The result is the same whether extended session information is used or not.
 
-### Code Example
+### Type
+series bool
+
+### Example
 ```pine
 //@version=6
 strategy("`session.isfirstbar_regular` Example", overlay = true)
@@ -808,16 +880,16 @@ if session.islastbar_regular and barstate.isconfirmed
     strategy.close("Long", immediately = true)
 ```
 
+### See also
+`session.isfirstbar`, `session.islastbar`
+
 ## session.islastbar
-
-**Type:** series bool
-
 Returns true if the current bar is the last bar of the day's session, false otherwise. If extended session information is used, only returns true on the last bar of the post-market bars.
 
-### Remarks
-This variable is not guaranteed to return true once in every session because the last bar of the session might not exist if no trades occur during what should be the session's last bar. This variable is not guaranteed to work as expected on non-standard chart types, e.g., Renko.
+### Type
+series bool
 
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("`session.islastbar` Example", overlay = true)
@@ -831,16 +903,20 @@ if session.islastbar and barstate.isconfirmed
     strategy.close("Long", immediately = true)
 ```
 
+### Remarks
+This variable is not guaranteed to return true once in every session because the last bar of the session might not exist if no trades occur during what should be the session's last bar.
+This variable is not guaranteed to work as expected on non-standard chart types, e.g., Renko.
+
+### See also
+`session.isfirstbar`, `session.islastbar_regular`
+
 ## session.islastbar_regular
-
-**Type:** series bool
-
 Returns true on the last regular session bar of the day, false otherwise. The result is the same whether extended session information is used or not.
 
-### Remarks
-This variable is not guaranteed to return true once in every session because the last bar of the session might not exist if no trades occur during what should be the session's last bar. This variable is not guaranteed to work as expected on non-standard chart types, e.g., Renko.
+### Type
+series bool
 
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("`session.islastbar_regular` Example", overlay = true)
@@ -853,139 +929,203 @@ if session.islastbar_regular and barstate.isconfirmed
     strategy.close("Long", immediately = true)
 ```
 
+### Remarks
+This variable is not guaranteed to return true once in every session because the last bar of the session might not exist if no trades occur during what should be the session's last bar.
+This variable is not guaranteed to work as expected on non-standard chart types, e.g., Renko.
+
+### See also
+`session.isfirstbar`, `session.islastbar`, `session.isfirstbar_regular`
+
 ## session.ismarket
-
-**Type:** series bool
-
 Returns true if the current bar is a part of the regular trading hours (i.e. market hours), false otherwise.
 
+### Type
+series bool
+
+### See also
+`session.ispremarket`, `session.ispostmarket`
+
 ## session.ispostmarket
-
-**Type:** series bool
-
 Returns true if the current bar is a part of the post-market, false otherwise. On non-intraday charts always returns false.
 
+### Type
+series bool
+
+### See also
+`session.ismarket`, `session.ispremarket`
+
 ## session.ispremarket
-
-**Type:** series bool
-
 Returns true if the current bar is a part of the pre-market, false otherwise. On non-intraday charts always returns false.
 
+### Type
+series bool
+
+### See also
+`session.ismarket`, `session.ispostmarket`
+
 ## strategy.account_currency
-
-**Type:** simple string
-
 Returns the currency used to calculate results, which can be set in the strategy's properties.
 
+### Type
+simple string
+
+### See also
+`strategy()`, `strategy.convert_to_account()`, `strategy.convert_to_symbol()`
+
 ## strategy.avg_losing_trade
-
-**Type:** series float
-
 Returns the average amount of money lost per losing trade. Calculated as the sum of losses divided by the number of losing trades.
 
+### Type
+series float
+
+### See also
+`strategy.avg_losing_trade_percent`
+
 ## strategy.avg_losing_trade_percent
-
-**Type:** series float
-
 Returns the average percentage loss per losing trade. Calculated as the sum of loss percentages divided by the number of losing trades.
 
+### Type
+series float
+
+### See also
+`strategy.avg_losing_trade`
+
 ## strategy.avg_trade
-
-**Type:** series float
-
 Returns the average amount of money gained or lost per trade. Calculated as the sum of all profits and losses divided by the number of closed trades.
 
+### Type
+series float
+
+### See also
+`strategy.avg_trade_percent`
+
 ## strategy.avg_trade_percent
-
-**Type:** series float
-
 Returns the average percentage gain or loss per trade. Calculated as the sum of all profit and loss percentages divided by the number of closed trades.
 
+### Type
+series float
+
+### See also
+`strategy.avg_trade`
+
 ## strategy.avg_winning_trade
-
-**Type:** series float
-
 Returns the average amount of money gained per winning trade. Calculated as the sum of profits divided by the number of winning trades.
 
+### Type
+series float
+
+### See also
+`strategy.avg_winning_trade_percent`
+
 ## strategy.avg_winning_trade_percent
-
-**Type:** series float
-
 Returns the average percentage gain per winning trade. Calculated as the sum of profit percentages divided by the number of winning trades.
 
+### Type
+series float
+
+### See also
+`strategy.avg_winning_trade`
+
 ## strategy.closedtrades
-
-**Type:** series int
-
 Number of trades, which were closed for the whole trading range.
 
+### Type
+series int
+
+### See also
+`strategy.position_size`, `strategy.opentrades`, `strategy.wintrades`, `strategy.losstrades`, `strategy.eventrades`
+
 ## strategy.closedtrades.first_index
-
-**Type:** series int
-
 The index, or trade number, of the first (oldest) trade listed in the List of Trades. This number is usually zero. If more trades than the allowed limit have been closed, the oldest trades are removed, and this number is the index of the oldest remaining trade.
 
+### Type
+series int
+
+### See also
+`strategy.position_size`, `strategy.opentrades`, `strategy.wintrades`, `strategy.losstrades`, `strategy.eventrades`
+
 ## strategy.equity
-
-**Type:** series float
-
 Current equity (strategy.initial_capital + strategy.netprofit + strategy.openprofit).
 
+### Type
+series float
+
+### See also
+`strategy.netprofit`, `strategy.openprofit`, `strategy.position_size`
+
 ## strategy.eventrades
-
-**Type:** series int
-
 Number of breakeven trades for the whole trading range.
 
+### Type
+series int
+
+### See also
+`strategy.position_size`, `strategy.opentrades`, `strategy.closedtrades`, `strategy.wintrades`, `strategy.losstrades`
+
 ## strategy.grossloss
-
-**Type:** series float
-
 Total currency value of all completed losing trades.
 
+### Type
+series float
+
+### See also
+`strategy.netprofit`, `strategy.grossprofit`
+
 ## strategy.grossloss_percent
-
-**Type:** series float
-
 The total value of all completed losing trades, expressed as a percentage of the initial capital.
 
+### Type
+series float
+
+### See also
+`strategy.grossloss`
+
 ## strategy.grossprofit
-
-**Type:** series float
-
 Total currency value of all completed winning trades.
 
+### Type
+series float
+
+### See also
+`strategy.netprofit`, `strategy.grossloss`
+
 ## strategy.grossprofit_percent
-
-**Type:** series float
-
 The total currency value of all completed winning trades, expressed as a percentage of the initial capital.
 
+### Type
+series float
+
+### See also
+`strategy.grossprofit`
+
 ## strategy.initial_capital
-
-**Type:** series float
-
 The amount of initial capital set in the strategy properties.
 
+### Type
+series float
+
+### See also
+`strategy()`
+
 ## strategy.losstrades
-
-**Type:** series int
-
 Number of unprofitable trades for the whole trading range.
 
+### Type
+series int
+
+### See also
+`strategy.position_size`, `strategy.opentrades`, `strategy.closedtrades`, `strategy.wintrades`, `strategy.eventrades`
+
 ## strategy.margin_liquidation_price
-
-**Type:** series float
-
 When margin is used in a strategy, returns the price point where a simulated margin call will occur and liquidate enough of the position to meet the margin requirements.
 
-### Remarks
-The variable returns na if the strategy does not use margin, i.e., the strategy declaration statement does not specify an argument for the margin_long or margin_short parameter.
+### Type
+series float
 
-### Code Example
+### Example
 ```pine
 //@version=6
-strategy("Margin call management", overlay = true, margin_long = 25, margin_short = 25, 
+strategy("Margin call management", overlay = true, margin_long = 25, margin_short = 25,
   default_qty_type = strategy.percent_of_equity, default_qty_value = 395)
 
 float maFast = ta.sma(close, 14)
@@ -997,7 +1137,7 @@ if ta.crossover(maFast, maSlow)
 if ta.crossunder(maFast, maSlow)
     strategy.entry("Short", strategy.short)
 
-changePercent(v1, v2) => 
+changePercent(v1, v2) =>
     float result = (v1 - v2) * 100 / math.abs(v2)
 
 // exit when we're 10% away from a margin call, to prevent it.
@@ -1006,92 +1146,128 @@ if math.abs(changePercent(close, strategy.margin_liquidation_price)) <= 10
     strategy.close("Short")
 ```
 
+### Remarks
+The variable returns na if the strategy does not use margin, i.e., the strategy() declaration statement does not specify an argument for the margin_long or margin_short parameter.
+
 ## strategy.max_contracts_held_all
-
-**Type:** series float
-
 Maximum number of contracts/shares/lots/units in one trade for the whole trading range.
 
+### Type
+series float
+
+### See also
+`strategy.position_size`, `strategy.max_contracts_held_long`, `strategy.max_contracts_held_short`
+
 ## strategy.max_contracts_held_long
-
-**Type:** series float
-
 Maximum number of contracts/shares/lots/units in one long trade for the whole trading range.
 
+### Type
+series float
+
+### See also
+`strategy.position_size`, `strategy.max_contracts_held_all`, `strategy.max_contracts_held_short`
+
 ## strategy.max_contracts_held_short
-
-**Type:** series float
-
 Maximum number of contracts/shares/lots/units in one short trade for the whole trading range.
 
+### Type
+series float
+
+### See also
+`strategy.position_size`, `strategy.max_contracts_held_all`, `strategy.max_contracts_held_long`
+
 ## strategy.max_drawdown
-
-**Type:** series float
-
 Maximum equity drawdown value for the whole trading range.
 
+### Type
+series float
+
+### See also
+`strategy.netprofit`, `strategy.equity`, `strategy.max_runup`
+
 ## strategy.max_drawdown_percent
-
-**Type:** series float
-
 The maximum equity drawdown value for the whole trading range, expressed as a percentage and calculated by formula: Lowest Value During Trade / (Entry Price x Quantity) * 100.
 
+### Type
+series float
+
+### See also
+`strategy.max_drawdown`
+
 ## strategy.max_runup
-
-**Type:** series float
-
 Maximum equity run-up value for the whole trading range.
 
+### Type
+series float
+
+### See also
+`strategy.netprofit`, `strategy.equity`, `strategy.max_drawdown`
+
 ## strategy.max_runup_percent
-
-**Type:** series float
-
 The maximum equity run-up value for the whole trading range, expressed as a percentage and calculated by formula: Highest Value During Trade / (Entry Price x Quantity) * 100.
 
+### Type
+series float
+
+### See also
+`strategy.max_runup`
+
 ## strategy.netprofit
-
-**Type:** series float
-
 Total currency value of all completed trades.
 
+### Type
+series float
+
+### See also
+`strategy.openprofit`, `strategy.position_size`, `strategy.grossprofit`, `strategy.grossloss`
+
 ## strategy.netprofit_percent
-
-**Type:** series float
-
 The total value of all completed trades, expressed as a percentage of the initial capital.
 
+### Type
+series float
+
+### See also
+`strategy.netprofit`
+
 ## strategy.openprofit
-
-**Type:** series float
-
 Current unrealized profit or loss for all open positions.
 
+### Type
+series float
+
+### See also
+`strategy.netprofit`, `strategy.position_size`
+
 ## strategy.openprofit_percent
-
-**Type:** series float
-
 The current unrealized profit or loss for all open positions, expressed as a percentage and calculated by formula: openPL / realizedEquity * 100.
 
+### Type
+series float
+
+### See also
+`strategy.openprofit`
+
 ## strategy.opentrades
-
-**Type:** series int
-
 Number of market position entries, which were not closed and remain opened. If there is no open market position, 0 is returned.
 
+### Type
+series int
+
+### See also
+`strategy.position_size`
+
 ## strategy.opentrades.capital_held
-
-**Type:** series float
-
 Returns the capital amount currently held by open trades.
 
-### Remarks
-This variable returns na if the strategy does not simulate funding trades with a portion of the hypothetical account, i.e., if the strategy function does not include nonzero margin_long or margin_short arguments.
+### Type
+series float
 
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy(
-   "strategy.opentrades.capital_held example", overlay=false, margin_long=50, margin_short=50, 
+   "strategy.opentrades.capital_held example", overlay=false, margin_long=50, margin_short=50,
    default_qty_type = strategy.percent_of_equity, default_qty_value = 100
  )
 
@@ -1105,67 +1281,94 @@ plot(strategy.opentrades.capital_held, "Capital held")
 bgcolor(bar_index > 0 and strategy.opentrades.capital_held == 0 ? color.new(color.red, 60) : na)
 ```
 
+### Remarks
+This variable returns na if the strategy does not simulate funding trades with a portion of the hypothetical account, i.e., if the strategy() function does not include nonzero margin_long or margin_short arguments.
+
 ## strategy.position_avg_price
-
-**Type:** series float
-
 Average entry price of current market position. If the market position is flat, 'NaN' is returned.
 
+### Type
+series float
+
+### See also
+`strategy.position_size`
+
 ## strategy.position_entry_name
-
-**Type:** series string
-
 Name of the order that initially opened current market position.
 
+### Type
+series string
+
+### See also
+`strategy.position_size`
+
 ## strategy.position_size
-
-**Type:** series float
-
 Direction and size of the current market position. If the value is > 0, the market position is long. If the value is < 0, the market position is short. The absolute value is the number of contracts/shares/lots/units in trade (position size).
 
+### Type
+series float
+
+### See also
+`strategy.position_avg_price`
+
 ## strategy.wintrades
-
-**Type:** series int
-
 Number of profitable trades for the whole trading range.
 
+### Type
+series int
+
+### See also
+`strategy.position_size`, `strategy.opentrades`, `strategy.closedtrades`, `strategy.losstrades`, `strategy.eventrades`
+
 ## syminfo.basecurrency
-
-**Type:** simple string
-
 Returns a string containing the code representing the symbol's base currency (i.e., the traded currency or coin) if the instrument is a Forex or Crypto pair or a derivative based on such a pair. Otherwise, it returns an empty string. For example, this variable returns "EUR" for "EURJPY", "BTC" for "BTCUSDT", "CAD" for "CME:6C1!", and "" for "NASDAQ:AAPL".
 
+### Type
+simple string
+
+### See also
+`syminfo.currency`, `syminfo.ticker`
+
 ## syminfo.country
-
-**Type:** simple string
-
 Returns the two-letter code of the country where the symbol is traded, in the ISO 3166-1 alpha-2 format, or na if the exchange is not directly tied to a specific country. For example, on "NASDAQ:AAPL" it will return "US", on "LSE:AAPL" it will return "GB", and on "BITSTAMP:BTCUSD it will return na.
 
+### Type
+simple string
+
 ## syminfo.currency
-
-**Type:** simple string
-
 Returns a string containing the code representing the currency of the symbol's prices. For example, this variable returns "USD" for "NASDAQ:AAPL" and "JPY" for "EURJPY".
 
+### Type
+simple string
+
+### See also
+`syminfo.basecurrency`, `syminfo.ticker`, `currency.USD`, `currency.EUR`
+
 ## syminfo.current_contract
-
-**Type:** simple string
-
 The ticker identifier of the underlying contract, if the current symbol is a continuous futures contract; na otherwise.
 
+### Type
+simple string
+
+### See also
+`syminfo.ticker`, `syminfo.description`
+
 ## syminfo.description
-
-**Type:** simple string
-
 Description for the current symbol.
 
+### Type
+simple string
+
+### See also
+`syminfo.ticker`, `syminfo.prefix`
+
 ## syminfo.employees
-
-**Type:** simple int
-
 The number of employees the company has.
 
-### Code Example
+### Type
+simple int
+
+### Example
 ```pine
 //@version=6
 indicator("syminfo simple")
@@ -1189,70 +1392,89 @@ if barstate.islastconfirmedhistory
     table.cell(table_id = result_table, column = 1, row = 4, text = str.tostring(syminfo.shares_outstanding_total))
 ```
 
+### See also
+`syminfo.shareholders`, `syminfo.shares_outstanding_float`, `syminfo.shares_outstanding_total`
+
 ## syminfo.expiration_date
-
-**Type:** simple int
-
 A UNIX timestamp representing the start of the last day of the current futures contract. This variable is only compatible with non-continuous futures symbols. On other symbols, it returns na.
 
+### Type
+simple int
+
 ## syminfo.industry
-
-**Type:** simple string
-
 Returns the industry of the symbol, or na if the symbol has no industry. Example: "Internet Software/Services", "Packaged software", "Integrated Oil", "Motor Vehicles", etc. These are the same values one can see in the chart's "Symbol info" window.
+
+### Type
+simple string
 
 ### Remarks
 A sector is a broad section of the economy. An industry is a narrower classification. NASDAQ:CAT (Caterpillar, Inc.) for example, belongs to the "Producer Manufacturing" sector and the "Trucks/Construction/Farm Machinery" industry.
 
+## syminfo.isin
+Holds a string representing a symbol's associated International Securities Identification Number (ISIN), or an empty string if there is no ISIN information available for the symbol. An ISIN is a 12-character alphanumeric code that uniquely identifies a security globally. Unlike ticker symbols, which can vary across exchanges, the ISIN for a security is consistent across exchanges. As such, programmers can use the ISIN to identify an underlying financial instrument, regardless of the exchange or the symbol name listed by an exchange.
+For example, the ISIN associated with NASDAQ:AAPL and GETTEX:APC is US0378331005, because both symbols refer to the common stock from Apple Inc. In contrast, the ISIN for TSX:AAPL is CA03785Y1007, because the symbol refers to a different instrument: the Apple Inc. Canadian Depositary Receipt (CDR).
+
+### Type
+simple string
+
+### See also
+`syminfo.ticker`, `syminfo.description`
+
 ## syminfo.main_tickerid
-
-**Type:** simple string
-
 A ticker identifier representing the current chart's symbol. The value contains an exchange prefix and a symbol name, separated by a colon (e.g., "NASDAQ:AAPL"). It can also include information about data modifications such as dividend adjustment, non-standard chart type, currency conversion, etc. Unlike syminfo.tickerid, this variable's value does not change when used in the expression argument of a request.*() function call.
 
+### Type
+simple string
+
+### See also
+`ticker.new()`, `timeframe.main_period`, `syminfo.tickerid`, `syminfo.ticker`, `timeframe.period`, `timeframe.multiplier`, `syminfo.root`
+
 ## syminfo.mincontract
-
-**Type:** simple float
-
 The smallest amount of the current symbol that can be traded. This limit is set by the exchange. For cryptocurrencies, it is often less than 1 token. For most other types of asset, it is often 1.
 
+### Type
+simple float
+
+### See also
+`syminfo.mintick`, `syminfo.pointvalue`
+
 ## syminfo.minmove
-
-**Type:** simple int
-
 Returns a whole number used to calculate the smallest increment between a symbol's price movements (syminfo.mintick). It is the numerator in the syminfo.mintick formula: syminfo.minmove / syminfo.pricescale = syminfo.mintick.
 
+### Type
+simple int
+
+### See also
+`ticker.new()`, `syminfo.ticker`, `timeframe.period`, `timeframe.multiplier`, `syminfo.root`
+
 ## syminfo.mintick
-
-**Type:** simple float
-
 Min tick value for the current symbol.
 
+### Type
+simple float
+
+### See also
+`syminfo.pointvalue`, `syminfo.mincontract`
+
 ## syminfo.pointvalue
+The chart price of a security multiplied by the point value equals the actual price of the traded security.
+For all types of security except futures, the point value is usually equal to 1 and can therefore be ignored. For futures, the prices shown on the chart are either the cost of a single futures contract, in which case the point value is 1, or the price of a single unit of the underlying commodity, in which case the point value represents the number of units included in a single contract.
+For example, the price of the "COMEX:GC1!" gold futures chart reflects the price of a single troy ounce of gold. However, a single GC futures contract comprises 100 troy ounces, as defined by the COMEX exchange. So when the price on the "GC1!" chart is 2000 USD, a single contract costs 2000 USD * 100 troy ounces = 200,000 USD. This calculation is important in backtesting, because the strategy engine takes the point value into account, and does not open a position if there is not enough capital.
+The point value is also displayed in the Security Info window for a given asset.
 
-**Type:** simple float
+### Type
+simple float
 
-Point value for the current symbol.
+### See also
+`syminfo.mintick`, `syminfo.mincontract`
 
 ## syminfo.prefix
-
-**Type:** simple string
-
 Prefix of current symbol name (i.e. for 'CME_EOD:TICKER' prefix is 'CME_EOD').
 
-### Syntax
+### Type
+simple string
 
-```pine
-syminfo.prefix(symbol) → series string
-```
-
-### Arguments
-
-- `symbol` (*series string*) — Symbol. Note that the symbol should be passed with a prefix. For example: "NASDAQ:AAPL" instead of "AAPL".
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("syminfo.prefix")
@@ -1262,19 +1484,25 @@ if barstate.islastconfirmedhistory
     label.new(bar_index, high, text=syminfo.prefix)
 ```
 
+### See also
+`syminfo.ticker`, `syminfo.tickerid`
+
 ## syminfo.pricescale
-
-**Type:** simple int
-
 Returns a whole number used to calculate the smallest increment between a symbol's price movements (syminfo.mintick). It is the denominator in the syminfo.mintick formula: syminfo.minmove / syminfo.pricescale = syminfo.mintick.
 
+### Type
+simple int
+
+### See also
+`ticker.new()`, `syminfo.ticker`, `timeframe.period`, `timeframe.multiplier`, `syminfo.root`
+
 ## syminfo.recommendations_buy
-
-**Type:** series int
-
 The number of analysts who gave the current symbol a "Buy" rating.
 
-### Code Example
+### Type
+series int
+
+### Example
 ```pine
 //@version=6
 indicator("syminfo recommendations", overlay = true)
@@ -1308,14 +1536,17 @@ if barstate.islastconfirmedhistory
     table.cell(ratings, 3, 1, strongBuyRatings, bgcolor = color.lime, text_color = #000000, text_size = size.large)
     table.cell(ratings, 4, 1, sellRatings, bgcolor = color.maroon, text_color = #000000, text_size = size.large)
 ```
+
+### See also
+`syminfo.recommendations_buy_strong`, `syminfo.recommendations_date`, `syminfo.recommendations_hold`, `syminfo.recommendations_total`, `syminfo.recommendations_sell`, `syminfo.recommendations_sell_strong`
 
 ## syminfo.recommendations_buy_strong
-
-**Type:** series int
-
 The number of analysts who gave the current symbol a "Strong Buy" rating.
 
-### Code Example
+### Type
+series int
+
+### Example
 ```pine
 //@version=6
 indicator("syminfo recommendations", overlay = true)
@@ -1349,14 +1580,17 @@ if barstate.islastconfirmedhistory
     table.cell(ratings, 3, 1, strongBuyRatings, bgcolor = color.lime, text_color = #000000, text_size = size.large)
     table.cell(ratings, 4, 1, sellRatings, bgcolor = color.maroon, text_color = #000000, text_size = size.large)
 ```
+
+### See also
+`syminfo.recommendations_buy`, `syminfo.recommendations_date`, `syminfo.recommendations_hold`, `syminfo.recommendations_total`, `syminfo.recommendations_sell`, `syminfo.recommendations_sell_strong`
 
 ## syminfo.recommendations_date
-
-**Type:** series int
-
 The starting date of the last set of recommendations for the current symbol.
 
-### Code Example
+### Type
+series int
+
+### Example
 ```pine
 //@version=6
 indicator("syminfo recommendations", overlay = true)
@@ -1390,14 +1624,17 @@ if barstate.islastconfirmedhistory
     table.cell(ratings, 3, 1, strongBuyRatings, bgcolor = color.lime, text_color = #000000, text_size = size.large)
     table.cell(ratings, 4, 1, sellRatings, bgcolor = color.maroon, text_color = #000000, text_size = size.large)
 ```
+
+### See also
+`syminfo.recommendations_buy`, `syminfo.recommendations_buy_strong`, `syminfo.recommendations_hold`, `syminfo.recommendations_total`, `syminfo.recommendations_sell`, `syminfo.recommendations_sell_strong`
 
 ## syminfo.recommendations_hold
-
-**Type:** series int
-
 The number of analysts who gave the current symbol a "Hold" rating.
 
-### Code Example
+### Type
+series int
+
+### Example
 ```pine
 //@version=6
 indicator("syminfo recommendations", overlay = true)
@@ -1431,14 +1668,17 @@ if barstate.islastconfirmedhistory
     table.cell(ratings, 3, 1, strongBuyRatings, bgcolor = color.lime, text_color = #000000, text_size = size.large)
     table.cell(ratings, 4, 1, sellRatings, bgcolor = color.maroon, text_color = #000000, text_size = size.large)
 ```
+
+### See also
+`syminfo.recommendations_buy`, `syminfo.recommendations_buy_strong`, `syminfo.recommendations_date`, `syminfo.recommendations_total`, `syminfo.recommendations_sell`, `syminfo.recommendations_sell_strong`
 
 ## syminfo.recommendations_sell
-
-**Type:** series int
-
 The number of analysts who gave the current symbol a "Sell" rating.
 
-### Code Example
+### Type
+series int
+
+### Example
 ```pine
 //@version=6
 indicator("syminfo recommendations", overlay = true)
@@ -1472,14 +1712,17 @@ if barstate.islastconfirmedhistory
     table.cell(ratings, 3, 1, strongBuyRatings, bgcolor = color.lime, text_color = #000000, text_size = size.large)
     table.cell(ratings, 4, 1, sellRatings, bgcolor = color.maroon, text_color = #000000, text_size = size.large)
 ```
+
+### See also
+`syminfo.recommendations_buy`, `syminfo.recommendations_buy_strong`, `syminfo.recommendations_date`, `syminfo.recommendations_hold`, `syminfo.recommendations_total`, `syminfo.recommendations_sell_strong`
 
 ## syminfo.recommendations_sell_strong
-
-**Type:** series int
-
 The number of analysts who gave the current symbol a "Strong Sell" rating.
 
-### Code Example
+### Type
+series int
+
+### Example
 ```pine
 //@version=6
 indicator("syminfo recommendations", overlay = true)
@@ -1513,14 +1756,17 @@ if barstate.islastconfirmedhistory
     table.cell(ratings, 3, 1, strongBuyRatings, bgcolor = color.lime, text_color = #000000, text_size = size.large)
     table.cell(ratings, 4, 1, sellRatings, bgcolor = color.maroon, text_color = #000000, text_size = size.large)
 ```
+
+### See also
+`syminfo.recommendations_buy`, `syminfo.recommendations_buy_strong`, `syminfo.recommendations_date`, `syminfo.recommendations_hold`, `syminfo.recommendations_total`, `syminfo.recommendations_sell`
 
 ## syminfo.recommendations_total
-
-**Type:** series int
-
 The total number of recommendations for the current symbol.
 
-### Code Example
+### Type
+series int
+
+### Example
 ```pine
 //@version=6
 indicator("syminfo recommendations", overlay = true)
@@ -1555,13 +1801,16 @@ if barstate.islastconfirmedhistory
     table.cell(ratings, 4, 1, sellRatings, bgcolor = color.maroon, text_color = #000000, text_size = size.large)
 ```
 
+### See also
+`syminfo.recommendations_buy`, `syminfo.recommendations_buy_strong`, `syminfo.recommendations_date`, `syminfo.recommendations_hold`, `syminfo.recommendations_sell`, `syminfo.recommendations_sell_strong`
+
 ## syminfo.root
-
-**Type:** simple string
-
 Root for derivatives like futures contract. For other symbols returns the same value as syminfo.ticker.
 
-### Code Example
+### Type
+simple string
+
+### Example
 ```pine
 //@version=6
 indicator("syminfo.root")
@@ -1571,28 +1820,34 @@ if barstate.islastconfirmedhistory
     label.new(bar_index, high, syminfo.root)
 ```
 
+### See also
+`syminfo.ticker`, `syminfo.tickerid`
+
 ## syminfo.sector
-
-**Type:** simple string
-
 Returns the sector of the symbol, or na if the symbol has no sector. Example: "Electronic Technology", "Technology services", "Energy Minerals", "Consumer Durables", etc. These are the same values one can see in the chart's "Symbol info" window.
+
+### Type
+simple string
 
 ### Remarks
 A sector is a broad section of the economy. An industry is a narrower classification. NASDAQ:CAT (Caterpillar, Inc.) for example, belongs to the "Producer Manufacturing" sector and the "Trucks/Construction/Farm Machinery" industry.
 
 ## syminfo.session
-
-**Type:** simple string
-
 Session type of the chart main series. Possible values are session.regular, session.extended.
 
+### Type
+simple string
+
+### See also
+`session.regular`, `session.extended`
+
 ## syminfo.shareholders
-
-**Type:** simple int
-
 The number of shareholders the company has.
 
-### Code Example
+### Type
+simple int
+
+### Example
 ```pine
 //@version=6
 indicator("syminfo simple")
@@ -1615,14 +1870,17 @@ if barstate.islastconfirmedhistory
     table.cell(table_id = result_table, column = 0, row = 4, text = "shares_outstanding_total")
     table.cell(table_id = result_table, column = 1, row = 4, text = str.tostring(syminfo.shares_outstanding_total))
 ```
+
+### See also
+`syminfo.employees`, `syminfo.shares_outstanding_float`, `syminfo.shares_outstanding_total`
 
 ## syminfo.shares_outstanding_float
-
-**Type:** simple float
-
 The total number of shares outstanding a company has available, excluding any of its restricted shares.
 
-### Code Example
+### Type
+simple float
+
+### Example
 ```pine
 //@version=6
 indicator("syminfo simple")
@@ -1645,14 +1903,17 @@ if barstate.islastconfirmedhistory
     table.cell(table_id = result_table, column = 0, row = 4, text = "shares_outstanding_total")
     table.cell(table_id = result_table, column = 1, row = 4, text = str.tostring(syminfo.shares_outstanding_total))
 ```
+
+### See also
+`syminfo.employees`, `syminfo.shareholders`, `syminfo.shares_outstanding_total`
 
 ## syminfo.shares_outstanding_total
-
-**Type:** simple int
-
 The total number of shares outstanding a company has available, including restricted shares held by insiders, major shareholders, and employees.
 
-### Code Example
+### Type
+simple int
+
+### Example
 ```pine
 //@version=6
 indicator("syminfo simple")
@@ -1676,16 +1937,16 @@ if barstate.islastconfirmedhistory
     table.cell(table_id = result_table, column = 1, row = 4, text = str.tostring(syminfo.shares_outstanding_total))
 ```
 
+### See also
+`syminfo.employees`, `syminfo.shareholders`, `syminfo.shares_outstanding_float`
+
 ## syminfo.target_price_average
-
-**Type:** series float
-
 The average of the last yearly price targets for the symbol predicted by analysts.
 
-### Remarks
-If analysts supply the targets when the market is closed, the variable can return na until the market opens.
+### Type
+series float
 
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("syminfo target_price")
@@ -1707,17 +1968,20 @@ if barstate.islastconfirmedhistory
     string estimatesText = str.format("Number of estimates: {0}", syminfo.target_price_estimates)
     label.new(bar_index, close, estimatesText, textcolor = color.white, size = size.large)
 ```
+
+### Remarks
+If analysts supply the targets when the market is closed, the variable can return na until the market opens.
+
+### See also
+`syminfo.target_price_date`, `syminfo.target_price_estimates`, `syminfo.target_price_high`, `syminfo.target_price_low`, `syminfo.target_price_median`
 
 ## syminfo.target_price_date
-
-**Type:** series int
-
 The starting date of the last price target prediction for the current symbol.
 
-### Remarks
-If analysts supply the targets when the market is closed, the variable can return na until the market opens.
+### Type
+series int
 
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("syminfo target_price")
@@ -1739,17 +2003,20 @@ if barstate.islastconfirmedhistory
     string estimatesText = str.format("Number of estimates: {0}", syminfo.target_price_estimates)
     label.new(bar_index, close, estimatesText, textcolor = color.white, size = size.large)
 ```
+
+### Remarks
+If analysts supply the targets when the market is closed, the variable can return na until the market opens.
+
+### See also
+`syminfo.target_price_average`, `syminfo.target_price_estimates`, `syminfo.target_price_high`, `syminfo.target_price_low`, `syminfo.target_price_median`
 
 ## syminfo.target_price_estimates
-
-**Type:** series float
-
 The latest total number of price target predictions for the current symbol.
 
-### Remarks
-If analysts supply the targets when the market is closed, the variable can return na until the market opens.
+### Type
+series float
 
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("syminfo target_price")
@@ -1771,17 +2038,20 @@ if barstate.islastconfirmedhistory
     string estimatesText = str.format("Number of estimates: {0}", syminfo.target_price_estimates)
     label.new(bar_index, close, estimatesText, textcolor = color.white, size = size.large)
 ```
+
+### Remarks
+If analysts supply the targets when the market is closed, the variable can return na until the market opens.
+
+### See also
+`syminfo.target_price_average`, `syminfo.target_price_date`, `syminfo.target_price_high`, `syminfo.target_price_low`, `syminfo.target_price_median`
 
 ## syminfo.target_price_high
-
-**Type:** series float
-
 The last highest yearly price target for the symbol predicted by analysts.
 
-### Remarks
-If analysts supply the targets when the market is closed, the variable can return na until the market opens.
+### Type
+series float
 
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("syminfo target_price")
@@ -1803,17 +2073,20 @@ if barstate.islastconfirmedhistory
     string estimatesText = str.format("Number of estimates: {0}", syminfo.target_price_estimates)
     label.new(bar_index, close, estimatesText, textcolor = color.white, size = size.large)
 ```
+
+### Remarks
+If analysts supply the targets when the market is closed, the variable can return na until the market opens.
+
+### See also
+`syminfo.target_price_average`, `syminfo.target_price_date`, `syminfo.target_price_estimates`, `syminfo.target_price_low`, `syminfo.target_price_median`
 
 ## syminfo.target_price_low
-
-**Type:** series float
-
 The last lowest yearly price target for the symbol predicted by analysts.
 
-### Remarks
-If analysts supply the targets when the market is closed, the variable can return na until the market opens.
+### Type
+series float
 
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("syminfo target_price")
@@ -1835,17 +2108,20 @@ if barstate.islastconfirmedhistory
     string estimatesText = str.format("Number of estimates: {0}", syminfo.target_price_estimates)
     label.new(bar_index, close, estimatesText, textcolor = color.white, size = size.large)
 ```
+
+### Remarks
+If analysts supply the targets when the market is closed, the variable can return na until the market opens.
+
+### See also
+`syminfo.target_price_average`, `syminfo.target_price_date`, `syminfo.target_price_estimates`, `syminfo.target_price_high`, `syminfo.target_price_median`
 
 ## syminfo.target_price_median
-
-**Type:** series float
-
 The median of the last yearly price targets for the symbol predicted by analysts.
 
-### Remarks
-If analysts supply the targets when the market is closed, the variable can return na until the market opens.
+### Type
+series float
 
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("syminfo target_price")
@@ -1868,66 +2144,77 @@ if barstate.islastconfirmedhistory
     label.new(bar_index, close, estimatesText, textcolor = color.white, size = size.large)
 ```
 
+### Remarks
+If analysts supply the targets when the market is closed, the variable can return na until the market opens.
+
+### See also
+`syminfo.target_price_average`, `syminfo.target_price_date`, `syminfo.target_price_estimates`, `syminfo.target_price_high`, `syminfo.target_price_low`
+
 ## syminfo.ticker
-
-**Type:** simple string
-
 Symbol name without exchange prefix, e.g. 'MSFT'.
-### Syntax
 
-```pine
-syminfo.ticker(symbol) → series string
-```
+### Type
+simple string
 
-### Arguments
-
-- `symbol` (*series string*) — Symbol. Note that the symbol should be passed with a prefix. For example: "NASDAQ:AAPL" instead of "AAPL".
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
+### See also
+`syminfo.tickerid`, `timeframe.period`, `timeframe.multiplier`, `syminfo.root`
 
 ## syminfo.tickerid
-
-**Type:** simple string
-
 A ticker identifier representing the chart's symbol or a requested symbol, depending on how the script uses it. The variable's value represents a requested dataset's ticker ID when used in the expression argument of a request.*() function call. Otherwise, it represents the chart's ticker ID. The value contains an exchange prefix and a symbol name, separated by a colon (e.g., "NASDAQ:AAPL"). It can also include information about data modifications such as dividend adjustment, non-standard chart type, currency conversion, etc.
 
+### Type
+simple string
+
 ### Remarks
-Because the value of this variable does not always use a simple "prefix:ticker" format, it is a poor candidate for use in boolean comparisons or string manipulation functions. In those contexts, run the variable's result through ticker.standard to purify it. This will remove any extraneous information and return a ticker ID consistently formatted using the "prefix:ticker" structure. To always access the script's main ticker ID, even within another context, use the syminfo.main_tickerid variable.
+Because the value of this variable does not always use a simple "prefix:ticker" format, it is a poor candidate for use in boolean comparisons or string manipulation functions. In those contexts, run the variable's result through ticker.standard() to purify it. This will remove any extraneous information and return a ticker ID consistently formatted using the "prefix:ticker" structure.
+To always access the script's main ticker ID, even within another context, use the syminfo.main_tickerid variable.
+
+### See also
+`ticker.new()`, `syminfo.main_tickerid`, `timeframe.main_period`, `syminfo.ticker`, `timeframe.period`, `timeframe.multiplier`, `syminfo.root`
 
 ## syminfo.timezone
+Timezone of the exchange of the chart main series. Possible values see in timestamp().
 
-**Type:** simple string
+### Type
+simple string
 
-Timezone of the exchange of the chart main series. Possible values see in timestamp.
+### See also
+`timestamp()`
 
 ## syminfo.type
-
-**Type:** simple string
-
 The type of market the symbol belongs to. The values are "stock", "fund", "dr", "right", "bond", "warrant", "structured", "index", "forex", "futures", "spread", "economic", "fundamental", "crypto", "spot", "swap", "option", "commodity".
 
+### Type
+simple string
+
+### See also
+`syminfo.ticker`
+
 ## syminfo.volumetype
-
-**Type:** simple string
-
 Volume type of the current symbol. Possible values are: "base" for base currency, "quote" for quote currency, "tick" for the number of transactions, and "n/a" when there is no volume or its type is not specified.
+
+### Type
+simple string
 
 ### Remarks
 Only some data feed suppliers provide information qualifying volume. As a result, the variable will return a value on some symbols only, mostly in the crypto sector.
 
+### See also
+`syminfo.type`
+
 ## ta.accdist
-
-**Type:** series float
-
 Accumulation/distribution index.
 
+### Type
+series float
+
 ## ta.iii
-
-**Type:** series float
-
 Intraday Intensity Index.
 
-### Code Example
+### Type
+series float
+
+### Example
 ```pine
 //@version=6
 indicator("Intraday Intensity Index")
@@ -1935,18 +2222,18 @@ plot(ta.iii, color=color.yellow)
 
 // the same on pine
 f_iii() =>
-    (2 * close - high - low) / ((high - low) * volume)
+    ((2 * close - high - low) / (high - low)) * volume
 
 plot(f_iii())
 ```
 
 ## ta.nvi
-
-**Type:** series float
-
 Negative Volume Index.
 
-### Code Example
+### Type
+series float
+
+### Example
 ```pine
 //@version=6
 indicator("Negative Volume Index")
@@ -1967,12 +2254,12 @@ plot(f_nvi())
 ```
 
 ## ta.obv
-
-**Type:** series float
-
 On Balance Volume.
 
-### Code Example
+### Type
+series float
+
+### Example
 ```pine
 //@version=6
 indicator("On Balance Volume")
@@ -1986,12 +2273,12 @@ plot(f_obv())
 ```
 
 ## ta.pvi
-
-**Type:** series float
-
 Positive Volume Index.
 
-### Code Example
+### Type
+series float
+
+### Example
 ```pine
 //@version=6
 indicator("Positive Volume Index")
@@ -2012,12 +2299,12 @@ plot(f_pvi())
 ```
 
 ## ta.pvt
-
-**Type:** series float
-
 Price-Volume Trend.
 
-### Code Example
+### Type
+series float
+
+### Example
 ```pine
 //@version=6
 indicator("Price-Volume Trend")
@@ -2031,49 +2318,30 @@ plot(f_pvt())
 ```
 
 ## ta.tr
-
-**Type:** series float
-
 True range, equivalent to ta.tr(handle_na = false). It is calculated as math.max(high - low, math.abs(high - close[1]), math.abs(low - close[1])).
-### Syntax
 
-```pine
-ta.tr(handle_na) → series float
-```
+### Type
+series float
 
-### Arguments
-
-- `handle_na` (*simple bool*) — How NaN values are handled. if true, and previous day’s close is NaN then tr would be calculated as current day high-low. Otherwise (if false) tr would return NaN in such cases. Also note, that [ta.atr](https://www.tradingview.com/pine-script-reference/v6/#fun_ta.atr) uses ta.tr(true).
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
+### See also
+`ta.tr()`, `ta.atr()`
 
 ## ta.vwap
-
-**Type:** series float
-
 Volume Weighted Average Price. It uses hlc3 as its source series.
-### Syntax
 
-```pine
-ta.vwap(source, anchor) → series float
-ta.vwap(source, anchor, stdev_mult) → [series float, series float, series float]
-```
+### Type
+series float
 
-### Arguments
-
-- `source` (*series int|float*) — Source used for the VWAP calculation.
-- `anchor` (*series bool*, default `1D`) — The condition that triggers the reset of VWAP calculations. When [true](https://www.tradingview.com/pine-script-reference/v6/#op_true), calculations reset; when [false](https://www.tradingview.com/pine-script-reference/v6/#op_false), calculations proceed using the values accumulated since the previous reset. Optional. The default is equivalent to passing [timeframe.change](https://www.tradingview.com/pine-script-reference/v6/#fun_timeframe.change) with "1D" as its argument.
-- `stdev_mult` (*series int|float*, default `na`) — If specified, the function will calculate the standard deviation bands based on the main VWAP series and return a [vwap, upper_band, lower_band] tuple. The `upper_band`/`lower_band` values are calculated using the VWAP to which the standard deviation multiplied by this argument is added/subtracted. Optional. The default is [na](https://www.tradingview.com/pine-script-reference/v6/#var_na), in which case the function returns a single value, not a tuple.
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
+### See also
+`ta.vwap()`
 
 ## ta.wad
-
-**Type:** series float
-
 Williams Accumulation/Distribution.
 
-### Code Example
+### Type
+series float
+
+### Example
 ```pine
 //@version=6
 indicator("Williams Accumulation/Distribution")
@@ -2091,12 +2359,12 @@ plot(f_wad())
 ```
 
 ## ta.wvad
-
-**Type:** series float
-
 Williams Variable Accumulation/Distribution.
 
-### Code Example
+### Type
+series float
+
+### Example
 ```pine
 //@version=6
 indicator("Williams Variable Accumulation/Distribution")
@@ -2110,15 +2378,12 @@ plot(f_wvad())
 ```
 
 ## table.all
-
-**Type:** array<table>
-
 Returns an array filled with all the current tables drawn by the script.
 
-### Remarks
-The array is read-only. Index zero of the array is the ID of the oldest object on the chart.
+### Type
+array<table>
 
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("table.all")
@@ -2130,184 +2395,222 @@ if array.size(a_allTables) > 0
         table.delete(array.get(a_allTables, i))
 ```
 
+### Remarks
+The array is read-only. Index zero of the array is the ID of the oldest object on the chart.
+
+### See also
+`table.new()`, `line.all`, `label.all`, `box.all`
+
 ## time
-
-**Type:** series int
-
 Current bar time in UNIX format. It is the number of milliseconds that have elapsed since 00:00:00 UTC, 1 January 1970.
 
-### Syntax
-
-```pine
-time(timeframe, session, timezone) → series int
-```
-
-### Arguments
-
-- `timeframe` (*series string*) — Timeframe. An empty string is interpreted as the current timeframe of the chart.
-- `session` (*series string*, default `""`) — Session specification. Optional argument, session of the symbol is used by default. An empty string is interpreted as the session of the symbol.
-- `timezone` (*series string*, default `syminfo.timezone`) — Timezone of the `session` argument. Can only be used when a `session` is specified. Optional. The default is [syminfo.timezone](https://www.tradingview.com/pine-script-reference/v6/#var_syminfo.timezone). Can be specified in GMT notation (e.g. "GMT-5") or as an [IANA time zone database name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) (e.g. "America/New_York").
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
+### Type
+series int
 
 ### Remarks
 Note that this variable returns the timestamp based on the time of the bar's open. Because of that, for overnight sessions (e.g. EURUSD, where Monday session starts on Sunday, 17:00) this variable can return time before the specified date of the trading day. For example, on EURUSD, dayofmonth(time) can be lower by 1 than the date of the trading day, because the bar for the current day actually opens one day prior.
 
+### See also
+`time()`, `time_close`, `timenow`, `year`, `month`, `weekofyear`, `dayofmonth`, `dayofweek`, `hour`, `minute`, `second`
+
 ## time_close
-
-**Type:** series int
-
 The time of the current bar's close in UNIX format. It represents the number of milliseconds elapsed since 00:00:00 UTC, 1 January 1970. On tick charts and price-based charts such as Renko, line break, Kagi, point & figure, and range, this variable's series holds an na timestamp for the latest realtime bar (because the future closing time is unpredictable), but valid timestamps for all previous bars.
-### Syntax
 
-```pine
-time_close(timeframe, session, timezone) → series int
-```
+### Type
+series int
 
-### Arguments
-
-- `timeframe` (*series string*) — Resolution. An empty string is interpreted as the current resolution of the chart.
-- `session` (*series string*, default `""`) — Session specification. Optional argument, session of the symbol is used by default. An empty string is interpreted as the session of the symbol.
-- `timezone` (*series string*, default `syminfo.timezone`) — Timezone of the `session` argument. Can only be used when a `session` is specified. Optional. The default is [syminfo.timezone](https://www.tradingview.com/pine-script-reference/v6/#var_syminfo.timezone). Can be specified in GMT notation (e.g. "GMT-5") or as an [IANA time zone database name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) (e.g. "America/New_York").
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
+### See also
+`time`, `timenow`, `year`, `month`, `weekofyear`, `dayofmonth`, `dayofweek`, `hour`, `minute`, `second`
 
 ## time_tradingday
+The timestamp that represents 00:00 UTC of the trading day the current bar belongs to, in UNIX format (the number of milliseconds that have elapsed since 00:00:00 UTC, 1 January 1970).
 
-**Type:** series int
+### Type
+series int
 
-The beginning time of the trading day the current bar belongs to, in UNIX format (the number of milliseconds that have elapsed since 00:00:00 UTC, 1 January 1970).
+### Example
+```pine
+//@version=6
+indicator("Friday session")
+
+//@variable The day of week, based on the current `time_tradingday` value.
+//          Uses "UTC+0" to return the daily session's timestamp at 00:00 UTC.
+int tradingDayOfWeek = dayofweek(time_tradingday, "UTC+0")
+
+//@variable Returns `true` if the `dayofweek` represents Friday, in exchange time.
+//          It might never return `true` on overnight symbols, depending on the timeframe, since the Friday session
+//          starts on Thursday.
+bool isFriday = dayofweek == dayofweek.friday
+//@variable Returns `true` if the `tradingDayOfWeek` is Friday.
+//          Differs from `isFriday` on symbols with overnight sessions and for timeframes > "1D" on others.
+bool isFridaySession = tradingDayOfWeek == dayofweek.friday
+
+// Create a horizontal line at the `dayofweek.friday` value.
+hline(dayofweek.friday, "Friday value", color.gray, hline.style_dashed, 2)
+// Plot the `dayofweek` and `tradingDayOfWeek` for comparison.
+plot(dayofweek, "Day of week", color.blue, 2)
+plot(tradingDayOfWeek, "Trading day", color.teal, 3)
+// Highlight the background when `isFriday` and `isFridaySession` occur.
+bgcolor(isFriday ? color.new(color.blue, 90) : na, title = "isFriday highlight")
+bgcolor(isFridaySession ? color.new(color.teal, 80) : na, title = "isFridaySession highlight")
+```
 
 ### Remarks
-The variable is useful for overnight sessions, where the current day's session can start on the previous calendar day (e.g., on FXCM:EURUSD the Monday session will start on Sunday, 17:00 in the exchange timezone). Unlike time, which would return the timestamp for Sunday at 17:00 for the Monday daily bar, time_tradingday will return the timestamp for Monday, 00:00 UTC. When used on timeframes higher than 1D, time_tradingday returns the trading day of the last day inside the bar (e.g. on 1W, it will return the last trading day of the week).
+This variable is helpful when working with overnight sessions, where the day's session can begin on the previous calendar day. For example, on the "FXCM:EURUSD" symbol, the Monday session starts on Sunday, 17:00, exchange time. Unlike time, which returns the timestamp for Sunday at 17:00 on the Monday daily bar, time_tradingday returns the timestamp for Monday at 00:00 UTC. When used on timeframes higher than "1D", time_tradingday returns the timestamp of the last trading day inside that bar (e.g., on "1W", it returns the timestamp of the final trading day within the week).
+
+### See also
+`time`, `time_close`
 
 ## timeframe.isdaily
-
-**Type:** simple bool
-
 Returns true if current resolution is a daily resolution, false otherwise.
 
+### Type
+simple bool
+
+### See also
+`timeframe.isdwm`, `timeframe.isintraday`, `timeframe.isminutes`, `timeframe.isseconds`, `timeframe.isticks`, `timeframe.isweekly`, `timeframe.ismonthly`
+
 ## timeframe.isdwm
-
-**Type:** simple bool
-
 Returns true if current resolution is a daily or weekly or monthly resolution, false otherwise.
 
+### Type
+simple bool
+
+### See also
+`timeframe.isintraday`, `timeframe.isminutes`, `timeframe.isseconds`, `timeframe.isticks`, `timeframe.isdaily`, `timeframe.isweekly`, `timeframe.ismonthly`
+
 ## timeframe.isintraday
-
-**Type:** simple bool
-
 Returns true if current resolution is an intraday (minutes or seconds) resolution, false otherwise.
 
+### Type
+simple bool
+
+### See also
+`timeframe.isminutes`, `timeframe.isseconds`, `timeframe.isticks`, `timeframe.isdwm`, `timeframe.isdaily`, `timeframe.isweekly`, `timeframe.ismonthly`
+
 ## timeframe.isminutes
-
-**Type:** simple bool
-
 Returns true if current resolution is a minutes resolution, false otherwise.
 
+### Type
+simple bool
+
+### See also
+`timeframe.isdwm`, `timeframe.isintraday`, `timeframe.isseconds`, `timeframe.isticks`, `timeframe.isdaily`, `timeframe.isweekly`, `timeframe.ismonthly`
+
 ## timeframe.ismonthly
-
-**Type:** simple bool
-
 Returns true if current resolution is a monthly resolution, false otherwise.
 
+### Type
+simple bool
+
+### See also
+`timeframe.isdwm`, `timeframe.isintraday`, `timeframe.isminutes`, `timeframe.isseconds`, `timeframe.isticks`, `timeframe.isdaily`, `timeframe.isweekly`
+
 ## timeframe.isseconds
-
-**Type:** simple bool
-
 Returns true if current resolution is a seconds resolution, false otherwise.
 
+### Type
+simple bool
+
+### See also
+`timeframe.isdwm`, `timeframe.isintraday`, `timeframe.isminutes`, `timeframe.isticks`, `timeframe.isdaily`, `timeframe.isweekly`, `timeframe.ismonthly`
+
 ## timeframe.isticks
-
-**Type:** simple bool
-
 Returns true if current resolution is a ticks resolution, false otherwise.
 
+### Type
+simple bool
+
+### See also
+`timeframe.isdwm`, `timeframe.isintraday`, `timeframe.isminutes`, `timeframe.isseconds`, `timeframe.isdaily`, `timeframe.isweekly`, `timeframe.ismonthly`
+
 ## timeframe.isweekly
-
-**Type:** simple bool
-
 Returns true if current resolution is a weekly resolution, false otherwise.
 
+### Type
+simple bool
+
+### See also
+`timeframe.isdwm`, `timeframe.isintraday`, `timeframe.isminutes`, `timeframe.isseconds`, `timeframe.isticks`, `timeframe.isdaily`, `timeframe.ismonthly`
+
 ## timeframe.main_period
+A string representation of the script's main timeframe. If the script is an indicator() that specifies a timeframe value in its declaration statement, this variable holds that value. Otherwise, its value represents the chart's timeframe. Unlike timeframe.period, this variable's value does not change when used in the expression argument of a request.*() function call.
+The string's format is "<quantity>[<unit>]", where <unit> is "T" for ticks, "S" for seconds, "D" for days, "W" for weeks, and "M" for months, but is absent for minutes. No <unit> exists for hours: hourly timeframes are expressed in minutes.
+The variable's value is: "10S" for 10 seconds, "30" for 30 minutes, "240" for four hours, "1D" for one day, "2W" for two weeks, and "3M" for one quarter.
 
-**Type:** simple string
+### Type
+simple string
 
-A string representation of the script's main timeframe. If the script is an indicator that specifies a timeframe value in its declaration statement, this variable holds that value. Otherwise, its value represents the chart's timeframe. Unlike timeframe.period, this variable's value does not change when used in the expression argument of a request.*() function call.
+### See also
+`timeframe.period`, `syminfo.main_tickerid`, `syminfo.ticker`, `syminfo.tickerid`, `timeframe.multiplier`
 
 ## timeframe.multiplier
-
-**Type:** simple int
-
 Multiplier of resolution, e.g. '60' - 60, 'D' - 1, '5D' - 5, '12M' - 12.
 
+### Type
+simple int
+
+### See also
+`syminfo.ticker`, `syminfo.tickerid`, `timeframe.period`
+
 ## timeframe.period
+A string representation of the script's main timeframe or a requested timeframe, depending on how the script uses it. The variable's value represents the timeframe of a requested dataset when used in the expression argument of a request.*() function call. Otherwise, its value represents the script's main timeframe (timeframe.main_period), which equals either the timeframe argument of the indicator() declaration statement or the chart's timeframe.
+The string's format is "<quantity>[<unit>]", where <unit> is "T" for ticks, "S" for seconds, "D" for days, "W" for weeks, and "M" for months, but is absent for minutes. No <unit> exists for hours: hourly timeframes are expressed in minutes.
+The variable's value is: "10S" for 10 seconds, "30" for 30 minutes, "240" for four hours, "1D" for one day, "2W" for two weeks, and "3M" for one quarter.
 
-**Type:** simple string
-
-A string representation of the script's main timeframe or a requested timeframe, depending on how the script uses it. The variable's value represents the timeframe of a requested dataset when used in the expression argument of a request.*() function call. Otherwise, its value represents the script's main timeframe (timeframe.main_period), which equals either the timeframe argument of the indicator declaration statement or the chart's timeframe.
+### Type
+simple string
 
 ### Remarks
 To always access the script's main timeframe, even within another context, use the timeframe.main_period variable.
 
+### See also
+`timeframe.main_period`, `syminfo.main_tickerid`, `syminfo.ticker`, `syminfo.tickerid`, `timeframe.multiplier`
+
 ## timenow
-
-**Type:** series int
-
 Current time in UNIX format. It is the number of milliseconds that have elapsed since 00:00:00 UTC, 1 January 1970.
+
+### Type
+series int
 
 ### Remarks
 Please note that using this variable/function can cause indicator repainting.
 
+### See also
+`timestamp()`, `time`, `time_close`, `year`, `month`, `weekofyear`, `dayofmonth`, `dayofweek`, `hour`, `minute`, `second`
+
 ## volume
-
-**Type:** series float
-
 Current bar volume.
+
+### Type
+series float
 
 ### Remarks
 Previous values may be accessed with square brackets operator [], e.g. volume[1], volume[2].
 
+### See also
+`open`, `high`, `low`, `close`, `time()`, `hl2`, `hlc3`, `hlcc4`, `ohlc4`, `ask`, `bid`
+
 ## weekofyear
+The week number of the year, in the exchange time zone, calculated from the bar's opening UNIX timestamp.
 
-**Type:** series int
-
-Week number of current bar time in exchange timezone.
-
-### Syntax
-
-```pine
-weekofyear(time, timezone) → series int
-```
-
-### Arguments
-
-- `time` (*series int*) — UNIX time in milliseconds.
-- `timezone` (*series string*, default `syminfo.timezone`) — Allows adjusting the returned value to a time zone specified in either UTC/GMT notation (e.g., "UTC-5", "GMT+0530") or as an IANA time zone database name (e.g., "America/New_York"). Optional. The default is [syminfo.timezone](https://www.tradingview.com/pine-script-reference/v6/#var_syminfo.timezone).
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
+### Type
+series int
 
 ### Remarks
-Note that this variable returns the week based on the time of the bar's open. For overnight sessions (e.g. EURUSD, where Monday session starts on Sunday, 17:00) this value can be lower by 1 than the week of the trading day.
+This variable always references the week number corresponding to the bar's opening time. Consequently, for symbols with overnight sessions (e.g., "EURUSD", where the "Monday" session starts on Sunday at 17:00 in exchange time), the value may represent a previous calendar week rather than the week of the session's primary trading day.
+
+### See also
+`weekofyear()`, `dayofmonth`, `dayofweek`, `time`, `year`, `month`, `hour`, `minute`, `second`
 
 ## year
-
-**Type:** series int
-
 Current bar year in exchange timezone.
 
-### Syntax
-
-```pine
-year(time, timezone) → series int
-```
-
-### Arguments
-
-- `time` (*series int*) — UNIX time in milliseconds.
-- `timezone` (*series string*, default `syminfo.timezone`) — Allows adjusting the returned value to a time zone specified in either UTC/GMT notation (e.g., "UTC-5", "GMT+0530") or as an IANA time zone database name (e.g., "America/New_York"). Optional. The default is [syminfo.timezone](https://www.tradingview.com/pine-script-reference/v6/#var_syminfo.timezone).
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
+### Type
+series int
 
 ### Remarks
 Note that this variable returns the year based on the time of the bar's open. For overnight sessions (e.g. EURUSD, where Monday session starts on Sunday, 17:00) this value can be lower by 1 than the year of the trading day.
+
+### See also
+`year()`, `time`, `month`, `weekofyear`, `dayofmonth`, `dayofweek`, `hour`, `minute`, `second`

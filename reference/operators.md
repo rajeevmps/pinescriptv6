@@ -8,7 +8,7 @@ Retrieved: 2026-08-20
 
 Arithmetic, comparison, logical, assignment, history-reference, and ternary operators.
 
-**20 entries** · Source: [Pine Script® v6 Reference Manual](https://www.tradingview.com/pine-script-reference/v6/)
+**21 entries** · Source: [Pine Script® v6 Reference Manual](https://www.tradingview.com/pine-script-reference/v6/)
 
 ## Index
 
@@ -28,6 +28,7 @@ Arithmetic, comparison, logical, assignment, history-reference, and ternary oper
 - [`+=`](#)
 - [`<`](#)
 - [`<=`](#)
+- [`=`](#)
 - [`==`](#)
 - [`=>`](#)
 - [`>`](#)
@@ -36,40 +37,30 @@ Arithmetic, comparison, logical, assignment, history-reference, and ternary oper
 ---
 
 ## -
-
 Subtraction or unary minus. Applicable to numerical expressions.
 
 ### Syntax
-
 ```pine
 expr1 - expr2
-- expr
 ```
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Returns
 Returns integer or float value, or series of values:
+Binary - returns expr1 minus expr2.
+Unary - returns the negation of expr.
 
 ### Remarks
 You may use arithmetic operators with numbers as well as with series variables. In case of usage with series the operators are applied elementwise.
 
 ## -=
-
 Subtraction assignment. Applicable to numerical expressions.
 
 ### Syntax
-
 ```pine
 expr1 -= expr2
 ```
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
-### Returns
-Integer or float value, or series of values.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("-=")
@@ -81,19 +72,18 @@ a -= b
 plot(a)
 ```
 
-## :=
+### Returns
+Integer or float value, or series of values.
 
+## :=
 Reassignment operator. It is used to assign a new value to a previously declared variable.
 
 ### Syntax
-
 ```pine
 <var_name> := <new_value>
 ```
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("My script")
@@ -111,39 +101,28 @@ plot(myVar)
 ```
 
 ## !=
-
-Not equal to. Applicable to expressions of any type.
+Inequality operator. Returns true if the operands are considered not equal, and false otherwise. This operator is compatible with all value types, including "int", "float", "bool", "color", and "string". The operator can also compare two line or label IDs.
 
 ### Syntax
-
 ```pine
 expr1 != expr2
 ```
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
 ### Returns
 Boolean value, or series of boolean values.
 
-## ?:
+### Remarks
+This operator rounds "float" operands to nine fractional digits.
 
+## ?:
 Ternary conditional operator.
 
 ### Syntax
-
 ```pine
 expr1 ? expr2 : expr3
 ```
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
-### Returns
-expr2 if expr1 is evaluated to true, expr3 otherwise. Zero value (0 and also NaN, +Infinity, -Infinity) is considered to be false, any other value is true.
-
-### Remarks
-Use na for 'else' branch if you do not need it. You can combine two or more ?: operators to achieve the equivalent of a 'switch'-like statement (see examples above). You may use arithmetic operators with numbers as well as with series variables. In case of usage with series the operators are applied elementwise.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("?:")
@@ -156,22 +135,26 @@ c = timeframe.isintraday ? color.red : timeframe.isdaily ? color.green : timefra
 plot(hl2, color=c)
 ```
 
-## []
+### Returns
+expr2 if expr1 is evaluated to true, expr3 otherwise. Zero value (0 and also NaN, +Infinity, -Infinity) is considered to be false, any other value is true.
 
+### Remarks
+Use na for 'else' branch if you do not need it.
+You can combine two or more ?: operators to achieve the equivalent of a 'switch'-like statement (see examples above).
+You may use arithmetic operators with numbers as well as with series variables. In case of usage with series the operators are applied elementwise.
+
+### See also
+`na`
+
+## []
 Series subscript. Provides access to previous values of series expr1. expr2 is the number of bars back, and must be numerical. Floats will be rounded down.
 
 ### Syntax
-
 ```pine
 expr1[expr2]
 ```
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
-### Returns
-A series of values.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("[]")
@@ -183,37 +166,32 @@ if high == low // if some condition - change `a` value to another
 plot(a)
 ```
 
-## *
+### Returns
+A series of values.
 
+### See also
+`math.floor()`
+
+## *
 Multiplication. Applicable to numerical expressions.
 
 ### Syntax
-
 ```pine
 expr1 * expr2
 ```
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Returns
 Integer or float value, or series of values.
 
 ## *=
-
 Multiplication assignment. Applicable to numerical expressions.
 
 ### Syntax
-
 ```pine
 expr1 *= expr2
 ```
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
-### Returns
-Integer or float value, or series of values.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("*=")
@@ -225,37 +203,29 @@ a *= b
 plot(a)
 ```
 
-## /
+### Returns
+Integer or float value, or series of values.
 
+## /
 Division. Applicable to numerical expressions.
 
 ### Syntax
-
 ```pine
 expr1 / expr2
 ```
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Returns
 Integer or float value, or series of values.
 
 ## /=
-
 Division assignment. Applicable to numerical expressions.
 
 ### Syntax
-
 ```pine
 expr1 /= expr2
 ```
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
-### Returns
-Integer or float value, or series of values.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("/=")
@@ -267,40 +237,33 @@ a /= b
 plot(a)
 ```
 
-## %
+### Returns
+Integer or float value, or series of values.
 
+## %
 Modulo (integer remainder). Applicable to numerical expressions.
 
 ### Syntax
-
 ```pine
 expr1 % expr2
 ```
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Returns
 Integer or float value, or series of values.
 
 ### Remarks
-In Pine Script®, when the integer remainder is calculated, the quotient is truncated, i.e. rounded towards the lowest absolute value. The resulting value will have the same sign as the dividend. Example: -1 % 9 = -1 - 9 * int(-1/9) = -1 - 9 * int(-0.111) = -1 - 9 * 0 = -1.
+In Pine Script®, when the integer remainder is calculated, the quotient is truncated, i.e. rounded towards the lowest absolute value. The resulting value will have the same sign as the dividend.
+Example: -1 % 9 = -1 - 9 * int(-1/9) = -1 - 9 * int(-0.111) = -1 - 9 * 0 = -1.
 
 ## %=
-
 Modulo assignment. Applicable to numerical expressions.
 
 ### Syntax
-
 ```pine
 expr1 %= expr2
 ```
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
-### Returns
-Integer or float value, or series of values.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("%=")
@@ -312,44 +275,35 @@ a %= b
 plot(a)
 ```
 
-## +
+### Returns
+Integer or float value, or series of values.
 
+## +
 Addition or unary plus. Applicable to numerical expressions or strings.
 
 ### Syntax
-
 ```pine
 expr1 + expr2
-+ expr
 ```
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Returns
 Binary + for strings returns concatenation of expr1 and expr2
+For numbers returns integer or float value, or series of values:
+Binary + returns expr1 plus expr2.
+Unary + returns expr (does nothing added just for the symmetry with the unary - operator).
 
 ### Remarks
 You may use arithmetic operators with numbers as well as with series variables. In case of usage with series the operators are applied elementwise.
 
 ## +=
-
 Addition assignment. Applicable to numerical expressions or strings.
 
 ### Syntax
-
 ```pine
 expr1 += expr2
 ```
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
-### Returns
-For strings returns concatenation of expr1 and expr2. For numbers returns integer or float value, or series of values.
-
-### Remarks
-You may use arithmetic operators with numbers as well as with series variables. In case of usage with series the operators are applied elementwise.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("+=")
@@ -361,108 +315,118 @@ a += b
 plot(a)
 ```
 
-## <
+### Returns
+For strings returns concatenation of expr1 and expr2. For numbers returns integer or float value, or series of values.
 
+### Remarks
+You may use arithmetic operators with numbers as well as with series variables. In case of usage with series the operators are applied elementwise.
+
+## <
 Less than. Applicable to numerical expressions.
 
 ### Syntax
-
 ```pine
 expr1 < expr2
 ```
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Returns
 Boolean value, or series of boolean values.
 
 ## <=
-
 Less than or equal to. Applicable to numerical expressions.
 
 ### Syntax
-
 ```pine
 expr1 <= expr2
 ```
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
 ### Returns
 Boolean value, or series of boolean values.
 
-## ==
-
-Equal to. Applicable to expressions of any type.
+## =
+Assignment operator. Assigns an initial value or reference to a declared variable. It means this is a new variable, and it starts with this value.
 
 ### Syntax
+```pine
+<var_name> := <initial_value>
+```
 
+### Example
+```pine
+//@version=6
+indicator("`=` showcase")
+// The following are all valid variable declarations.
+i = 1
+MS_IN_ONE_MINUTE = 1000 * 60
+showPlotInput = input.bool(true, "Show plots")
+pHi = ta.pivothigh(5, 5)
+plotColor = color.green
+
+plot(pHi, color = plotColor, display = showPlotInput ? display.all : display.none, precision = i)
+```
+
+## ==
+Equality operator. Returns true if the operands are considered equal, and false otherwise. This operator is compatible with all value types, including "int", "float", "bool", "color", and "string". The operator can also compare two line or label IDs.
+
+### Syntax
 ```pine
 expr1 == expr2
 ```
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
 ### Returns
 Boolean value, or series of boolean values.
 
-## =>
+### Remarks
+This operator rounds "float" operands to nine fractional digits.
 
+## =>
 The '=>' operator is used in user-defined function declarations and in switch statements.
+The function declaration syntax is:
 
 ### Syntax
-
 ```pine
 <identifier>([<parameter_name>[=<default_value>]], ...) =>
     <local_block>
     <function_result>
 ```
+A <local_block> is zero or more Pine Script® statements.
+The <function_result> is a variable, an expression, or a tuple.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
-### Remarks
-You can learn more about user-defined functions in the User Manual's pages on Declaring functions and Libraries.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("=>")
 // single-line function
 f1(x, y) => x + y
 // multi-line function
-f2(x, y) => 
+f2(x, y) =>
     sum = x + y
     sumChange = ta.change(sum, 10)
     // Function automatically returns the last expression used in it
 plot(f1(30, 8) + f2(1, 3))
 ```
 
-## >
+### Remarks
+You can learn more about user-defined functions in the User Manual's pages on Declaring functions and Libraries.
 
+## >
 Greater than. Applicable to numerical expressions.
 
 ### Syntax
-
 ```pine
 expr1 > expr2
 ```
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Returns
 Boolean value, or series of boolean values.
 
 ## >=
-
 Greater than or equal to. Applicable to numerical expressions.
 
 ### Syntax
-
 ```pine
 expr1 >= expr2
 ```
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Returns
 Boolean value, or series of boolean values.

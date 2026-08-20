@@ -26,10 +26,9 @@ The `//@` compiler annotations used for versioning, library documentation, and s
 ---
 
 ## @description
+Sets a custom description for scripts that use the library() declaration statement. The text provided with this annotation will be used to pre-fill the "Description" field in the publication dialogue.
 
-Sets a custom description for scripts that use the library declaration statement. The text provided with this annotation will be used to pre-fill the "Description" field in the publication dialogue.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 // @description Provides a tool to quickly output a label on the chart.
@@ -43,18 +42,9 @@ export drawLabel(string labelText) =>
 ```
 
 ## @enum
-
 If placed above an enum declaration, it adds a custom description for the enum. The Pine Editor's autosuggest uses this description and displays it when a user hovers over the enum name. When used in library scripts, the descriptions of all enums using the export keyword will pre-fill the "Description" field in the publication dialogue.
 
-### Syntax
-
-```pine
-//@enum EnumName
-```
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("Session highlight", overlay = true)
@@ -84,10 +74,10 @@ bgcolor(inSession ? color.new(color.green, 90) : na, title = "Active session hig
 ```
 
 ## @field
-
 If placed above a type or enum declaration, it adds a custom description for a field of the type/enum. After the annotation, users should specify the field name, followed by its description.
+The Pine Editor's autosuggest uses this description and displays it when a user hovers over the type/enum or field name. When used in library() scripts, the descriptions of all types/enums using the export keyword will pre-fill the "Description" field in the publication dialogue.
 
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("New high over the last 20 bars", overlay = true)
@@ -108,10 +98,10 @@ if ta.highestbars(high, 20) == 0
 ```
 
 ## @function
-
 If placed above a function declaration, it adds a custom description for the function.
+The Pine Editor's autosuggest uses this description and displays it when a user hovers over the function name. When used in library() scripts, the descriptions of all functions using the export keyword will pre-fill the "Description" field in the publication dialogue.
 
-### Code Example
+### Example
 ```pine
 //@version=6
 // @description Provides a tool to quickly output a label on the chart.
@@ -125,10 +115,10 @@ export drawLabel(string labelText) =>
 ```
 
 ## @param
-
 If placed above a function declaration, it adds a custom description for a function parameter. After the annotation, users should specify the parameter name, then its description.
+The Pine Editor's autosuggest uses this description and displays it when a user hovers over the function name. When used in library() scripts, the descriptions of all functions using the export keyword will pre-fill the "Description" field in the publication dialogue.
 
-### Code Example
+### Example
 ```pine
 //@version=6
 // @description Provides a tool to quickly output a label on the chart.
@@ -142,10 +132,10 @@ export drawLabel(string labelText) =>
 ```
 
 ## @returns
-
 If placed above a function declaration, it adds a custom description for what that function returns.
+The Pine Editor's autosuggest uses this description and displays it when a user hovers over the function name. When used in library() scripts, the descriptions of all functions using the export keyword will pre-fill the "Description" field in the publication dialogue.
 
-### Code Example
+### Example
 ```pine
 //@version=6
 // @description Provides a tool to quickly output a label on the chart.
@@ -159,10 +149,9 @@ export drawLabel(string labelText) =>
 ```
 
 ## @strategy_alert_message
+If used within a strategy() script, it provides a default message to pre-fill the "Message" field in the alert creation dialogue.
 
-If used within a strategy script, it provides a default message to pre-fill the "Message" field in the alert creation dialogue.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("My strategy", overlay=true, margin_long=100, margin_short=100)
@@ -175,10 +164,10 @@ strategy.exit("Exit", "My Long Entry Id", profit = 10 / syminfo.mintick, loss = 
 ```
 
 ## @type
-
 If placed above a type declaration, it adds a custom description for the type.
+The Pine Editor's autosuggest uses this description and displays it when a user hovers over the type name. When used in library() scripts, the descriptions of all types using the export keyword will pre-fill the "Description" field in the publication dialogue.
 
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("New high over the last 20 bars", overlay = true)
@@ -199,10 +188,10 @@ if ta.highestbars(high, 20) == 0
 ```
 
 ## @variable
-
 If placed above a variable declaration, it adds a custom description for the variable.
+The Pine Editor's autosuggest uses this description and displays it when a user hovers over the variable name.
 
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("New high over the last 20 bars", overlay = true)
@@ -223,20 +212,22 @@ if ta.highestbars(high, 20) == 0
 ```
 
 ## @version=
-
 Specifies the Pine Script® version that the script will use. The number in this annotation should not be confused with the script's version number, which updates on every saved change to the code.
 
-### Remarks
-The version should always be specified. Otherwise, for compatibility reasons, the script will be compiled using Pine Script® v1, which lacks most of the newer features and is bound to confuse. This annotation can be anywhere within a script, but we recommend placing it at the top of the code for readability.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 indicator("Pine v6 Indicator")
 plot(close)
+```
 
+### Example
+```pine
 //This indicator has no version annotation, so it will try to use v1.
 //Pine Script® v1 has no function named `indicator()`, so the script will not compile.
 indicator("Pine v1 Indicator")
 plot(close)
 ```
+
+### Remarks
+The version should always be specified. Otherwise, for compatibility reasons, the script will be compiled using Pine Script® v1, which lacks most of the newer features and is bound to confuse. This annotation can be anywhere within a script, but we recommend placing it at the top of the code for readability.

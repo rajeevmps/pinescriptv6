@@ -64,54 +64,51 @@ The backtesting engine: the `strategy()` declaration, order placement, exits, an
 ---
 
 ## strategy()
-
 This declaration statement designates the script as a strategy and sets a number of strategy-related properties.
+Learn more
 
 ### Syntax
-
 ```pine
 strategy(title, shorttitle, overlay, format, precision, scale, pyramiding, calc_on_order_fills, calc_on_every_tick, max_bars_back, backtest_fill_limits_assumption, default_qty_type, default_qty_value, initial_capital, currency, slippage, commission_type, commission_value, process_orders_on_close, close_entries_rule, margin_long, margin_short, explicit_plot_zorder, max_lines_count, max_labels_count, max_boxes_count, calc_bars_count, risk_free_rate, use_bar_magnifier, fill_orders_on_standard_ohlc, max_polylines_count, dynamic_requests, behind_chart, calc_on_every_history_tick) → void
 ```
 
 ### Arguments
+- `title` (*const string*) — The title of the script. It is displayed on the chart when no shorttitle argument is used, and becomes the publication's default title when publishing the script.
+- `shorttitle` (*const string*) — The script's display name on charts. If specified, it will replace the title argument in most chart-related windows. Optional. The default is the argument used for title.
+- `overlay` (*const bool*) — If true, the script's visuals appear on the main chart pane if the user adds it to the chart directly, or in another script's pane if the user applies it to that script. If false, the script's visuals appear in a separate pane. Changes to the overlay value apply only after the user adds the script to the chart again. Additionally, if the user moves the script to another pane by selecting a "Move to" option in the script's "More" menu, it does not move back to its original pane after any updates to the source code. The default is false. Strategy-specific labels that display entries and exits will be displayed over the main chart regardless of this setting.
+- `format` (*const string*) — Specifies the formatting of the script's displayed values. Possible values: format.inherit, format.price, format.volume, format.percent. Optional. The default is format.inherit.
+- `precision` (*const int*) — Specifies the number of digits after the floating point of the script's displayed values. Must be a non-negative integer no greater than 16. If format is set to format.inherit and precision is specified, the format will instead be set to format.price. When the function's format parameter uses format.volume, the precision parameter will not affect the result, as the decimal precision rules defined by format.volume supersede other precision settings. Optional. The default is inherited from the precision of the chart's symbol.
+- `scale` (*const scale_type*) — Optional. Determines the location of the script's price scale and the scaling behavior of the script's visuals. Possible values are scale.right, scale.left, and scale.none. If specified and the script overlays on the main chart pane or another script's pane, the script scales its visuals independently to fit the pane's visual space. If the script occupies the same pane as the main chart or another script, scale.right or scale.left adds a separate price scale for the script to the left or right side of that pane. If the script occupies a separate pane, either argument positions the price scale for that pane on the left or right side without adding a new scale. If the argument is scale.none, which is valid only if the overlay argument is true, the script displays plotted numbers directly on the scale of the existing pane, or displays values on a new price scale if the user moves it to a new pane. Changes to the argument apply only after the user adds the script to the chart again. If not specified, the script uses the main price scale for the pane it occupies, and it does not scale its visuals separately if it overlays on an existing pane.
+- `pyramiding` (*const int*) — The maximum number of entries allowed in the same direction. If the value is 0, only one entry order in the same direction can be opened, and additional entry orders are rejected. This setting can also be changed in the strategy's "Settings/Properties" tab. Optional. The default is 0.
+- `calc_on_order_fills` (*const bool*) — Optional. Modifies the strategy's default calculation behavior on historical and realtime bars. Users can change the behavior by selecting the "On order fill" checkbox from the "Script executions" dropdown menu in the "Settings/Properties" tab. If true, the strategy performs a new execution to update its calculations on each tick where an order fill occurs. On historical bars, ticks refer to bar OHLC prices or intrabar prices from a lower timeframe, depending on the selected level of historical bar detail. On realtime bars, ticks refer to new price updates from the data feed. If the argument is false, the strategy executes only on the closing tick of each bar, and on any other ticks allowed by the selected "Script executions" settings. The default is false.
+- `calc_on_every_tick` (*const bool*) — Optional. Modifies the strategy's default calculation behavior on realtime bars. Users can change the behavior by selecting the "On realtime bar tick" checkbox from the "Script executions" dropdown menu in the "Settings/Properties" tab. If true, the strategy performs a new execution to update its calculations on every available tick in each realtime bar, where a tick refers to a new price update from the data feed. If false, the strategy executes only on the closing tick of each bar, and on any other ticks allowed by the selected "Script executions" settings. The default is false.
+- `max_bars_back` (*const int*) — The length of the historical buffer the script keeps for every variable and function, which determines how many past values can be referenced using the [] history-referencing operator. The required buffer size is automatically detected by the Pine Script® runtime. Using this parameter is only necessary when a runtime error occurs because automatic detection fails. More information on the underlying mechanics of the historical buffer can be found in our Help Center. Optional. The default is 0.
+- `backtest_fill_limits_assumption` (*const int*) — Limit order execution threshold in ticks. When it is used, limit orders are only filled if the market price exceeds the order's limit level by the specified number of ticks. Optional. The default is 0.
+- `default_qty_type` (*const string*) — Specifies the units used for default_qty_value. Possible values are: strategy.fixed for contracts/shares/lots, strategy.cash for currency amounts, or strategy.percent_of_equity for a percentage of available equity. This setting can also be changed in the strategy's "Settings/Properties" tab. Optional. The default is strategy.fixed.
+- `default_qty_value` (*const int/float*) — The default quantity to trade, in units determined by the argument used with the default_qty_type parameter. This setting can also be changed in the strategy's "Settings/Properties" tab. Optional. The default is 1.
+- `initial_capital` (*const int/float*) — The amount of funds initially available for the strategy to trade, in units of currency. Optional. The default is 1000000.
+- `currency` (*const string*) — Currency used by the strategy in currency-related calculations. Market positions are still opened by converting currency into the chart symbol's currency. The conversion rate depends on the previous daily value of a corresponding currency pair from the most popular exchange. A spread symbol is used if no exchange provides the rate directly. Possible values: a "string" representing a valid currency code (e.g., "USD" or "USDT") or a constant from the currency.* namespace (e.g., currency.USD or currency.USDT). The default is syminfo.currency.
+- `slippage` (*const int*) — Slippage expressed in ticks. This value is added to or subtracted from the fill price of market/stop orders to make the fill price less favorable for the strategy. E.g., if syminfo.mintick is 0.01 and slippage is set to 5, a long market order will enter at 5 * 0.01 = 0.05 points above the actual price. This setting can also be changed in the strategy's "Settings/Properties" tab. Optional. The default is 0.
+- `commission_type` (*const string*) — Determines what the number passed to the commission_value expresses: strategy.commission.percent for a percentage of the cash volume of the order, strategy.commission.cash_per_contract for currency per contract, strategy.commission.cash_per_order for currency per order. This setting can also be changed in the strategy's "Settings/Properties" tab. Optional. The default is strategy.commission.percent.
+- `commission_value` (*const int/float*) — Commission applied to the strategy's orders in units determined by the argument passed to the commission_type parameter. This setting can also be changed in the strategy's "Settings/Properties" tab. Optional. The default is 0.
+- `process_orders_on_close` (*const bool*) — When set to true, generates an additional attempt to execute orders after a bar closes and strategy calculations are completed. If the orders are market orders, the broker emulator executes them before the next bar's open. If the orders are price-dependent, they will only be filled if the price conditions are met. This option is useful if you wish to close positions on the current bar. This setting can also be changed in the strategy's "Settings/Properties" tab. Optional. The default is false.
+- `close_entries_rule` (*const string*) — Determines the order in which trades are closed. Possible values are: "FIFO" (First-In, First-Out) if the earliest exit order must close the earliest entry order, or "ANY" if the orders are closed based on the from_entry parameter of the strategy.exit() function. "FIFO" can only be used with stocks, futures and US forex (NFA Compliance Rule 2-43b), while "ANY" is allowed in non-US forex. Optional. The default is "FIFO".
+- `margin_long` (*const int/float*) — Margin long is the percentage of the purchase price of a security that must be covered by cash or collateral for long positions. Must be a non-negative number. The logic used to simulate margin calls is explained in the Help Center. This setting can also be changed in the strategy's "Settings/Properties" tab. Optional. If the value is 0, the strategy does not enforce any limits on position size. The default is 100, in which case the strategy only uses its own funds and the long positions cannot be margin called.
+- `margin_short` (*const int/float*) — Margin short is the percentage of the purchase price of a security that must be covered by cash or collateral for short positions. Must be a non-negative number. The logic used to simulate margin calls is explained in the Help Center. This setting can also be changed in the strategy's "Settings/Properties" tab. Optional. If the value is 0, the strategy does not enforce any limits on position size. The default is 100, in which case the strategy only uses its own funds. Note that even with no margin used, short positions can be margin called if the loss exceeds available funds.
+- `explicit_plot_zorder` (*const bool*) — Specifies the order in which the script's plots, fills, and hlines are rendered. If true, plots are drawn in the order in which they appear in the script's code, each newer plot being drawn above the previous ones. This only applies to plot*() functions, fill(), and hline(). Optional. The default is false.
+- `max_lines_count` (*const int*) — The number of last line drawings displayed. Possible values: 1-500. Optional. The default is 50.
+- `max_labels_count` (*const int*) — The number of last label drawings displayed. Possible values: 1-500. Optional. The default is 50.
+- `max_boxes_count` (*const int*) — The number of last box drawings displayed. Possible values: 1-500. Optional. The default is 50.
+- `calc_bars_count` (*const int*) — Limits the initial calculation of a script to the last number of bars specified. When specified, a "Calculated bars" field will be included in the "Calculation" section of the script's "Settings/Inputs" tab. Optional. The default is 0, in which case the script executes on all available bars.
+- `risk_free_rate` (*const int/float*) — The risk-free rate of return is the annual percentage change in the value of an investment with minimal or zero risk. It is used to calculate the Sharpe and Sortino ratios. Optional. The default is 2.
+- `use_bar_magnifier` (*const bool*) — Optional. When true, the Broker Emulator uses lower timeframe data during backtesting on historical bars to achieve more realistic results. The default is false. Only Premium and higher-tier plans have access to this feature.
+- `fill_orders_on_standard_ohlc` (*const bool*) — When true, forces strategies running on Heikin Ashi charts to fill orders using actual OHLC prices, for more realistic results. Optional. The default is false.
+- `max_polylines_count` (*const int*) — The number of last polyline drawings displayed. Possible values: 1-100. The count is approximate; more drawings than the specified count may be displayed. Optional. The default is 50.
+- `dynamic_requests` (*const bool*) — Specifies whether the script can dynamically call functions from the request.*() namespace. Dynamic request.*() calls are allowed within the local scopes of conditional structures (e.g., if), loops (e.g., for), and exported functions. Additionally, such calls allow "series" arguments for many of their parameters. Optional. The default is true. See the User Manual's Dynamic requests section for more information.
+- `behind_chart` (*const bool*) — Optional. Controls whether all plots and drawings appear behind the chart display (if true) or in front of it (if false). This parameter only takes effect when the overlay parameter is true. The default is true.
+- `calc_on_every_history_tick` (*const bool*) — Optional. Modifies the strategy's default calculation behavior on historical bars. Users can change the behavior by selecting the "On history bar tick" checkbox from the "Script executions" dropdown menu in the "Settings/Properties" tab. An argument for this parameter must include the parameter's name (e.g., calc_on_every_history_tick = true). If the value is true, the strategy performs a new execution to update its calculations on every available tick in each historical bar. Historical ticks refer to bar OHLC prices or intrabar prices from a lower timeframe, depending on the selected level of historical bar detail. If false, the strategy executes only on the closing tick of each bar, and on any other ticks allowed by the selected "Script executions" settings. The default is false.
 
-- `title` (*const string*) — The title of the script. It is displayed on the chart when no `shorttitle` argument is used, and becomes the publication’s default title when publishing the script.
-- `shorttitle` (*const string*, optional, default `'title'`) — The script’s display name on charts. If specified, it will replace the `title` argument in most chart-related windows. Optional. The default is the argument used for `title`.
-- `overlay` (*const bool*, optional, default `false`) — If [true](https://www.tradingview.com/pine-script-reference/v6/#op_true), the strategy will be displayed over the chart. If [false](https://www.tradingview.com/pine-script-reference/v6/#op_false), it will be added in a separate pane. Strategy-specific labels that display entries and exits will be displayed over the main chart regardless of this setting. Optional. The default is [false](https://www.tradingview.com/pine-script-reference/v6/#op_false).
-- `format` (*const string*, optional, default `format.inherit`) — Specifies the formatting of the script’s displayed values. Possible values: [format.inherit](https://www.tradingview.com/pine-script-reference/v6/#var_format.inherit), [format.price](https://www.tradingview.com/pine-script-reference/v6/#var_format.price), [format.volume](https://www.tradingview.com/pine-script-reference/v6/#var_format.volume), [format.percent](https://www.tradingview.com/pine-script-reference/v6/#var_format.percent). Optional. The default is [format.inherit](https://www.tradingview.com/pine-script-reference/v6/#var_format.inherit).
-- `precision` (*const int*, optional, default `syminfo.pricescale`) — Specifies the number of digits after the floating point of the script’s displayed values. Must be a non-negative integer no greater than 16. If `format` is set to [format.inherit](https://www.tradingview.com/pine-script-reference/v6/#var_format.inherit) and `precision` is specified, the format will instead be set to [format.price](https://www.tradingview.com/pine-script-reference/v6/#var_format.price). Optional. The default is inherited from the precision of the chart’s symbol.
-- `scale` (*const scale_type*, optional, default `scale.right`) — The price scale used. Possible values: [scale.right](https://www.tradingview.com/pine-script-reference/v6/#var_scale.right), [scale.left](https://www.tradingview.com/pine-script-reference/v6/#var_scale.left), [scale.none](https://www.tradingview.com/pine-script-reference/v6/#var_scale.none). The [scale.none](https://www.tradingview.com/pine-script-reference/v6/#var_scale.none) value can only be applied in combination with `overlay = true`. Optional. By default, the script uses the same scale as the chart.
-- `pyramiding` (*const int*, optional, default `0`) — The maximum number of entries allowed in the same direction. If the value is 0, only one entry order in the same direction can be opened, and additional entry orders are rejected. This setting can also be changed in the strategy’s "Settings/Properties" tab. Optional. The default is 0.
-- `calc_on_order_fills` (*const bool*, optional, default `false`) — Specifies whether the strategy should be recalculated after an order is filled. If [true](https://www.tradingview.com/pine-script-reference/v6/#op_true), the strategy recalculates after an order is filled, as opposed to recalculating only when the bar closes. This setting can also be changed in the strategy’s "Settings/Properties" tab. Optional. The default is [false](https://www.tradingview.com/pine-script-reference/v6/#op_false).
-- `calc_on_every_tick` (*const bool*, optional, default `false`) — Specifies whether the strategy should be recalculated on each realtime tick. If [true](https://www.tradingview.com/pine-script-reference/v6/#op_true), when the strategy is running on a realtime bar, it will recalculate on each chart update. If [false](https://www.tradingview.com/pine-script-reference/v6/#op_false), the strategy only calculates when the realtime bar closes. The argument used does not affect strategy calculation on historical data. This setting can also be changed in the strategy’s "Settings/Properties" tab. Optional. The default is [false](https://www.tradingview.com/pine-script-reference/v6/#op_false).
-- `max_bars_back` (*const int*, optional, default `0`) — The length of the historical buffer the script keeps for every variable and function, which determines how many past values can be referenced using the `[]` history-referencing operator. The required buffer size is automatically detected by the Pine Script™ runtime. Using this parameter is only necessary when a runtime error occurs because automatic detection fails. More information on the underlying mechanics of the historical buffer can be found [in our Help Center](https://www.tradingview.com/chart/?solution=43000587849). Optional. The default is 0.
-- `backtest_fill_limits_assumption` (*const int*, optional, default `0`) — Limit order execution threshold in ticks. When it is used, limit orders are only filled if the market price exceeds the order’s limit level by the specified number of ticks. Optional. The default is 0.
-- `default_qty_type` (*const string*, optional, default `strategy.fixed`) — Specifies the units used for `default_qty_value`. Possible values are: [strategy.fixed](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.fixed) for contracts/shares/lots, [strategy.cash](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.cash) for currency amounts, or [strategy.percent_of_equity](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.percent_of_equity) for a percentage of available equity. This setting can also be changed in the strategy’s "Settings/Properties" tab. Optional. The default is [strategy.fixed](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.fixed).
-- `default_qty_value` (*const int|float*, optional, default `1`) — The default quantity to trade, in units determined by the argument used with the `default_qty_type` parameter. This setting can also be changed in the strategy’s "Settings/Properties" tab. Optional. The default is 1.
-- `initial_capital` (*const int|float*, optional, default `1000000`) — The amount of funds initially available for the strategy to trade, in units of `currency`. Optional. The default is 1000000.
-- `currency` (*const string*, optional, default `syminfo.currency`) — Currency used by the strategy in currency-related calculations. Market positions are still opened by converting `currency` into the chart symbol’s currency. The conversion rates used are based on the FX_IDC pairs' daily rates of the previous day (relative to the bar where the calculation is done). This setting can also be changed in the strategy’s "Settings/Properties" tab. Optional. The default is [currency.NONE](https://www.tradingview.com/pine-script-reference/v6/#var_currency.NONE), in which case the chart’s currency is used. Possible values: one of the constants in the `currency.*` namespace, e.g. [currency.USD](https://www.tradingview.com/pine-script-reference/v6/#var_currency.USD).
-- `slippage` (*const int*, optional, default `0`) — Slippage expressed in ticks. This value is added to or subtracted from the fill price of market/stop orders to make the fill price less favorable for the strategy. E.g., if [syminfo.mintick](https://www.tradingview.com/pine-script-reference/v6/#var_syminfo.mintick) is 0.01 and `slippage` is set to 5, a long market order will enter at 5 * 0.01 = 0.05 points above the actual price. This setting can also be changed in the strategy’s "Settings/Properties" tab. Optional. The default is 0.
-- `commission_type` (*const string*, optional, default `strategy.commission.percent`) — Determines what the number passed to the `commission_value` expresses: [strategy.commission.percent](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.commission.percent) for a percentage of the cash volume of the order, [strategy.commission.cash_per_contract](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.commission.cash_per_contract) for currency per contract, [strategy.commission.cash_per_order](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.commission.cash_per_order) for currency per order. This setting can also be changed in the strategy’s "Settings/Properties" tab. Optional. The default is [strategy.commission.percent](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.commission.percent).
-- `commission_value` (*const int|float*, optional, default `0`) — Commission applied to the strategy’s orders in units determined by the argument passed to the `commission_type` parameter. This setting can also be changed in the strategy’s "Settings/Properties" tab. Optional. The default is 0.
-- `process_orders_on_close` (*const bool*, optional, default `false`) — When set to [true](https://www.tradingview.com/pine-script-reference/v6/#op_true), generates an additional attempt to execute orders after a bar closes and strategy calculations are completed. If the orders are market orders, the broker emulator executes them before the next bar’s open. If the orders are price-dependent, they will only be filled if the price conditions are met. This option is useful if you wish to close positions on the current bar. This setting can also be changed in the strategy’s "Settings/Properties" tab. Optional. The default is [false](https://www.tradingview.com/pine-script-reference/v6/#op_false).
-- `close_entries_rule` (*const string*, optional, default `"FIFO"`) — Determines the order in which trades are closed. Possible values are: "FIFO" (First-In, First-Out) if the earliest exit order must close the earliest entry order, or "ANY" if the orders are closed based on the `from_entry` parameter of the [strategy.exit](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.exit) function. "FIFO" can only be used with stocks, futures and US forex (NFA Compliance Rule 2-43b), while "ANY" is allowed in non-US forex. Optional. The default is "FIFO".
-- `margin_long` (*const int|float*, optional, default `0`) — Margin long is the percentage of the purchase price of a security that must be covered by cash or collateral for long positions. Must be a non-negative number. The logic used to simulate margin calls is explained in the [Help Center](https://www.tradingview.com/chart/?solution=43000628599). This setting can also be changed in the strategy’s "Settings/Properties" tab. Optional. The default is 0, in which case the strategy does not enforce any limits on position size.
-- `margin_short` (*const int|float*, optional, default `0`) — Margin short is the percentage of the purchase price of a security that must be covered by cash or collateral for short positions. Must be a non-negative number. The logic used to simulate margin calls is explained in the [Help Center](https://www.tradingview.com/chart/?solution=43000628599). This setting can also be changed in the strategy’s "Settings/Properties" tab. Optional. The default is 0, in which case the strategy does not enforce any limits on position size.
-- `explicit_plot_zorder` (*const bool*, optional, default `false`) — Specifies the order in which the script’s plots, fills, and hlines are rendered. If [true](https://www.tradingview.com/pine-script-reference/v6/#op_true), plots are drawn in the order in which they appear in the script’s code, each newer plot being drawn above the previous ones. This only applies to `plot*()` functions, [fill](https://www.tradingview.com/pine-script-reference/v6/#fun_fill), and [hline](https://www.tradingview.com/pine-script-reference/v6/#fun_hline). Optional. The default is [false](https://www.tradingview.com/pine-script-reference/v6/#op_false).
-- `max_lines_count` (*const int*, optional, default `50`) — The number of last [line](https://www.tradingview.com/pine-script-reference/v6/#op_line) drawings displayed. Possible values: 1-500. Optional. The default is 50.
-- `max_labels_count` (*const int*, optional, default `50`) — The number of last [label](https://www.tradingview.com/pine-script-reference/v6/#op_label) drawings displayed. Possible values: 1-500. Optional. The default is 50.
-- `max_boxes_count` (*const int*, optional, default `50`) — The number of last [box](https://www.tradingview.com/pine-script-reference/v6/#op_box) drawings displayed. Possible values: 1-500. Optional. The default is 50.
-- `risk_free_rate` (*const int|float*, optional, default `2`) — The risk-free rate of return is the annual percentage change in the value of an investment with minimal or zero risk. It is used to calculate the [Sharpe and Sortino ratios](https://www.tradingview.com/chart/?solution=43000561856). Optional. The default is 2.
-- `use_bar_magnifier` (*const bool*, optional, default `false`) — When true, the [Broker Emulator](https://www.tradingview.com/pine-script-docs/en/v5/concepts/Strategies.html#broker-emulator) uses lower timeframe data during history backtesting to achieve more realistic results. Optional. The default is [false](https://www.tradingview.com/pine-script-reference/v6/#op_false). Only [Premium](https://www.tradingview.com/gopro/) accounts have access to this feature.
-- `fill_orders_on_standard_ohlc` (optional, default `false`) — When true, forces the strategy to fill orders on Heikin Ashi charts using actual OHLC values. Optional. The default is [false](https://www.tradingview.com/pine-script-reference/v6/#op_false).
-- `max_polylines_count` (*const int*, optional, default `50`) — The number of last [polyline](https://www.tradingview.com/pine-script-reference/v6/#op_polyline) drawings displayed. Possible values: 1-100. The count is approximate; more drawings than the specified count may be displayed. Optional. The default is 50.
-
-*Signature from the official v6 User Manual. Arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy).*
-
-### Remarks
-You can learn more about strategies in our User Manual. Every strategy script must have one strategy call. Strategies using calc_on_every_tick = true parameter may calculate differently on historical and realtime bars, which causes repainting. Strategies always use the chart's prices to enter and exit positions. Using them on non-standard chart types (Heikin Ashi, Renko, etc.) will produce misleading results, as their prices are synthetic. Backtesting on non-standard charts is thus not recommended. The maximum number of orders a strategy can open, unless it uses Deep Backtesting mode, is 9000. If the strategy exceeds this limit, it removes the oldest order's information when a new entry appears in the "List of Trades" tab. The strategy.closedtrades.*() functions return na for trades opened or closed by removed orders. To retrieve the index of the oldest available closed trade, use the strategy.closedtrades.first_index variable.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("My strategy", overlay = true)
@@ -123,23 +120,30 @@ if open > high[1]
 strategy.exit("Exit", "Long", profit = 10, loss = 5)
 ```
 
-## strategy.cancel()
+### Remarks
+You can learn more about strategies in our User Manual.
+Every strategy script must have one strategy() call.
+Strategies using calc_on_every_tick = true parameter may calculate differently on historical and realtime bars, which causes repainting.
+Strategies always use the chart's prices to enter and exit positions. Using them on non-standard chart types (Heikin Ashi, Renko, etc.) will produce misleading results, as their prices are synthetic. Backtesting on non-standard charts is thus not recommended.
+The maximum number of orders a strategy can open, unless it uses Deep Backtesting mode, is 9000. If the strategy exceeds this limit, it removes the oldest order's information when a new entry appears in the "List of Trades" tab. The strategy.closedtrades.*() functions return na for trades opened or closed by removed orders. To retrieve the index of the oldest available closed trade, use the strategy.closedtrades.first_index variable.
 
+### See also
+`indicator()`, `library()`
+
+## strategy.cancel()
 Cancels a pending or unfilled order with a specific identifier. If multiple unfilled orders share the same ID, calling this command with that ID as the id argument cancels all of them. If a script calls this command with an id representing the ID of a filled order, it has no effect.
+This command is most useful when working with price-based orders (e.g., limit orders). Calls to this command can also cancel market orders, but only if they execute on the same ticks as the order placement commands.
+Learn more
 
 ### Syntax
-
 ```pine
 strategy.cancel(id) → void
 ```
 
 ### Arguments
+- `id` (*series string*) — The identifier of the unfilled order to cancel.
 
-- `id` (*series string*) — A required parameter. The order identifier. It is possible to cancel an order by referencing its identifier.
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.cancel).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy(title = "Order cancellation demo")
@@ -152,18 +156,16 @@ if not conditionForBuy
 ```
 
 ## strategy.cancel_all()
-
 Cancels all pending or unfilled orders, regardless of their identifiers.
+This command is most useful when working with price-based orders (e.g., limit orders). Calls to this command can also cancel market orders, but only if they execute on the same ticks as the order placement commands.
+Learn more
 
 ### Syntax
-
 ```pine
 strategy.cancel_all() → void
 ```
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.cancel_all).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy(title = "Cancel all orders demo")
@@ -180,31 +182,25 @@ if conditionForStopTrading
 ```
 
 ## strategy.close()
-
 Creates an order to exit from the part of a position opened by entry orders with a specific identifier. If multiple entries in the position share the same ID, the orders from this command apply to all those entries, starting from the first open trade, when its calls use that ID as the id argument.
+This command always generates market orders. To exit from a position using price-based orders (e.g., stop-loss orders), use the strategy.exit() command.
+Learn more
 
 ### Syntax
-
 ```pine
-strategy.close(id, comment, qty, qty_percent, alert_message, immediately) → void
+strategy.close(id, comment, qty, qty_percent, alert_message, immediately, disable_alert) → void
 ```
 
 ### Arguments
+- `id` (*series string*) — The entry identifier of the open trades to close.
+- `comment` (*series string*) — Optional. Additional notes on the filled order. If the value is not an empty string, the Strategy Tester and the chart show this text for the order instead of the automatically generated exit identifier. The default is an empty string.
+- `qty` (*series int/float*) — Optional. The number of contracts/lots/shares/units to close when an exit order fills. If specified, the command uses this value instead of qty_percent to determine the order size. The default is na, which means the order size depends on the qty_percent value.
+- `qty_percent` (*series int/float*) — Optional. A value between 0 and 100 representing the percentage of the open trade quantity to close when an exit order fills. The percentage calculation depends on the total size of the open trades with the id entry identifier. The command ignores this parameter if the qty value is not na. The default is 100.
+- `alert_message` (*series string*) — Optional. Custom text for the alert that fires when an order fills. If the "Message" field of the "Create Alert" dialog box contains the {{strategy.order.alert_message}} placeholder, the alert message replaces the placeholder with this text. The default is an empty string.
+- `immediately` (*series bool*) — Optional. If true, the closing order executes on the same tick when the strategy places it, ignoring the strategy properties that restrict execution to the opening tick of the following bar. The default is false.
+- `disable_alert` (*series bool*) — Optional. If true when the command creates an order, the strategy does not trigger an alert when that order fills. This parameter accepts a "series" value, meaning users can control which orders trigger alerts when they execute. The default is false.
 
-- `id` (*series string*) — A required parameter. The order identifier. It is possible to close an order by referencing its identifier.
-- `comment` (*series string*, optional) — An optional parameter. Additional notes on the order.
-- `qty` (*series int|float*, optional, default `na`) — An optional parameter. Number of contracts/shares/lots/units to exit a trade with. The default value is 'NaN'.
-- `qty_percent` (*series int|float*, optional, default `100`) — Defines the percentage (0-100) of the position to close. Its priority is lower than that of the 'qty' parameter. Optional. The default is 100.
-- `alert_message` (*series string*, optional) — An optional parameter which replaces the {{strategy.order.alert_message}} placeholder when it is used in the "Create Alert" dialog box’s "Message" field.
-- `immediately` (*series bool*, optional, default `false`) — An optional parameter. If [true](https://www.tradingview.com/pine-script-reference/v6/#op_true), the closing order will be executed on the tick where it has been placed, ignoring the strategy parameters that restrict the order execution to the open of the next bar. The default is [false](https://www.tradingview.com/pine-script-reference/v6/#op_false).
-- `disable_alert` (*series bool*, optional, default `false`) — If [true](https://www.tradingview.com/pine-script-reference/v6/#op_true) when the function creates an order, the strategy alert will not fire upon the execution of that order. The parameter accepts a 'series bool' argument, allowing users to control which orders will trigger alerts when they fill. Optional. The default is [false](https://www.tradingview.com/pine-script-reference/v6/#op_false).
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.close).*
-
-### Remarks
-When a position consists of several open trades and the close_entries_rule in the strategy declaration statement is "FIFO" (default), a strategy.close call exits from the position starting with the first open trade. This behavior applies even if the id value is the entry ID of different open trades. However, in that case, the maximum exit order size still depends on the trades opened by orders with the id identifier. For more information, see this section of our User Manual.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("Partial close strategy")
@@ -217,7 +213,7 @@ float sma28 = ta.sma(close, 28)
 if ta.crossover(sma14, sma28)
     strategy.entry("My Long Entry ID", strategy.long)
 
-// Place a market order to close the long trade when `sma14` crosses under `sma28`. 
+// Place a market order to close the long trade when `sma14` crosses under `sma28`.
 if ta.crossunder(sma14, sma28)
     strategy.close("My Long Entry ID", "50% market close", qty_percent = 50)
 
@@ -225,26 +221,26 @@ if ta.crossunder(sma14, sma28)
 plot(strategy.position_size)
 ```
 
-## strategy.close_all()
+### Remarks
+When a position consists of several open trades and the close_entries_rule in the strategy() declaration statement is "FIFO" (default), a strategy.close() call exits from the position starting with the first open trade. This behavior applies even if the id value is the entry ID of different open trades. However, in that case, the maximum exit order size still depends on the trades opened by orders with the id identifier. For more information, see this section of our User Manual.
 
+## strategy.close_all()
 Creates an order to close an open position completely, regardless of the identifiers of the entry orders that opened or added to it.
+This command always generates market orders. To exit from a position using price-based orders (e.g., stop-loss orders), use the strategy.exit() command.
+Learn more
 
 ### Syntax
-
 ```pine
-strategy.close_all(comment, alert_message, immediately) → void
+strategy.close_all(comment, alert_message, immediately, disable_alert) → void
 ```
 
 ### Arguments
+- `comment` (*series string*) — Optional. Additional notes on the filled order. If the value is not an empty string, the Strategy Tester and the chart show this text for the order instead of the automatically generated exit identifier. The default is an empty string.
+- `alert_message` (*series string*) — Optional. Custom text for the alert that fires when an order fills. If the "Message" field of the "Create Alert" dialog box contains the {{strategy.order.alert_message}} placeholder, the alert message replaces the placeholder with this text. The default is an empty string.
+- `immediately` (*series bool*) — Optional. If true, the closing order executes on the same tick when the strategy places it, ignoring the strategy properties that restrict execution to the opening tick of the following bar. The default is false.
+- `disable_alert` (*series bool*) — Optional. If true when the command creates an order, the strategy does not trigger an alert when that order fills. This parameter accepts a "series" value, meaning users can control which orders trigger alerts when they execute. The default is false.
 
-- `comment` (*series string*, optional) — An optional parameter. Additional notes on the order.
-- `alert_message` (*series string*, optional) — An optional parameter which replaces the {{strategy.order.alert_message}} placeholder when it is used in the "Create Alert" dialog box’s "Message" field.
-- `immediately` (*series bool*, optional, default `false`) — An optional parameter. If [true](https://www.tradingview.com/pine-script-reference/v6/#op_true), the closing order will be executed on the tick where it has been placed, ignoring the strategy parameters that restrict the order execution to the open of the next bar. The default is [false](https://www.tradingview.com/pine-script-reference/v6/#op_false).
-- `disable_alert` (*series bool*, optional, default `false`) — If [true](https://www.tradingview.com/pine-script-reference/v6/#op_true) when the function creates an order, the strategy alert will not fire upon the execution of that order. The parameter accepts a 'series bool' argument, allowing users to control which orders will trigger alerts when they fill. Optional. The default is [false](https://www.tradingview.com/pine-script-reference/v6/#op_false).
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.close_all).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("Multi-entry close strategy")
@@ -257,7 +253,7 @@ float sma28 = ta.sma(close, 28)
 if ta.crossover(sma14, sma28)
     strategy.order("My Long Entry ID " + str.tostring(strategy.opentrades), strategy.long)
 
-// Place a market order to close the entire position every 500 bars. 
+// Place a market order to close the entire position every 500 bars.
 if bar_index % 500 == 0
     strategy.close_all()
 
@@ -266,22 +262,17 @@ plot(strategy.position_size)
 ```
 
 ## strategy.closedtrades.commission()
-
 Returns the sum of entry and exit fees paid in the closed trade, expressed in strategy.account_currency.
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.commission(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.commission).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("`strategy.closedtrades.commission` Example", commission_type = strategy.commission.percent, commission_value = 0.1)
@@ -296,23 +287,21 @@ if bar_index % 20 == 0
 plot(strategy.closedtrades.commission(strategy.closedtrades - 1))
 ```
 
-## strategy.closedtrades.entry_bar_index()
+### See also
+`strategy()`, `strategy.opentrades.commission()`
 
+## strategy.closedtrades.entry_bar_index()
 Returns the bar_index of the closed trade's entry.
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.entry_bar_index(trade_num) → series int
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.entry_bar_index).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("strategy.closedtrades.entry_bar_index Example")
@@ -331,24 +320,21 @@ avgBarsPerTrade() =>
 plot(avgBarsPerTrade())
 ```
 
-## strategy.closedtrades.entry_comment()
+### See also
+`strategy.closedtrades.exit_bar_index()`, `strategy.opentrades.entry_bar_index()`
 
-Returns the comment message of the closed trade's entry, or na
-if there is no entry with this trade_num.
+## strategy.closedtrades.entry_comment()
+Returns the comment message of the closed trade's entry, or na if there is no entry with this trade_num.
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.entry_comment(trade_num) → series string
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.entry_comment).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("`strategy.closedtrades.entry_comment()` Example", overlay = true)
@@ -369,29 +355,21 @@ if barstate.islastconfirmedhistory or barstate.isrealtime
     table.cell(testTable, 0, 2, "Actual Entry Price: " + str.tostring(strategy.closedtrades.entry_price(strategy.closedtrades - 1)))
 ```
 
-## strategy.closedtrades.entry_id()
+### See also
+`strategy()`, `strategy.entry()`, `strategy.closedtrades`
 
+## strategy.closedtrades.entry_id()
 Returns the id of the closed trade's entry.
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.entry_id(trade_num) → series string
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.entry_id).*
-
-### Returns
-Returns the id of the closed trade's entry.
-
-### Remarks
-The function returns na if trade_num is not in the range: 0 to strategy.closedtrades-1.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("strategy.closedtrades.entry_id Example", overlay = true)
@@ -401,29 +379,33 @@ if bar_index == 1
     strategy.entry("Short at bar #" + str.tostring(bar_index), strategy.short)
 if bar_index == last_bar_index - 2
     strategy.close_all()
-    
+
 // Display ID of the last entry position.
 if barstate.islastconfirmedhistory
     label.new(last_bar_index, high, "Last Entry ID is: " + strategy.closedtrades.entry_id(strategy.closedtrades - 1))
 ```
 
-## strategy.closedtrades.entry_price()
+### Returns
+Returns the id of the closed trade's entry.
 
+### Remarks
+The function returns na if trade_num is not in the range: 0 to strategy.closedtrades-1.
+
+### See also
+`strategy.closedtrades.entry_bar_index()`, `strategy.closedtrades.entry_price()`, `strategy.closedtrades.entry_time()`
+
+## strategy.closedtrades.entry_price()
 Returns the price of the closed trade's entry.
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.entry_price(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.entry_price).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("strategy.closedtrades.entry_price Example 1")
@@ -438,7 +420,10 @@ if bar_index % 20 == 0
 entryPrice = strategy.closedtrades.entry_price(strategy.closedtrades - 1)
 
 plot(entryPrice, "Long entry price")
+```
 
+### Example
+```pine
 // Calculates the average profit percentage for all closed trades.
 //@version=6
 strategy("strategy.closedtrades.entry_price Example 2")
@@ -458,30 +443,28 @@ for tradeNo = 0 to strategy.closedtrades - 1
     entryP = strategy.closedtrades.entry_price(tradeNo)
     exitP = strategy.closedtrades.exit_price(tradeNo)
     profitPct += (exitP - entryP) / entryP * strategy.closedtrades.size(tradeNo) * 100
-    
+
 // Calculate average profit percent for both closed trades.
 avgProfitPct = nz(profitPct / strategy.closedtrades)
 
 plot(avgProfitPct)
 ```
 
-## strategy.closedtrades.entry_time()
+### See also
+`strategy.closedtrades.entry_price()`, `strategy.closedtrades.exit_price()`, `strategy.closedtrades.size()`, `strategy.closedtrades`
 
+## strategy.closedtrades.entry_time()
 Returns the UNIX time of the closed trade's entry, expressed in milliseconds..
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.entry_time(trade_num) → series int
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.entry_time).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("strategy.closedtrades.entry_time Example", overlay = true)
@@ -492,7 +475,7 @@ if ta.rising(close, 3)
 if ta.falling(close, 2)
     strategy.close("Long")
 
-// Calculate the average trade duration 
+// Calculate the average trade duration
 avgTradeDuration() =>
     sumTradeDuration = 0
     for i = 0 to strategy.closedtrades - 1
@@ -504,23 +487,21 @@ if barstate.islastconfirmedhistory
     label.new(bar_index, high, str.tostring(avgTradeDuration() / 1000, "#.##") + " seconds")
 ```
 
-## strategy.closedtrades.exit_bar_index()
+### See also
+`strategy.opentrades.entry_time()`, `strategy.closedtrades.exit_time()`, `time`
 
+## strategy.closedtrades.exit_bar_index()
 Returns the bar_index of the closed trade's exit.
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.exit_bar_index(trade_num) → series int
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.exit_bar_index).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("strategy.closedtrades.exit_bar_index Example 1")
@@ -535,7 +516,10 @@ if bar_index == last_bar_index - 10
 barsSinceClosed = strategy.closedtrades > 0 ? bar_index - strategy.closedtrades.exit_bar_index(strategy.closedtrades - 1) : na
 
 plot(barsSinceClosed, "Bars since last closed trade")
+```
 
+### Example
+```pine
 // Calculates the average amount of bars per trade.
 //@version=6
 strategy("strategy.closedtrades.exit_bar_index Example 2")
@@ -557,24 +541,21 @@ avgBarsPerTrade() =>
 plot(avgBarsPerTrade())
 ```
 
-## strategy.closedtrades.exit_comment()
+### See also
+`bar_index`, `last_bar_index`
 
-Returns the comment message of the closed trade's exit, or
-na if there is no entry with this trade_num.
+## strategy.closedtrades.exit_comment()
+Returns the comment message of the closed trade's exit, or na if there is no entry with this trade_num.
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.exit_comment(trade_num) → series string
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.exit_comment).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("`strategy.closedtrades.exit_comment()` Example", overlay = true)
@@ -588,7 +569,7 @@ exitStats() =>
     int slCount = 0
     int tpCount = 0
     int trailCount = 0
-    
+
     if strategy.closedtrades > 0
         for i = 0 to strategy.closedtrades - 1
             switch strategy.closedtrades.exit_comment(i)
@@ -607,29 +588,21 @@ if barstate.islastconfirmedhistory
     table.cell(testTable, 0, 3, "Trailing Stop: " + str.tostring(trailCount))
 ```
 
-## strategy.closedtrades.exit_id()
+### See also
+`strategy()`, `strategy.exit()`, `strategy.close()`, `strategy.closedtrades()`
 
+## strategy.closedtrades.exit_id()
 Returns the id of the closed trade's exit.
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.exit_id(trade_num) → series string
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.exit_id).*
-
-### Returns
-Returns the id of the closed trade's exit.
-
-### Remarks
-The function returns na if trade_num is not in the range: 0 to strategy.closedtrades-1.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("strategy.closedtrades.exit_id Example", overlay = true)
@@ -639,7 +612,7 @@ if bar_index == last_bar_index - 15
     strategy.entry("Long Entry", strategy.long)
 else if bar_index == last_bar_index - 10
     strategy.entry("Short Entry", strategy.short)
-    
+
 // When a new open trade is detected then we create the exit strategy corresponding with the matching entry id
 // We detect the correct entry id by determining if a position is long or short based on the position quantity
 if ta.change(strategy.opentrades) != 0
@@ -652,23 +625,27 @@ if ta.change(strategy.closedtrades) != 0
     label.new(bar_index, high + (3 * ta.tr), msg)
 ```
 
-## strategy.closedtrades.exit_price()
+### Returns
+Returns the id of the closed trade's exit.
 
+### Remarks
+The function returns na if trade_num is not in the range: 0 to strategy.closedtrades-1.
+
+### See also
+`strategy.closedtrades.exit_bar_index()`, `strategy.closedtrades.exit_price()`, `strategy.closedtrades.exit_time()`
+
+## strategy.closedtrades.exit_price()
 Returns the price of the closed trade's exit.
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.exit_price(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.exit_price).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("strategy.closedtrades.exit_price Example 1")
@@ -682,7 +659,10 @@ strategy.close("Long")
 exitPrice = strategy.closedtrades.exit_price(strategy.closedtrades - 1)
 
 plot(exitPrice, "Long exit price")
+```
 
+### Example
+```pine
 // Calculates the average profit percentage for all closed trades.
 //@version=6
 strategy("strategy.closedtrades.exit_price Example 2")
@@ -702,30 +682,28 @@ for tradeNo = 0 to strategy.closedtrades - 1
     entryP = strategy.closedtrades.entry_price(tradeNo)
     exitP = strategy.closedtrades.exit_price(tradeNo)
     profitPct += (exitP - entryP) / entryP * strategy.closedtrades.size(tradeNo) * 100
-    
+
 // Calculate average profit percent for both closed trades.
 avgProfitPct = nz(profitPct / strategy.closedtrades)
 
 plot(avgProfitPct)
 ```
 
-## strategy.closedtrades.exit_time()
+### See also
+`strategy.closedtrades.entry_price()`
 
+## strategy.closedtrades.exit_time()
 Returns the UNIX time of the closed trade's exit, expressed in milliseconds.
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.exit_time(trade_num) → series int
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.exit_time).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("strategy.closedtrades.exit_time Example 1")
@@ -736,7 +714,7 @@ if ta.rising(close, 3)
 if ta.falling(close, 2)
     strategy.close("Long")
 
-// Calculate the average trade duration. 
+// Calculate the average trade duration.
 avgTradeDuration() =>
     sumTradeDuration = 0
     for i = 0 to strategy.closedtrades - 1
@@ -746,7 +724,10 @@ avgTradeDuration() =>
 // Display average duration converted to seconds and formatted using 2 decimal points.
 if barstate.islastconfirmedhistory
     label.new(bar_index, high, str.tostring(avgTradeDuration() / 1000, "#.##") + " seconds")
+```
 
+### Example
+```pine
 // Reopens a closed trade after X seconds.
 //@version=6
 strategy("strategy.closedtrades.exit_time Example 2")
@@ -760,33 +741,28 @@ reopenPositionAfter(timeSec) =>
         if time - strategy.closedtrades.exit_time(strategy.closedtrades - 1) >= timeSec * 1000
             strategy.entry("Long", strategy.long)
 
-// Reopen last closed position after 120 sec.                
+// Reopen last closed position after 120 sec.
 reopenPositionAfter(120)
 
 if ta.change(strategy.opentrades) != 0
     strategy.exit("Long", stop = low * 0.9, profit = high * 2.5)
 ```
 
-## strategy.closedtrades.max_drawdown()
+### See also
+`strategy.closedtrades.entry_time()`
 
+## strategy.closedtrades.max_drawdown()
 Returns the maximum drawdown of the closed trade, i.e., the maximum possible loss during the trade, expressed in strategy.account_currency.
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.max_drawdown(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.max_drawdown).*
-
-### Remarks
-The function returns na if trade_num is not in the range: 0 to strategy.closedtrades - 1.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("`strategy.closedtrades.max_drawdown` Example")
@@ -807,38 +783,38 @@ maxTradeDrawDown() =>
 plot(maxTradeDrawDown(), "Biggest max drawdown")
 ```
 
+### Remarks
+The function returns na if trade_num is not in the range: 0 to strategy.closedtrades - 1.
+
+### See also
+`strategy.opentrades.max_drawdown()`, `strategy.max_drawdown`
+
 ## strategy.closedtrades.max_drawdown_percent()
-
 Returns the maximum drawdown of the closed trade, i.e., the maximum possible loss during the trade, expressed as a percentage and calculated by formula: Lowest Value During Trade / (Entry Price x Quantity) * 100.
-### Syntax
 
+### Syntax
 ```pine
 strategy.closedtrades.max_drawdown_percent(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.max_drawdown_percent).*
+### See also
+`strategy.closedtrades.max_drawdown()`, `strategy.max_drawdown`
 
 ## strategy.closedtrades.max_runup()
-
 Returns the maximum run up of the closed trade, i.e., the maximum possible profit during the trade, expressed in strategy.account_currency.
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.max_runup(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.max_runup).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("`strategy.closedtrades.max_runup` Example")
@@ -859,90 +835,87 @@ maxTradeRunUp() =>
 plot(maxTradeRunUp(), "Max trade runup")
 ```
 
+### See also
+`strategy.opentrades.max_runup()`, `strategy.max_runup`
+
 ## strategy.closedtrades.max_runup_percent()
-
 Returns the maximum run-up of the closed trade, i.e., the maximum possible profit during the trade, expressed as a percentage and calculated by formula: Highest Value During Trade / (Entry Price x Quantity) * 100.
-### Syntax
 
+### Syntax
 ```pine
 strategy.closedtrades.max_runup_percent(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.max_runup_percent).*
+### See also
+`strategy.closedtrades.max_runup()`, `strategy.max_runup`
 
 ## strategy.closedtrades.profit()
-
-Returns the profit/loss of the closed trade, expressed in strategy.account_currency. Losses are expressed as negative values.
+Returns the profit/loss of the closed trade in the strategy's account currency, reduced by the trade's commissions. A positive returned value represents a profit, and a negative value represents a loss.
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.profit(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.profit).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
-strategy("`strategy.closedtrades.profit` Example")
+strategy("`strategy.closedtrades.profit()` example")
 
-// Strategy calls to enter long trades every 15 bars and exit long trades every 20 bars.
+// Enter a long trade every 15 bars, and close a long trade every 20 bars.
 if bar_index % 15 == 0
     strategy.entry("Long", strategy.long)
 if bar_index % 20 == 0
     strategy.close("Long")
 
-// Calculate average gross profit by adding the difference between gross profit and commission.
+//@function Calculates the average gross profit from all available closed trades.
 avgGrossProfit() =>
-    sumGrossProfit = 0.0
-    for tradeNo = 0 to strategy.closedtrades - 1
-        sumGrossProfit += strategy.closedtrades.profit(tradeNo) - strategy.closedtrades.commission(tradeNo)
-    result = nz(sumGrossProfit / strategy.closedtrades)
-    
+    var float result = 0.0
+    if result == 0.0 or strategy.closedtrades > strategy.closedtrades[1]
+        float sumGrossProfit = 0.0
+        for tradeNo = 0 to strategy.closedtrades - 1
+            sumGrossProfit += strategy.closedtrades.profit(tradeNo)
+        result := nz(sumGrossProfit / strategy.closedtrades)
+    result
+
 plot(avgGrossProfit(), "Average gross profit")
 ```
 
+### See also
+`strategy.account_currency`, `strategy.opentrades.profit()`, `strategy.closedtrades.commission()`
+
 ## strategy.closedtrades.profit_percent()
-
 Returns the profit/loss value of the closed trade, expressed as a percentage. Losses are expressed as negative values.
-### Syntax
 
+### Syntax
 ```pine
 strategy.closedtrades.profit_percent(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.profit_percent).*
+### See also
+`strategy.closedtrades.profit()`
 
 ## strategy.closedtrades.size()
-
 Returns the direction and the number of contracts traded in the closed trade. If the value is > 0, the market position was long. If the value is < 0, the market position was short.
 
 ### Syntax
-
 ```pine
 strategy.closedtrades.size(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.closedtrades.size).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("`strategy.closedtrades.size` Example 1")
@@ -955,9 +928,12 @@ if bar_index % 15 == 0
 if bar_index % 20 == 0
     strategy.close("Long")
 
-// Plot the number of contracts traded in the last closed trade.     
+// Plot the number of contracts traded in the last closed trade.
 plot(strategy.closedtrades.size(strategy.closedtrades - 1), "Number of contracts traded")
+```
 
+### Example
+```pine
 // Calculates the average profit percentage for all closed trades.
 //@version=6
 strategy("`strategy.closedtrades.size` Example 2")
@@ -974,37 +950,38 @@ for tradeNo = 0 to strategy.closedtrades - 1
     entryP = strategy.closedtrades.entry_price(tradeNo)
     exitP = strategy.closedtrades.exit_price(tradeNo)
     profitPct += (exitP - entryP) / entryP * strategy.closedtrades.size(tradeNo) * 100
-    
+
 // Calculate average profit percent for both closed trades.
 avgProfitPct = nz(profitPct / strategy.closedtrades)
 
 plot(avgProfitPct)
 ```
 
-## strategy.convert_to_account()
+### See also
+`strategy.opentrades.size()`, `strategy.position_size`, `strategy.closedtrades`, `strategy.opentrades`
 
+## strategy.convert_to_account()
 Converts the value from the currency that the symbol on the chart is traded in (syminfo.currency) to the currency used by the strategy (strategy.account_currency).
 
 ### Syntax
-
 ```pine
 strategy.convert_to_account(value) → series float
 ```
 
 ### Arguments
+- `value` (*series int/float*) — The value to be converted.
 
-- `value` (*series int|float*) — The value to be converted.
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.convert_to_account).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("`strategy.convert_to_account` Example 1", currency = currency.EUR)
 
 plot(close, "Close price using default currency")
 plot(strategy.convert_to_account(close), "Close price converted to strategy currency")
+```
 
+### Example
+```pine
 // Calculates the "Buy and hold return" using your account's currency.
 //@version=6
 strategy("`strategy.convert_to_account` Example 2", currency = currency.EUR)
@@ -1016,27 +993,25 @@ buyAndHoldReturnPct(fromDate) =>
         money = close * syminfo.pointvalue
         var initialBal = strategy.convert_to_account(money)
         (strategy.convert_to_account(money) - initialBal) / initialBal * 100
-        
+
 plot(buyAndHoldReturnPct(dateInput))
 ```
 
-## strategy.convert_to_symbol()
+### See also
+`strategy()`, `strategy.convert_to_symbol()`
 
+## strategy.convert_to_symbol()
 Converts the value from the currency used by the strategy (strategy.account_currency) to the currency that the symbol on the chart is traded in (syminfo.currency).
 
 ### Syntax
-
 ```pine
 strategy.convert_to_symbol(value) → series float
 ```
 
 ### Arguments
+- `value` (*series int/float*) — The value to be converted.
 
-- `value` (*series int|float*) — The value to be converted.
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.convert_to_symbol).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("`strategy.convert_to_symbol` Example", currency = currency.EUR)
@@ -1055,26 +1030,21 @@ if bar_index % 20 == 0
     strategy.close("Long")
 ```
 
-## strategy.default_entry_qty()
+### See also
+`strategy()`, `strategy.convert_to_account()`
 
-Calculates the default quantity, in units, of an entry order from strategy.entry or strategy.order if it were to fill at the specified fill_price value. The calculation depends on several strategy properties, including default_qty_type, default_qty_value, currency, and other parameters in the strategy function and their representation in the "Properties" tab of the strategy's settings.
+## strategy.default_entry_qty()
+Calculates the default quantity, in units, of an entry order from strategy.entry() or strategy.order() if it were to fill at the specified fill_price value. The calculation depends on several strategy properties, including default_qty_type, default_qty_value, currency, and other parameters in the strategy() function and their representation in the "Properties" tab of the strategy's settings.
 
 ### Syntax
-
 ```pine
 strategy.default_entry_qty(fill_price) → series float
 ```
 
 ### Arguments
-
 - `fill_price` (*series int/float*) — The fill price for which to calculate the default order quantity.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.default_entry_qty).*
-
-### Remarks
-This function does not consider open positions simulated by a strategy. For example, if a strategy script has an open position from a long order with a qty of 10 units, using the strategy.entry function to simulate a short order with a qty of 5 will prompt the script to sell 15 units to reverse the position. This function will still return 5 in such a case since it doesn't consider an open trade. This value represents the default calculated quantity of an order. Order placement commands can override the default value by explicitly passing a new qty value in the function call.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("Supertrend Strategy", overlay = true, default_qty_type = strategy.percent_of_equity, default_qty_value = 15)
@@ -1101,32 +1071,36 @@ if ta.change(direction) > 0
     strategy.close_all()
 ```
 
-## strategy.entry()
+### Remarks
+This function does not consider open positions simulated by a strategy. For example, if a strategy script has an open position from a long order with a qty of 10 units, using the strategy.entry() function to simulate a short order with a qty of 5 will prompt the script to sell 15 units to reverse the position. This function will still return 5 in such a case since it doesn't consider an open trade.
+This value represents the default calculated quantity of an order.
+Order placement commands can override the default value by explicitly passing a new qty value in the function call.
 
+## strategy.entry()
 Creates a new order to open or add to a position. If an unfilled order with the same id exists, a call to this command modifies that order.
+The resulting order's type depends on the limit and stop parameters. If the call does not contain limit or stop arguments, it creates a market order that executes on the next tick. If the call specifies a limit value but no stop value, it places a limit order that executes after the market price reaches the limit value or a better price (lower for buy orders and higher for sell orders). If the call specifies a stop value but no limit value, it places a stop order that executes after the market price reaches the stop value or a worse price (higher for buy orders and lower for sell orders). If the call contains limit and stop arguments, it creates a stop-limit order, which generates a limit order at the limit price only after the market price reaches the stop value or a worse price.
+Orders from this command, unlike those from strategy.order(), are affected by the pyramiding parameter of the strategy() declaration statement. Pyramiding specifies the number of concurrent open entries allowed per position. For example, with pyramiding = 3, the strategy can have up to three open trades, and the command cannot create orders to open additional trades until at least one existing trade closes.
+By default, when a strategy executes an order from this command in the opposite direction of the current market position, it reverses that position. For example, if there is an open long position of five shares, an order from this command with a qty of 5 and a direction of strategy.short triggers the sale of 10 shares to close the long position and open a new five-share short position. Users can change this behavior by specifying an allowed direction with the strategy.risk_allow_entry_in() function.
+Learn more
 
 ### Syntax
-
 ```pine
 strategy.entry(id, direction, qty, limit, stop, oca_name, oca_type, comment, alert_message, disable_alert) → void
 ```
 
 ### Arguments
+- `id` (*series string*) — The identifier of the order, which corresponds to an entry ID in the strategy's trades after the order fills. If the strategy opens a new position after filling the order, the order's ID becomes the strategy.position_entry_name value. Strategy commands can reference the order ID to cancel or modify pending orders and generate exit orders for specific open trades. The Strategy Tester and the chart display the order ID unless the command specifies a comment value.
+- `direction` (*series strategy_direction*) — The direction of the trade. Possible values: strategy.long for a long trade, strategy.short for a short one.
+- `qty` (*series int/float*) — Optional. The number of contracts/shares/lots/units in the resulting open trade when the order fills. The default is na, which means that the command uses the default_qty_type and default_qty_value parameters of the strategy() declaration statement to determine the quantity.
+- `limit` (*series int/float*) — Optional. The limit price of the order. If specified, the command creates a limit or stop-limit order, depending on whether the stop value is also specified. The default is na, which means the resulting order is not of the limit or stop-limit type.
+- `stop` (*series int/float*) — Optional. The stop price of the order. If specified, the command creates a stop or stop-limit order, depending on whether the limit value is also specified. The default is na, which means the resulting order is not of the stop or stop-limit type.
+- `oca_name` (*series string*) — Optional. The name of the order's One-Cancels-All (OCA) group. When a pending order with the same oca_name and oca_type parameters executes, that order affects all unfilled orders in the group. The default is an empty string, which means the order does not belong to an OCA group.
+- `oca_type` (*input string*) — Optional. Specifies how an unfilled order behaves when another pending order with the same oca_name and oca_type values executes. Possible values: strategy.oca.cancel, strategy.oca.reduce, strategy.oca.none. The default is strategy.oca.none.
+- `comment` (*series string*) — Optional. Additional notes on the filled order. If the value is not an empty string, the Strategy Tester and the chart show this text for the order instead of the specified id. The default is an empty string.
+- `alert_message` (*series string*) — Optional. Custom text for the alert that fires when an order fills. If the "Message" field of the "Create Alert" dialog box contains the {{strategy.order.alert_message}} placeholder, the alert message replaces the placeholder with this text. The default is an empty string.
+- `disable_alert` (*series bool*) — Optional. If true when the command creates an order, the strategy does not trigger an alert when that order fills. This parameter accepts a "series" value, meaning users can control which orders trigger alerts when they execute. The default is false.
 
-- `id` (*series string*) — A required parameter. The order identifier. It is possible to cancel or modify an order by referencing its identifier.
-- `direction` (*series strategy_direction*) — A required parameter. Market position direction: 'strategy.long' is for long, 'strategy.short' is for short.
-- `qty` (*series int|float*, optional, default `na`) — An optional parameter. Number of contracts/shares/lots/units to trade. The default value is 'NaN'.
-- `limit` (*series int|float*, optional, default `1`) — An optional parameter. Limit price of the order. If it is specified, the order type is either 'limit', or 'stop-limit'. 'NaN' should be specified for any other order type.
-- `stop` (*series int|float*, optional, default `na`) — An optional parameter. Stop price of the order. If it is specified, the order type is either 'stop', or 'stop-limit'. 'NaN' should be specified for any other order type.
-- `oca_name` (*series string*, optional, default `""`) — An optional parameter. Name of the OCA group the order belongs to. If the order should not belong to any particular OCA group, there should be an empty string.
-- `oca_type` (*input string*, optional) — An optional parameter. Type of the OCA group. The allowed values are: [strategy.oca.none](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.oca.none) - the order should not belong to any particular OCA group; [strategy.oca.cancel](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.oca.cancel) - the order should belong to an OCA group, where as soon as an order is filled, all other orders of the same group are cancelled; [strategy.oca.reduce](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.oca.reduce) - the order should belong to an OCA group, where if X number of contracts of an order is filled, number of contracts for each other order of the same OCA group is decreased by X.
-- `comment` (*series string*, optional) — An optional parameter. Additional notes on the order.
-- `alert_message` (*series string*, optional) — An optional parameter which replaces the {{strategy.order.alert_message}} placeholder when it is used in the "Create Alert" dialog box’s "Message" field.
-- `disable_alert` (*series bool*, optional, default `false`) — If [true](https://www.tradingview.com/pine-script-reference/v6/#op_true) when the function creates an order, the strategy alert will not fire upon the execution of that order. The parameter accepts a 'series bool' argument, allowing users to control which orders will trigger alerts when they fill. Optional. The default is [false](https://www.tradingview.com/pine-script-reference/v6/#op_false).
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.entry).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("Market order strategy", overlay = true)
@@ -1142,18 +1116,21 @@ if ta.crossover(sma14, sma28)
 // Place a market order to close the long trade and enter a short position when `sma14` crosses under `sma28`.
 if ta.crossunder(sma14, sma28)
     strategy.entry("My Short Entry ID", strategy.short)
+```
 
+### Example
+```pine
 //@version=6
 strategy("Limit order strategy", overlay=true, margin_long=100, margin_short=100)
 
 //@variable The distance from the `close` price for each limit order.
 float limitOffsetInput = input.int(100, "Limit offset, in ticks", 1) * syminfo.mintick
 
-//@function Draws a label and line at the specified `price` to visualize a limit order's level. 
+//@function Draws a label and line at the specified `price` to visualize a limit order's level.
 drawLimit(float price, bool isLong) =>
     color col = isLong ? color.blue : color.red
     label.new(
-         bar_index, price, (isLong ? "Long" : "Short") + " limit order created", 
+         bar_index, price, (isLong ? "Long" : "Short") + " limit order created",
          style = label.style_label_right, color = col, textcolor = color.white
      )
     line.new(bar_index, price, bar_index + 1, price, extend = extend.right, style = line.style_dashed, color = col)
@@ -1181,7 +1158,7 @@ if ta.crossover(sma14, sma28)
     // Make new drawings for the long limit and stop extending the `shortLimit` line.
     longLimit := drawLimit(limitLevel, isLong = true)
     shortLimit.stopExtend()
-    
+
 if ta.crossunder(sma14, sma28)
     // Cancel any unfilled buy orders with the specified ID.
     strategy.cancel("My Long Entry ID")
@@ -1195,45 +1172,42 @@ if ta.crossunder(sma14, sma28)
 ```
 
 ## strategy.exit()
-
-Creates price-based orders to exit from an open position. If unfilled exit orders with the same id exist, calls to this command modify those orders. This command can generate more than one type of exit order, depending on the specified parameters. However, it does not create market orders. To exit from a position with a market order, use strategy.close or strategy.close_all.
+Creates price-based orders to exit from an open position. If unfilled exit orders with the same id exist, calls to this command modify those orders. This command can generate more than one type of exit order, depending on the specified parameters. However, it does not create market orders. To exit from a position with a market order, use strategy.close() or strategy.close_all().
+If a call to this command contains a profit or limit argument, it creates take-profit orders to exit from applicable trades at the determined price levels or better values (higher for long trades and lower for short ones). If the call contains loss or stop arguments, it creates stop-loss orders to exit from applicable trades at the determined levels or worse values (lower for long trades and higher for short ones). Calling this command with profit or limit and loss or stop arguments creates an order bracket with both order types.
+This command can create trailing stop orders when its call specifies a trail_price or trail_points argument and a trail_offset argument. A trailing stop order activates when the price moves trail_points ticks past the entry price or touches the trail_price level. Once activated, the stop follows trail_offset ticks behind the market price each time the trade's profit reaches a new high. The stop does not move when the trade does not achieve a new best value.
+Each call to this command reserves a portion of the position to close until the strategy fills or cancels its orders. For example, if there is an open position of 50 contracts and a strategy.exit() call specifies a qty of 20, that call's orders reserve 20 contracts out of the position. A second call can close a maximum of 30 contracts, even if its qty is 50 and one of its orders executes first. This behavior does not affect the orders from other commands, such as strategy.close() or strategy.order().
+If a call to this command occurs before a created entry order's execution, the strategy waits and does not create the exit orders until after the entry order executes.
+Learn more
 
 ### Syntax
-
 ```pine
 strategy.exit(id, from_entry, qty, qty_percent, profit, limit, loss, stop, trail_price, trail_points, trail_offset, oca_name, comment, comment_profit, comment_loss, comment_trailing, alert_message, alert_profit, alert_loss, alert_trailing, disable_alert) → void
 ```
 
 ### Arguments
+- `id` (*series string*) — The identifier of the orders, which corresponds to an exit ID in the strategy's trades after an order fills. Strategy commands can reference the order ID to cancel or modify pending exit orders. The Strategy Tester and the chart display the order ID unless the command includes a comment* argument that applies to the filled order.
+- `from_entry` (*series string*) — Optional. The entry order ID of the trade to exit from. If there is more than one open trade with the specified entry ID, the command generates exit orders for all the entries from before or at the time of the call. The default is an empty string, which means the command generates exit orders for all open trades until the position closes.
+- `qty` (*series int/float*) — Optional. The number of contracts/lots/shares/units to close when an exit order fills. If specified, the command uses this value instead of qty_percent to determine the order size. The exit orders reserve this quantity from the position, meaning other calls to this command cannot close this portion until the strategy fills or cancels those orders. The default is na, which means the order size depends on the qty_percent value.
+- `qty_percent` (*series int/float*) — Optional. A value between 0 and 100 representing the percentage of the open trade quantity to close when an exit order fills. The exit orders reserve this percentage from the applicable open trades, meaning other calls to this command cannot close this portion until the strategy fills or cancels those orders. The percentage calculation depends on the total size of the applicable open trades without considering the reserved amount from other strategy.exit() calls. The command ignores this parameter if the qty value is not na. The default is 100.
+- `profit` (*series int/float*) — Optional. The take-profit distance, expressed in ticks. If specified, the command creates a limit order to exit the trade profit ticks away from the entry price in the favorable direction. The order executes at the calculated price or a better value. If this parameter and limit are not na, the command places a take-profit order only at the price level expected to trigger an exit first. The default is na.
+- `limit` (*series int/float*) — Optional. The take-profit price. If this parameter and profit are not na, the command places a take-profit order only at the price level expected to trigger an exit first. The default is na.
+- `loss` (*series int/float*) — Optional. The stop-loss distance, expressed in ticks. If specified, the command creates a stop order to exit the trade loss ticks away from the entry price in the unfavorable direction. The order executes at the calculated price or a worse value. If this parameter and stop are not na, the command places a stop-loss order only at the price level expected to trigger an exit first. The default is na.
+- `stop` (*series int/float*) — Optional. The stop-loss price. If this parameter and loss are not na, the command places a stop-loss order only at the price level expected to trigger an exit first. The default is na.
+- `trail_price` (*series int/float*) — Optional. The price of the trailing stop activation level. If the value is more favorable than the entry price, the command creates a trailing stop when the market price reaches that value. If less favorable than the entry price, the command creates the trailing stop immediately when the current market price is equal to or more favorable than the value. If this parameter and trail_points are not na, the command sets the activation level using the value expected to activate the stop first. The default is na.
+- `trail_points` (*series int/float*) — Optional. The trailing stop activation distance, expressed in ticks. If the value is positive, the command creates a trailing stop order when the market price moves trail_points ticks away from the trade's entry price in the favorable direction. If the value is negative, the command creates the trailing stop immediately when the market price is equal to or more favorable than the level trail_points ticks away from the entry price in the unfavorable direction. The default is na.
+- `trail_offset` (*series int/float*) — Optional. The trailing stop offset. When the market price reaches the activation level determined by the trail_price or trail_points parameter, or exceeds the level in the favorable direction, the command creates a trailing stop with an initial value trail_offset ticks away from that level in the unfavorable direction. After activation, the trailing stop moves toward the market price each time the trade's profit reaches a better value, maintaining the specified distance behind the best price. The default is na.
+- `oca_name` (*series string*) — Optional. The name of the One-Cancels-All (OCA) group that the command's take-profit, stop-loss, and trailing stop orders belong to. All orders from this command are of the strategy.oca.reduce OCA type. When an order of this OCA type with the same oca_name executes, the strategy reduces the sizes of other unfilled orders in the OCA group by the filled quantity. The default is an empty string, which means the strategy assigns the OCA name automatically, and the resulting orders cannot reduce or be reduced by the orders from other commands.
+- `comment` (*series string*) — Optional. Additional notes on the filled order. If the value is not an empty string, the Strategy Tester and the chart show this text for the order instead of the specified id. The command ignores this value if the call includes an argument for a comment_* parameter that applies to the order. The default is an empty string.
+- `comment_profit` (*series string*) — Optional. Additional notes on the filled order. If the value is not an empty string, the Strategy Tester and the chart show this text for the order instead of the specified id or comment. This comment applies only to the command's take-profit orders created using the profit or limit parameter. The default is an empty string.
+- `comment_loss` (*series string*) — Optional. Additional notes on the filled order. If the value is not an empty string, the Strategy Tester and the chart show this text for the order instead of the specified id or comment. This comment applies only to the command's stop-loss orders created using the loss or stop parameter. The default is an empty string.
+- `comment_trailing` (*series string*) — Optional. Additional notes on the filled order. If the value is not an empty string, the Strategy Tester and the chart show this text for the order instead of the specified id or comment. This comment applies only to the command's trailing stop orders created using the trail_price or trail_points and trail_offset parameters. The default is an empty string.
+- `alert_message` (*series string*) — Optional. Custom text for the alert that fires when an order fills. If the "Message" field of the "Create Alert" dialog box contains the {{strategy.order.alert_message}} placeholder, the alert message replaces the placeholder with this text. The command ignores this value if the call includes an argument for the other alert_* parameter that applies to the order. The default is an empty string.
+- `alert_profit` (*series string*) — Optional. Custom text for the alert that fires when an order fills. If the "Message" field of the "Create Alert" dialog box contains the {{strategy.order.alert_message}} placeholder, the alert message replaces the placeholder with this text. This message applies only to the command's take-profit orders created using the profit or limit parameter. The default is an empty string.
+- `alert_loss` (*series string*) — Optional. Custom text for the alert that fires when an order fills. If the "Message" field of the "Create Alert" dialog box contains the {{strategy.order.alert_message}} placeholder, the alert message replaces the placeholder with this text. This message applies only to the command's stop-loss orders created using the loss or stop parameter. The default is an empty string.
+- `alert_trailing` (*series string*) — Optional. Custom text for the alert that fires when an order fills. If the "Message" field of the "Create Alert" dialog box contains the {{strategy.order.alert_message}} placeholder, the alert message replaces the placeholder with this text. This message applies only to the command's trailing stop orders created using the trail_price or trail_points and trail_offset parameters. The default is an empty string.
+- `disable_alert` (*series bool*) — Optional. If true when the command creates an order, the strategy does not trigger an alert when that order fills. This parameter accepts a "series" value, meaning users can control which orders trigger alerts when they execute. The default is false.
 
-- `id` (*series string*) — A required parameter. The order identifier. It is possible to cancel or modify an order by referencing its identifier.
-- `from_entry` (*series string*, optional) — An optional parameter. The identifier of a specific entry order to exit from it. To exit all entries an empty string should be used. The default values is empty string.
-- `qty` (*series int|float*, optional) — An optional parameter. Number of contracts/shares/lots/units to exit a trade with. The default value is 'NaN'.
-- `qty_percent` (*series int|float*, optional, default `100`) — Defines the percentage of (0-100) the position to close. Its priority is lower than that of the 'qty' parameter. Optional. The default is 100.
-- `profit` (*series int|float*, optional) — An optional parameter. Profit target (specified in ticks). If it is specified, a limit order is placed to exit market position when the specified amount of profit (in ticks) is reached. The default value is 'NaN'.
-- `limit` (*series int|float*, optional, default `na`) — An optional parameter. Profit target (requires a specific price). If it is specified, a limit order is placed to exit market position at the specified price (or better). Priority of the parameter 'limit' is higher than priority of the parameter 'profit' ('limit' is used instead of 'profit', if its value is not 'NaN'). The default value is 'NaN'.
-- `loss` (*series int|float*, optional, default `na`) — An optional parameter. Stop loss (specified in ticks). If it is specified, a stop order is placed to exit market position when the specified amount of loss (in ticks) is reached. The default value is 'NaN'.
-- `stop` (*series int|float*, optional, default `na`) — An optional parameter. Stop loss (requires a specific price). If it is specified, a stop order is placed to exit market position at the specified price (or worse). Priority of the parameter 'stop' is higher than priority of the parameter 'loss' ('stop' is used instead of 'loss', if its value is not 'NaN'). The default value is 'NaN'.
-- `trail_price` (*series int|float*, optional, default `na`) — An optional parameter. Trailing stop activation level (requires a specific price). If it is specified, a trailing stop order will be placed when the specified price level is reached. The offset (in ticks) to determine initial price of the trailing stop order is specified in the 'trail_offset' parameter: X ticks lower than activation level to exit long position; X ticks higher than activation level to exit short position. The default value is 'NaN'.
-- `trail_points` (*series int|float*, optional, default `na`) — An optional parameter. Trailing stop activation level (profit specified in ticks). If it is specified, a trailing stop order will be placed when the calculated price level (specified amount of profit) is reached. The offset (in ticks) to determine initial price of the trailing stop order is specified in the 'trail_offset' parameter: X ticks lower than activation level to exit long position; X ticks higher than activation level to exit short position. The default value is 'NaN'.
-- `trail_offset` (*series int|float*, optional, default `na`) — An optional parameter. Trailing stop price (specified in ticks). The offset in ticks to determine initial price of the trailing stop order: X ticks lower than 'trail_price' or 'trail_points' to exit long position; X ticks higher than 'trail_price' or 'trail_points' to exit short position. The default value is 'NaN'.
-- `oca_name` (*series string*, optional) — An optional parameter. Name of the OCA group (oca_type = [strategy.oca.reduce](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.oca.reduce)) the profit target, the stop loss / the trailing stop orders belong to. If the name is not specified, it will be generated automatically.
-- `comment` (*series string*, optional, default `na`) — Additional notes on the order. If specified, displays near the order marker on the chart. Optional. The default is [na](https://www.tradingview.com/pine-script-reference/v6/#var_na).
-- `comment_profit` (*series string*, optional, default `na`) — Additional notes on the order if the exit was triggered by crossing `profit` or `limit` specifically. If specified, supercedes the `comment` parameter and displays near the order marker on the chart. Optional. The default is [na](https://www.tradingview.com/pine-script-reference/v6/#var_na).
-- `comment_loss` (*series string*, optional, default `na`) — Additional notes on the order if the exit was triggered by crossing `stop` or `loss` specifically. If specified, supercedes the `comment` parameter and displays near the order marker on the chart. Optional. The default is [na](https://www.tradingview.com/pine-script-reference/v6/#var_na).
-- `comment_trailing` (*series string*, optional, default `na`) — Additional notes on the order if the exit was triggered by crossing `trail_offset` specifically. If specified, supercedes the `comment` parameter and displays near the order marker on the chart. Optional. The default is [na](https://www.tradingview.com/pine-script-reference/v6/#var_na).
-- `alert_message` (*series string*, optional, default `na`) — Text that will replace the '{{strategy.order.alert_message}}' placeholder when one is used in the "Message" field of the "Create Alert" dialog. Optional. The default is [na](https://www.tradingview.com/pine-script-reference/v6/#var_na).
-- `alert_profit` (*series string*, optional, default `na`) — Text that will replace the '{{strategy.order.alert_message}}' placeholder when one is used in the "Message" field of the "Create Alert" dialog. Only replaces the text if the exit was triggered by crossing `profit` or `limit` specifically. Optional. The default is [na](https://www.tradingview.com/pine-script-reference/v6/#var_na).
-- `alert_loss` (*series string*, optional, default `na`) — Text that will replace the '{{strategy.order.alert_message}}' placeholder when one is used in the "Message" field of the "Create Alert" dialog. Only replaces the text if the exit was triggered by crossing `stop` or `loss` specifically. Optional. The default is [na](https://www.tradingview.com/pine-script-reference/v6/#var_na).
-- `alert_trailing` (*series string*, optional, default `na`) — Text that will replace the '{{strategy.order.alert_message}}' placeholder when one is used in the "Message" field of the "Create Alert" dialog. Only replaces the text if the exit was triggered by crossing `trail_offset` specifically. Optional. The default is [na](https://www.tradingview.com/pine-script-reference/v6/#var_na).
-- `disable_alert` (*series bool*, optional, default `false`) — If [true](https://www.tradingview.com/pine-script-reference/v6/#op_true) when the function creates an order, the strategy alert will not fire upon the execution of that order. The parameter accepts a 'series bool' argument, allowing users to control which orders will trigger alerts when they fill. Optional. The default is [false](https://www.tradingview.com/pine-script-reference/v6/#op_false).
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.exit).*
-
-### Remarks
-A single call to the strategy.exit command can generate exit orders for several entries in an open position, depending on the call's from_entry value. If the call does not include a from_entry argument, it creates exit orders for all open trades, even the ones opened after the call, until the position closes. See this section of our User Manual to learn more. When a position consists of several open trades, and the close_entries_rule in the strategy declaration statement is "FIFO" (default), the orders from a strategy.exit call exit from the position starting with the first open trade. This behavior applies even if the from_entry value is the entry ID of different open trades. However, in that case, the maximum size of the exit orders still depends on the trades opened by orders with the from_entry ID. For more information, see this section of our User Manual. If a strategy.exit call includes arguments for creating stop-loss and trailing stop orders, the command places only the order that is supposed to fill first, because both orders are of the "stop" type.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("Exit bracket strategy", overlay = true)
@@ -1242,7 +1216,7 @@ strategy("Exit bracket strategy", overlay = true)
 int profitDistanceInput = input.int(100, "Profit distance, in ticks", 1)
 int lossDistanceInput   = input.int(100, "Loss distance, in ticks", 1)
 
-// Variables to track the take-profit and stop-loss price. 
+// Variables to track the take-profit and stop-loss price.
 var float takeProfit = na
 var float stopLoss   = na
 
@@ -1253,7 +1227,7 @@ float sma28 = ta.sma(close, 28)
 if ta.crossover(sma14, sma28) and strategy.opentrades == 0
     // Place a market order to enter a long position.
     strategy.entry("My Long Entry ID", strategy.long)
-    // Place a take-profit and stop-loss order when the entry order fills. 
+    // Place a take-profit and stop-loss order when the entry order fills.
     strategy.exit("My Long Exit ID", "My Long Entry ID", profit = profitDistanceInput, loss = lossDistanceInput)
 
 if ta.change(strategy.opentrades) == 1
@@ -1271,19 +1245,22 @@ if ta.change(strategy.closedtrades) == 1
 // Plot the `takeProfit` and `stopLoss`.
 plot(takeProfit, "Take-profit level", color.green, 2, plot.style_linebr)
 plot(stopLoss, "Stop-loss level", color.red, 2, plot.style_linebr)
+```
 
+### Example
+```pine
 //@version=6
 strategy("Trailing stop strategy", overlay = true)
 
 //@variable The distance required to activate the trailing stop.
-float activationDistanceInput = input.int(100, "Trail activation distance, in ticks") * syminfo.mintick 
-//@variable The number of ticks the trailing stop follows behind the price as it reaches new peaks. 
+float activationDistanceInput = input.int(100, "Trail activation distance, in ticks") * syminfo.mintick
+//@variable The number of ticks the trailing stop follows behind the price as it reaches new peaks.
 int trailDistanceInput = input.int(100, "Trail distance, in ticks")
 
-//@function Draws a label and line at the specified `price` to visualize a trailing stop order's activation level. 
+//@function Draws a label and line at the specified `price` to visualize a trailing stop order's activation level.
 drawActivation(float price) =>
     label.new(
-         bar_index, price, "Activation level", style = label.style_label_right, 
+         bar_index, price, "Activation level", style = label.style_label_right,
          color = color.gray, textcolor = color.white
      )
     line.new(
@@ -1295,7 +1272,7 @@ method stopExtend(line l) =>
     l.set_x2(bar_index)
     l.set_extend(extend.none)
 
-// The activation line, active trailing stop price, and active trailing stop flag. 
+// The activation line, active trailing stop price, and active trailing stop flag.
 var line activationLine     = na
 var float trailingStopPrice = na
 var bool isActive           = false
@@ -1305,7 +1282,7 @@ if bar_index % 100 == 0 and strategy.opentrades == 0
     isActive          := false
     // Place a market order to enter a long position.
     strategy.entry("My Long Entry ID", strategy.long)
-    //@variable The activation level's price. 
+    //@variable The activation level's price.
     float activationPrice = close + activationDistanceInput
     // Create a trailing stop order that activates the defined number of ticks above the entry price.
     strategy.exit(
@@ -1315,18 +1292,18 @@ if bar_index % 100 == 0 and strategy.opentrades == 0
     // Create new drawings at the `activationPrice`.
     activationLine := drawActivation(activationPrice)
 
-// Logic for trailing stop visualization. 
+// Logic for trailing stop visualization.
 if strategy.opentrades == 1
     // Stop extending the `activationLine` when the stop activates.
     if not isActive and high > activationLine.get_price(bar_index)
         isActive := true
         activationLine.stopExtend()
-    // Update the `trailingStopPrice` while the trailing stop is active. 
+    // Update the `trailingStopPrice` while the trailing stop is active.
     if isActive
         float offsetPrice = high - trailDistanceInput * syminfo.mintick
         trailingStopPrice := math.max(nz(trailingStopPrice, offsetPrice), offsetPrice)
 
-// Close the trade with a market order if the trailing stop does not activate before the next 300th bar. 
+// Close the trade with a market order if the trailing stop does not activate before the next 300th bar.
 if not isActive and bar_index % 300 == 0
     strategy.close_all("Market close")
 
@@ -1341,23 +1318,23 @@ if ta.change(strategy.closedtrades) > 0
 plot(trailingStopPrice, "Trailing stop", color.red, 3, plot.style_linebr)
 ```
 
-## strategy.opentrades.commission()
+### Remarks
+A single call to the strategy.exit() command can generate exit orders for several entries in an open position, depending on the call's from_entry value. If the call does not include a from_entry argument, it creates exit orders for all open trades, even the ones opened after the call, until the position closes. See this section of our User Manual to learn more.
+When a position consists of several open trades, and the close_entries_rule in the strategy() declaration statement is "FIFO" (default), the orders from a strategy.exit() call exit from the position starting with the first open trade. This behavior applies even if the from_entry value is the entry ID of different open trades. However, in that case, the maximum size of the exit orders still depends on the trades opened by orders with the from_entry ID. For more information, see this section of our User Manual.
+If a strategy.exit() call includes arguments for creating stop-loss and trailing stop orders, the command places only the order that is supposed to fill first, because both orders are of the "stop" type.
 
+## strategy.opentrades.commission()
 Returns the sum of entry and exit fees paid in the open trade, expressed in strategy.account_currency.
 
 ### Syntax
-
 ```pine
 strategy.opentrades.commission(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the open trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.opentrades.commission).*
-
-### Code Example
+### Example
 ```pine
 // Calculates the gross profit or loss for the current open position.
 //@version=6
@@ -1375,27 +1352,25 @@ tradeOpenGrossPL() =>
     for tradeNo = 0 to strategy.opentrades - 1
         sumOpenGrossPL += strategy.opentrades.profit(tradeNo) - strategy.opentrades.commission(tradeNo)
     result = sumOpenGrossPL
-    
+
 plot(tradeOpenGrossPL())
 ```
 
-## strategy.opentrades.entry_bar_index()
+### See also
+`strategy()`, `strategy.closedtrades.commission()`
 
+## strategy.opentrades.entry_bar_index()
 Returns the bar_index of the open trade's entry.
 
 ### Syntax
-
 ```pine
 strategy.opentrades.entry_bar_index(trade_num) → series int
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the open trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.opentrades.entry_bar_index).*
-
-### Code Example
+### Example
 ```pine
 // Wait 10 bars and then close the position.
 //@version=6
@@ -1408,29 +1383,26 @@ barsSinceLastEntry() =>
 if strategy.opentrades == 0
     strategy.entry("Long", strategy.long)
 
-// Close the long position after 10 bars. 
+// Close the long position after 10 bars.
 if barsSinceLastEntry() >= 10
     strategy.close("Long")
 ```
 
-## strategy.opentrades.entry_comment()
+### See also
+`strategy.closedtrades.entry_bar_index()`, `strategy.closedtrades.exit_bar_index()`
 
-Returns the comment message of the open trade's entry, or
-na if there is no entry with this trade_num.
+## strategy.opentrades.entry_comment()
+Returns the comment message of the open trade's entry, or na if there is no entry with this trade_num.
 
 ### Syntax
-
 ```pine
 strategy.opentrades.entry_comment(trade_num) → series string
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the open trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.opentrades.entry_comment).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("`strategy.opentrades.entry_comment()` Example", overlay = true)
@@ -1450,29 +1422,21 @@ if barstate.islastconfirmedhistory or barstate.isrealtime
     table.cell(testTable, 0, 2, "Actual Entry Price: " + str.tostring(strategy.opentrades.entry_price(strategy.opentrades - 1)))
 ```
 
-## strategy.opentrades.entry_id()
+### See also
+`strategy()`, `strategy.entry()`, `strategy.opentrades`
 
+## strategy.opentrades.entry_id()
 Returns the id of the open trade's entry.
 
 ### Syntax
-
 ```pine
 strategy.opentrades.entry_id(trade_num) → series string
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the open trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.opentrades.entry_id).*
-
-### Returns
-Returns the id of the open trade's entry.
-
-### Remarks
-The function returns na if trade_num is not in the range: 0 to strategy.opentrades-1.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("`strategy.opentrades.entry_id` Example", overlay = true)
@@ -1493,23 +1457,27 @@ if barstate.islastconfirmedhistory
     label.new(bar_index, high + (2 * ta.tr), "Last opened position is \n " + strategy.opentrades.entry_id(strategy.opentrades - 1))
 ```
 
-## strategy.opentrades.entry_price()
+### Returns
+Returns the id of the open trade's entry.
 
+### Remarks
+The function returns na if trade_num is not in the range: 0 to strategy.opentrades-1.
+
+### See also
+`strategy.opentrades.entry_bar_index()`, `strategy.opentrades.entry_price()`, `strategy.opentrades.entry_time()`
+
+## strategy.opentrades.entry_price()
 Returns the price of the open trade's entry.
 
 ### Syntax
-
 ```pine
 strategy.opentrades.entry_price(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the open trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.opentrades.entry_price).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("strategy.opentrades.entry_price Example 1", overlay = true)
@@ -1527,7 +1495,10 @@ if high >= currExitPrice
 
 plot(currEntryPrice, "Long entry price", style = plot.style_linebr)
 plot(currExitPrice, "Long exit price", color.green, style = plot.style_linebr)
+```
 
+### Example
+```pine
 // Calculates the average price for the open position.
 //@version=6
 strategy("strategy.opentrades.entry_price Example 2", pyramiding = 2)
@@ -1548,23 +1519,21 @@ avgOpenPositionPrice() =>
 plot(avgOpenPositionPrice())
 ```
 
-## strategy.opentrades.entry_time()
+### See also
+`strategy.closedtrades.exit_price()`
 
+## strategy.opentrades.entry_time()
 Returns the UNIX time of the open trade's entry, expressed in milliseconds.
 
 ### Syntax
-
 ```pine
 strategy.opentrades.entry_time(trade_num) → series int
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the open trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.opentrades.entry_time).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("strategy.opentrades.entry_time Example")
@@ -1582,26 +1551,21 @@ timeSinceLastEntry()=>
 plot(timeSinceLastEntry() / 1000 * 60 * 60 * 24, "Days since last entry")
 ```
 
-## strategy.opentrades.max_drawdown()
+### See also
+`strategy.closedtrades.entry_time()`, `strategy.closedtrades.exit_time()`
 
+## strategy.opentrades.max_drawdown()
 Returns the maximum drawdown of the open trade, i.e., the maximum possible loss during the trade, expressed in strategy.account_currency.
 
 ### Syntax
-
 ```pine
 strategy.opentrades.max_drawdown(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the open trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.opentrades.max_drawdown).*
-
-### Remarks
-The function returns na if trade_num is not in the range: 0 to strategy.closedtrades - 1.
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("strategy.opentrades.max_drawdown Example 1")
@@ -1614,7 +1578,10 @@ if bar_index % 20 == 0
 
 // Plot the max drawdown of the latest open trade.
 plot(strategy.opentrades.max_drawdown(strategy.opentrades - 1), "Max drawdown of the latest open trade")
+```
 
+### Example
+```pine
 // Calculates the max trade drawdown value for all open trades.
 //@version=6
 strategy("`strategy.opentrades.max_drawdown` Example 2", pyramiding = 100)
@@ -1635,38 +1602,38 @@ maxTradeDrawDown() =>
 plot(maxTradeDrawDown(), "Biggest max drawdown")
 ```
 
+### Remarks
+The function returns na if trade_num is not in the range: 0 to strategy.closedtrades - 1.
+
+### See also
+`strategy.closedtrades.max_drawdown()`, `strategy.max_drawdown`
+
 ## strategy.opentrades.max_drawdown_percent()
-
 Returns the maximum drawdown of the open trade, i.e., the maximum possible loss during the trade, expressed as a percentage and calculated by formula: Lowest Value During Trade / (Entry Price x Quantity) * 100.
-### Syntax
 
+### Syntax
 ```pine
 strategy.opentrades.max_drawdown_percent(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.opentrades.max_drawdown_percent).*
+### See also
+`strategy.opentrades.max_drawdown()`, `strategy.max_drawdown`
 
 ## strategy.opentrades.max_runup()
-
 Returns the maximum run up of the open trade, i.e., the maximum possible profit during the trade, expressed in strategy.account_currency.
 
 ### Syntax
-
 ```pine
 strategy.opentrades.max_runup(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the open trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.opentrades.max_runup).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("strategy.opentrades.max_runup Example 1")
@@ -1679,7 +1646,10 @@ if bar_index % 20 == 0
 
 // Plot the max runup of the latest open trade.
 plot(strategy.opentrades.max_runup(strategy.opentrades - 1), "Max runup of the latest open trade")
+```
 
+### Example
+```pine
 // Calculates the max trade runup value for all open trades.
 //@version=6
 strategy("strategy.opentrades.max_runup Example 2", pyramiding = 100)
@@ -1698,38 +1668,35 @@ maxOpenTradeRunUp() =>
 plot(maxOpenTradeRunUp(), "Biggest max runup of all open trades")
 ```
 
+### See also
+`strategy.closedtrades.max_runup()`, `strategy.max_drawdown`
+
 ## strategy.opentrades.max_runup_percent()
-
 Returns the maximum run-up of the open trade, i.e., the maximum possible profit during the trade, expressed as a percentage and calculated by formula: Highest Value During Trade / (Entry Price x Quantity) * 100.
-### Syntax
 
+### Syntax
 ```pine
 strategy.opentrades.max_runup_percent(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.opentrades.max_runup_percent).*
+### See also
+`strategy.opentrades.max_runup()`, `strategy.max_runup`
 
 ## strategy.opentrades.profit()
-
 Returns the profit/loss of the open trade, expressed in strategy.account_currency. Losses are expressed as negative values.
 
 ### Syntax
-
 ```pine
 strategy.opentrades.profit(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the open trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.opentrades.profit).*
-
-### Code Example
+### Example
 ```pine
 // Returns the profit of the last open trade.
 //@version=6
@@ -1742,7 +1709,10 @@ if bar_index % 20 == 0
     strategy.close("Long")
 
 plot(strategy.opentrades.profit(strategy.opentrades - 1), "Profit of the latest open trade")
+```
 
+### Example
+```pine
 // Calculates the profit for all open trades.
 //@version=6
 strategy("`strategy.opentrades.profit` Example 2", pyramiding = 5)
@@ -1757,42 +1727,39 @@ tradeOpenPL() =>
     for tradeNo = 0 to strategy.opentrades - 1
         sumProfit += strategy.opentrades.profit(tradeNo)
     result = sumProfit
-    
+
 plot(tradeOpenPL(), "Profit of all open trades")
 ```
 
+### See also
+`strategy.closedtrades.profit()`, `strategy.openprofit`, `strategy.netprofit`, `strategy.grossprofit`
+
 ## strategy.opentrades.profit_percent()
-
 Returns the profit/loss of the open trade, expressed as a percentage. Losses are expressed as negative values.
-### Syntax
 
+### Syntax
 ```pine
 strategy.opentrades.profit_percent(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the closed trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.opentrades.profit_percent).*
+### See also
+`strategy.opentrades.profit()`
 
 ## strategy.opentrades.size()
-
 Returns the direction and the number of contracts traded in the open trade. If the value is > 0, the market position was long. If the value is < 0, the market position was short.
 
 ### Syntax
-
 ```pine
 strategy.opentrades.size(trade_num) → series float
 ```
 
 ### Arguments
-
 - `trade_num` (*series int*) — The trade number of the open trade. The number of the first trade is zero.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.opentrades.size).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("`strategy.opentrades.size` Example 1")
@@ -1807,7 +1774,10 @@ if bar_index % 20 == 0
 
 // Plot the number of contracts in the latest open trade.
 plot(strategy.opentrades.size(strategy.opentrades - 1), "Amount of contracts in latest open trade")
+```
 
+### Example
+```pine
 // Calculates the average profit percentage for all open trades.
 //@version=6
 strategy("`strategy.opentrades.size` Example 2")
@@ -1824,38 +1794,40 @@ for tradeNo = 0 to strategy.opentrades - 1
     entryP = strategy.opentrades.entry_price(tradeNo)
     exitP = close
     profitPct += (exitP - entryP) / entryP * strategy.opentrades.size(tradeNo) * 100
-    
+
 // Calculate average profit percent for all open trades.
 avgProfitPct = nz(profitPct / strategy.opentrades)
 plot(avgProfitPct)
 ```
 
-## strategy.order()
+### See also
+`strategy.closedtrades.size()`, `strategy.position_size`, `strategy.opentrades`, `strategy.closedtrades`
 
+## strategy.order()
 Creates a new order to open, add to, or exit from a position. If an unfilled order with the same id exists, a call to this command modifies that order.
+The resulting order's type depends on the limit and stop parameters. If the call does not contain limit or stop arguments, it creates a market order that executes on the next tick. If the call specifies a limit value but no stop value, it places a limit order that executes after the market price reaches the limit value or a better price (lower for buy orders and higher for sell orders). If the call specifies a stop value but no limit value, it places a stop order that executes after the market price reaches the stop value or a worse price (higher for buy orders and lower for sell orders). If the call contains limit and stop arguments, it creates a stop-limit order, which generates a limit order at the limit price only after the market price reaches the stop value or a worse price.
+Orders from this command, unlike those from strategy.entry(), are not affected by the pyramiding parameter of the strategy() declaration statement. Strategies can open any number of trades in the same direction with calls to this function.
+This command does not automatically reverse open positions because it does not exclusively create entry orders like strategy.entry() does. For example, if there is an open long position of five shares, an order from this command with a qty of 5 and a direction of strategy.short triggers the sale of five shares, which closes the position.
+Learn more
 
 ### Syntax
-
 ```pine
 strategy.order(id, direction, qty, limit, stop, oca_name, oca_type, comment, alert_message, disable_alert) → void
 ```
 
 ### Arguments
+- `id` (*series string*) — The identifier of the order, which corresponds to an entry or exit ID in the strategy's trades after the order fills. If the strategy opens a new position after filling the order, the order's ID becomes the strategy.position_entry_name value. Strategy commands can reference the order ID to cancel or modify pending orders and generate exit orders for specific open trades. The Strategy Tester and the chart display the order ID unless the command specifies a comment value.
+- `direction` (*series strategy_direction*) — The direction of the trade. Possible values: strategy.long for a long trade, strategy.short for a short one.
+- `qty` (*series int/float*) — Optional. The number of contracts/shares/lots/units to trade when the order fills. The default is na, which means that the command uses the default_qty_type and default_qty_value parameters of the strategy() declaration statement to determine the quantity.
+- `limit` (*series int/float*) — Optional. The limit price of the order. If specified, the command creates a limit or stop-limit order, depending on whether the stop value is also specified. The default is na, which means the resulting order is not of the limit or stop-limit type.
+- `stop` (*series int/float*) — Optional. The stop price of the order. If specified, the command creates a stop or stop-limit order, depending on whether the limit value is also specified. The default is na, which means the resulting order is not of the stop or stop-limit type.
+- `oca_name` (*series string*) — Optional. The name of the order's One-Cancels-All (OCA) group. When a pending order with the same oca_name and oca_type parameters executes, that order affects all unfilled orders in the group. The default is an empty string, which means the order does not belong to an OCA group.
+- `oca_type` (*input string*) — Optional. Specifies how an unfilled order behaves when another pending order with the same oca_name and oca_type values executes. Possible values: strategy.oca.cancel, strategy.oca.reduce, strategy.oca.none. The default is strategy.oca.none.
+- `comment` (*series string*) — Optional. Additional notes on the filled order. If the value is not an empty string, the Strategy Tester and the chart show this text for the order instead of the specified id. The default is an empty string.
+- `alert_message` (*series string*) — Optional. Custom text for the alert that fires when an order fills. If the "Message" field of the "Create Alert" dialog box contains the {{strategy.order.alert_message}} placeholder, the alert message replaces the placeholder with this text. The default is an empty string.
+- `disable_alert` (*series bool*) — Optional. If true when the command creates an order, the strategy does not trigger an alert when that order fills. This parameter accepts a "series" value, meaning users can control which orders trigger alerts when they execute. The default is false.
 
-- `id` (*series string*) — A required parameter. The order identifier. It is possible to cancel or modify an order by referencing its identifier.
-- `direction` (*series strategy_direction*) — A required parameter. Order direction: 'strategy.long' is for buy, 'strategy.short' is for sell.
-- `qty` (*series int|float*, optional, default `1`) — An optional parameter. Number of contracts/shares/lots/units to trade. The default value is 'NaN'.
-- `limit` (*series int|float*, optional) — An optional parameter. Limit price of the order. If it is specified, the order type is either 'limit', or 'stop-limit'. 'NaN' should be specified for any other order type.
-- `stop` (*series int|float*, optional) — An optional parameter. Stop price of the order. If it is specified, the order type is either 'stop', or 'stop-limit'. 'NaN' should be specified for any other order type.
-- `oca_name` (*series string*, optional) — An optional parameter. Name of the OCA group the order belongs to. If the order should not belong to any particular OCA group, there should be an empty string.
-- `oca_type` (*input string*, optional) — An optional parameter. Type of the OCA group. The allowed values are: [strategy.oca.none](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.oca.none) - the order should not belong to any particular OCA group; [strategy.oca.cancel](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.oca.cancel) - the order should belong to an OCA group, where as soon as an order is filled, all other orders of the same group are cancelled; [strategy.oca.reduce](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.oca.reduce) - the order should belong to an OCA group, where if X number of contracts of an order is filled, number of contracts for each other order of the same OCA group is decreased by X.
-- `comment` (*series string*, optional) — An optional parameter. Additional notes on the order.
-- `alert_message` (*series string*, optional) — An optional parameter which replaces the {{strategy.order.alert_message}} placeholder when it is used in the "Create Alert" dialog box’s "Message" field.
-- `disable_alert` (*series bool*, optional, default `false`) — If [true](https://www.tradingview.com/pine-script-reference/v6/#op_true) when the function creates an order, the strategy alert will not fire upon the execution of that order. The parameter accepts a 'series bool' argument, allowing users to control which orders will trigger alerts when they fill. Optional. The default is [false](https://www.tradingview.com/pine-script-reference/v6/#op_false).
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.order).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("Market order strategy", overlay = true)
@@ -1868,22 +1840,25 @@ float sma28 = ta.sma(close, 28)
 if ta.crossover(sma14, sma28) and strategy.position_size == 0
     strategy.order("My Long Entry ID", strategy.long)
 
-// Place a market order to sell the same quantity as the long trade when `sma14` crosses under `sma28`, 
+// Place a market order to sell the same quantity as the long trade when `sma14` crosses under `sma28`,
 // effectively closing the long position.
 if ta.crossunder(sma14, sma28) and strategy.position_size > 0
     strategy.order("My Long Exit ID", strategy.short)
+```
 
+### Example
+```pine
 //@version=6
 strategy("Limit and stop exit strategy", overlay = true)
 
 //@variable The distance from the long entry price for each short limit order.
 float shortOffsetInput = input.int(200, "Sell limit/stop offset, in ticks", 1) * syminfo.mintick
 
-//@function Draws a label and line at the specified `price` to visualize a limit order's level. 
+//@function Draws a label and line at the specified `price` to visualize a limit order's level.
 drawLimit(float price, bool isLong, bool isStop = false) =>
     color col = isLong ? color.blue : color.red
     label.new(
-         bar_index, price, (isLong ? "Long " : "Short ") + (isStop ? "stop" : "limit") + " order created", 
+         bar_index, price, (isLong ? "Long " : "Short ") + (isStop ? "stop" : "limit") + " order created",
          style = label.style_label_right, color = col, textcolor = color.white
      )
     line.new(bar_index, price, bar_index + 1, price, extend = extend.right, style = line.style_dashed, color = col)
@@ -1904,14 +1879,14 @@ float sma28 = ta.sma(close, 28)
 if ta.crossover(sma14, sma28) and strategy.position_size == 0
     // Place a market order to enter a long position.
     strategy.order("My Long Entry ID", strategy.long)
-    
+
 if strategy.position_size > 0 and strategy.position_size[1] == 0
-    //@variable The entry price of the long trade. 
+    //@variable The entry price of the long trade.
     float entryPrice = strategy.opentrades.entry_price(0)
     // Calculate short limit and stop levels above and below the `entryPrice`.
     float profitLevel = entryPrice + shortOffsetInput
     float lossLevel   = entryPrice - shortOffsetInput
-    // Place short limit and stop orders at the `profitLevel` and `lossLevel`. 
+    // Place short limit and stop orders at the `profitLevel` and `lossLevel`.
     strategy.order("Profit", strategy.short, limit = profitLevel, oca_name = "Bracket", oca_type = strategy.oca.cancel)
     strategy.order("Loss", strategy.short, stop = lossLevel, oca_name = "Bracket", oca_type = strategy.oca.cancel)
     // Make new drawings for the `profitLimit` and `lossStop` lines.
@@ -1925,22 +1900,17 @@ if ta.change(strategy.closedtrades) > 0
 ```
 
 ## strategy.risk.allow_entry_in()
-
-This function can be used to specify in which market direction the strategy.entry function is allowed to open positions.
+This function can be used to specify in which market direction the strategy.entry() function is allowed to open positions.
 
 ### Syntax
-
 ```pine
 strategy.risk.allow_entry_in(value) → void
 ```
 
 ### Arguments
+- `value` (*simple string*) — The allowed direction. Possible values: strategy.direction.all, strategy.direction.long, strategy.direction.short
 
-- `value` (*simple string*) — The allowed direction. Possible values: [strategy.direction.all](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.direction.all), [strategy.direction.long](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.direction.long), [strategy.direction.short](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.direction.short)
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.risk.allow_entry_in).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("strategy.risk.allow_entry_in")
@@ -1954,23 +1924,18 @@ if open < close
 ```
 
 ## strategy.risk.max_cons_loss_days()
-
 The purpose of this rule is to cancel all pending orders, close all open positions and stop placing orders after a specified number of consecutive days with losses. The rule affects the whole strategy.
 
 ### Syntax
-
 ```pine
 strategy.risk.max_cons_loss_days(count, alert_message) → void
 ```
 
 ### Arguments
-
 - `count` (*simple int*) — A required parameter. The allowed number of consecutive days with losses.
-- `alert_message` (*simple string*, optional) — An optional parameter which replaces the {{strategy.order.alert_message}} placeholder when it is used in the "Create Alert" dialog box’s "Message" field.
+- `alert_message` (*simple string*) — An optional parameter which replaces the {{strategy.order.alert_message}} placeholder when it is used in the "Create Alert" dialog box's "Message" field.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.risk.max_cons_loss_days).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("risk.max_cons_loss_days Demo 1")
@@ -1979,30 +1944,28 @@ plot(strategy.position_size)
 ```
 
 ## strategy.risk.max_drawdown()
-
 The purpose of this rule is to determine maximum drawdown. The rule affects the whole strategy. Once the maximum drawdown value is reached, all pending orders are cancelled, all open positions are closed and no new orders can be placed.
 
 ### Syntax
-
 ```pine
 strategy.risk.max_drawdown(value, type, alert_message) → void
 ```
 
 ### Arguments
+- `value` (*simple int/float*) — A required parameter. The maximum drawdown value. It is specified either in money (base currency), or in percentage of maximum equity. For % of equity the range of allowed values is from 0 to 100.
+- `type` (*simple string*) — A required parameter. The type of the value. Please specify one of the following values: strategy.percent_of_equity or strategy.cash. Note: if equity drops down to zero or to a negative and the 'strategy.percent_of_equity' is specified, all pending orders are cancelled, all open positions are closed and no new orders can be placed for good.
+- `alert_message` (*simple string*) — An optional parameter which replaces the {{strategy.order.alert_message}} placeholder when it is used in the "Create Alert" dialog box's "Message" field.
 
-- `value` (*simple int|float*) — A required parameter. The maximum drawdown value. It is specified either in money (base currency), or in percentage of maximum equity. For % of equity the range of allowed values is from 0 to 100.
-- `displayType` (*simple string*) — A required parameter. The type of the value. Please specify one of the following values: [strategy.percent_of_equity](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.percent_of_equity) or [strategy.cash](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.cash). Note: if equity drops down to zero or to a negative and the 'strategy.percent_of_equity' is specified, all pending orders are cancelled, all open positions are closed and no new orders can be placed for good.
-- `alert_message` (*simple string*, optional) — An optional parameter which replaces the {{strategy.order.alert_message}} placeholder when it is used in the "Create Alert" dialog box’s "Message" field.
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.risk.max_drawdown).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("risk.max_drawdown Demo 1")
 strategy.risk.max_drawdown(50, strategy.percent_of_equity) // set maximum drawdown to 50% of maximum equity
 plot(strategy.position_size)
+```
 
+### Example
+```pine
 //@version=6
 strategy("risk.max_drawdown Demo 2", currency = "EUR")
 strategy.risk.max_drawdown(2000, strategy.cash) // set maximum drawdown to 2000 EUR from maximum equity
@@ -2010,23 +1973,18 @@ plot(strategy.position_size)
 ```
 
 ## strategy.risk.max_intraday_filled_orders()
-
 The purpose of this rule is to determine maximum number of filled orders per 1 day (per 1 bar, if chart resolution is higher than 1 day). The rule affects the whole strategy. Once the maximum number of filled orders is reached, all pending orders are cancelled, all open positions are closed and no new orders can be placed till the end of the current trading session.
 
 ### Syntax
-
 ```pine
 strategy.risk.max_intraday_filled_orders(count, alert_message) → void
 ```
 
 ### Arguments
-
 - `count` (*simple int*) — A required parameter. The maximum number of filled orders per 1 day.
-- `alert_message` (*simple string*, optional) — An optional parameter which replaces the {{strategy.order.alert_message}} placeholder when it is used in the "Create Alert" dialog box’s "Message" field.
+- `alert_message` (*simple string*) — An optional parameter which replaces the {{strategy.order.alert_message}} placeholder when it is used in the "Create Alert" dialog box's "Message" field.
 
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.risk.max_intraday_filled_orders).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("risk.max_intraday_filled_orders Demo")
@@ -2038,30 +1996,25 @@ if open < close
 ```
 
 ## strategy.risk.max_intraday_loss()
-
 The maximum loss value allowed during a day. It is specified either in money (base currency), or in percentage of maximum intraday equity (0 -100).
 
 ### Syntax
-
 ```pine
 strategy.risk.max_intraday_loss(value, type, alert_message) → void
 ```
 
 ### Arguments
+- `value` (*simple int/float*) — A required parameter. The maximum loss value. It is specified either in money (base currency), or in percentage of maximum intraday equity. For % of equity the range of allowed values is from 0 to 100.
+- `type` (*simple string*) — A required parameter. The type of the value. Please specify one of the following values: strategy.percent_of_equity or strategy.cash. Note: if equity drops down to zero or to a negative and the strategy.percent_of_equity is specified, all pending orders are cancelled, all open positions are closed and no new orders can be placed for good.
+- `alert_message` (*simple string*) — An optional parameter which replaces the {{strategy.order.alert_message}} placeholder when it is used in the "Create Alert" dialog box's "Message" field.
 
-- `value` (*simple int|float*) — A required parameter. The maximum loss value. It is specified either in money (base currency), or in percentage of maximum intraday equity. For % of equity the range of allowed values is from 0 to 100.
-- `displayType` (*simple string*) — A required parameter. The type of the value. Please specify one of the following values: [strategy.percent_of_equity](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.percent_of_equity) or [strategy.cash](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.cash). Note: if equity drops down to zero or to a negative and the [strategy.percent_of_equity](https://www.tradingview.com/pine-script-reference/v6/#var_strategy.percent_of_equity) is specified, all pending orders are cancelled, all open positions are closed and no new orders can be placed for good.
-- `alert_message` (*simple string*, optional) — An optional parameter which replaces the {{strategy.order.alert_message}} placeholder when it is used in the "Create Alert" dialog box’s "Message" field.
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.risk.max_intraday_loss).*
-
-### Code Example
+### Example
 ```pine
 // Sets the maximum intraday loss using the strategy's equity value.
 //@version=6
 strategy("strategy.risk.max_intraday_loss Example 1", overlay = false, default_qty_type = strategy.percent_of_equity, default_qty_value = 100)
 
-// Input for maximum intraday loss %. 
+// Input for maximum intraday loss %.
 lossPct = input.float(10)
 
 // Set maximum intraday loss to our lossPct input
@@ -2078,14 +2031,17 @@ eqFromDayStart = ta.valuewhen(ta.change(dayofweek) > 0, strategy.equity, 0)
 eqChgPct = 100 * ((strategy.equity - eqFromDayStart) / strategy.equity)
 
 // Plot it
-plot(eqChgPct) 
+plot(eqChgPct)
 hline(-lossPct)
+```
 
+### Example
+```pine
 // Sets the maximum intraday loss using the strategy's cash value.
 //@version=6
 strategy("strategy.risk.max_intraday_loss Example 2", overlay = false)
 
-// Input for maximum intraday loss in absolute cash value of the symbol. 
+// Input for maximum intraday loss in absolute cash value of the symbol.
 absCashLoss = input.float(5)
 
 // Set maximum intraday loss to `absCashLoss` in account currency.
@@ -2105,23 +2061,21 @@ hline(absCashLoss)
 plot(priceChg)
 ```
 
-## strategy.risk.max_position_size()
+### See also
+`strategy()`, `strategy.percent_of_equity`, `strategy.cash`
 
-The purpose of this rule is to determine maximum size of a market position. The rule affects the following function: strategy.entry. The 'entry' quantity can be reduced (if needed) to such number of contracts/shares/lots/units, so the total position size doesn't exceed the value specified in 'strategy.risk.max_position_size'. If minimum possible quantity still violates the rule, the order will not be placed.
+## strategy.risk.max_position_size()
+The purpose of this rule is to determine maximum size of a market position. The rule affects the following function: strategy.entry(). The 'entry' quantity can be reduced (if needed) to such number of contracts/shares/lots/units, so the total position size doesn't exceed the value specified in 'strategy.risk.max_position_size'. If minimum possible quantity still violates the rule, the order will not be placed.
 
 ### Syntax
-
 ```pine
 strategy.risk.max_position_size(contracts) → void
 ```
 
 ### Arguments
+- `contracts` (*simple int/float*) — A required parameter. Maximum number of contracts/shares/lots/units in a position.
 
-- `contracts` (*simple int|float*) — A required parameter. Maximum number of contracts/shares/lots/units in a position.
-
-*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/#fun_strategy.risk.max_position_size).*
-
-### Code Example
+### Example
 ```pine
 //@version=6
 strategy("risk.max_position_size Demo", default_qty_value = 100)
