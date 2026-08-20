@@ -1,4 +1,37 @@
+<!--
+Source: https://www.tradingview.com/pine-script-reference/v6/
+Pine Script v6 — official TradingView language reference manual
+Retrieved: 2026-08-20
+-->
+
 # Types
+
+The fundamental and special types in the Pine Script type system.
+
+**18 entries** · Source: [Pine Script® v6 Reference Manual](https://www.tradingview.com/pine-script-reference/v6/)
+
+## Index
+
+- [`array`](#array)
+- [`bool`](#bool)
+- [`box`](#box)
+- [`chart.point`](#chartpoint)
+- [`color`](#color)
+- [`const`](#const)
+- [`float`](#float)
+- [`int`](#int)
+- [`label`](#label)
+- [`line`](#line)
+- [`linefill`](#linefill)
+- [`map`](#map)
+- [`matrix`](#matrix)
+- [`polyline`](#polyline)
+- [`series`](#series)
+- [`simple`](#simple)
+- [`string`](#string)
+- [`table`](#table)
+
+---
 
 ## array
 
@@ -16,11 +49,22 @@ a := array.new<float>(1, close)
 plot(array.get(a, 0))
 ```
 
----
-
 ## bool
 
 Keyword used to explicitly declare the "bool" (boolean) type of a variable or a parameter. "Bool" variables can have values true or false.
+
+### Syntax
+
+```pine
+bool
+bool(x) → series bool
+```
+
+### Arguments
+
+- `x` (*series color*) — 'na' to cast to color.
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 Explicitly mentioning the type in a variable declaration is optional. Learn more about Pine Script® types in the User Manual page on the Type System.
@@ -33,11 +77,22 @@ bool b = true    // Same as `b = true`
 plot(b ? open : close)
 ```
 
----
-
 ## box
 
 Keyword used to explicitly declare the "box" type of a variable or a parameter. Box objects (or IDs) can be created with the box.new function.
+
+### Syntax
+
+```pine
+box
+box(x) → series box
+```
+
+### Arguments
+
+- `x` (*series box*) — 'na' to cast to box.
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 Box objects are always of "series" form.
@@ -53,17 +108,33 @@ var box2 = box.new(na, na, na, na)
 box3 = box.new(time, open, time + 60 * 60 * 24, close, xloc=xloc.bar_time)
 ```
 
----
-
 ## chart.point
 
 Keyword to explicitly declare the type of a variable or parameter as chart.point. Scripts can produce chart.point instances using the chart.point.from_time, chart.point.from_index, chart.point.now, and chart.point.new functions.
+### Syntax
 
----
+```pine
+chart.point
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ## color
 
 Keyword used to explicitly declare the "color" type of a variable or a parameter.
+
+### Syntax
+
+```pine
+color
+color(x) → series color
+```
+
+### Arguments
+
+- `x` (*series color*) — 'na' to cast to color.
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 Color literals have the following format: #RRGGBB or #RRGGBBAA. The letter pairs represent 00 to FF hexadecimal values (0 to 255 in decimal) where RR, GG and BB pairs are the values for the color's red, green and blue components. AA is an optional value for the color's transparency (or alpha component) where 00 is invisible and FF opaque. When no AA pair is supplied, FF is used. The hexadecimal letters can be upper or lower case. Explicitly mentioning the type in a variable declaration is optional, except when it is initialized with na. Learn more about Pine Script® types in the User Manual page on the Type System.
@@ -82,8 +153,6 @@ if barstate.islastconfirmedhistory
 c = color.rgb(0,255,0,0)
 plot(close, color = c)
 ```
-
----
 
 ## const
 
@@ -116,11 +185,22 @@ const float myVar = input.float(2.0)
 plot(myVar)
 ```
 
----
-
 ## float
 
 Keyword used to explicitly declare the "float" (floating point) type of a variable or a parameter.
+
+### Syntax
+
+```pine
+float
+float(x) → series float
+```
+
+### Arguments
+
+- `x` (*series float*) — 'na' to cast to float.
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 Explicitly mentioning the type in a variable declaration is optional, except when it is initialized with na. Learn more about Pine Script® types in the User Manual page on the Type System.
@@ -134,15 +214,22 @@ f := na
 plot(f)
 ```
 
----
-
-## footprint
-A keyword that explicitly declares the type of a variable or parameter as footprint. Scripts create objects of the footprint type by calling the request.footprint() function. Scripts can use IDs of this type with the built-in footprint.*() functions to retrieve volume footprint data, including footprint rows, categorized volume sums, and volume delta.
-
-
 ## int
 
 Keyword used to explicitly declare the "int" (integer) type of a variable or a parameter.
+
+### Syntax
+
+```pine
+int
+int(x) → series int
+```
+
+### Arguments
+
+- `x` (*series int*) — 'na' to cast to int.
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 Explicitly mentioning the type in a variable declaration is optional, except when it is initialized with na. Learn more about Pine Script® types in the User Manual page on the Type System.
@@ -156,11 +243,22 @@ i := na
 plot(i)
 ```
 
----
-
 ## label
 
 Keyword used to explicitly declare the "label" type of a variable or a parameter. Label objects (or IDs) can be created with the label.new function.
+
+### Syntax
+
+```pine
+label
+label(x) → series label
+```
+
+### Arguments
+
+- `x` (*series label*) — 'na' to cast to label..
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 Label objects are always of "series" form.
@@ -177,11 +275,22 @@ if barstate.islastconfirmedhistory
     label3 = label.new(bar_index, high, text = "label3 text")
 ```
 
----
-
 ## line
 
 Keyword used to explicitly declare the "line" type of a variable or a parameter. Line objects (or IDs) can be created with the line.new function.
+
+### Syntax
+
+```pine
+line
+line(x) → series line
+```
+
+### Arguments
+
+- `x` (*series line*) — 'na' to cast to line..
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 Line objects are always of "series" form.
@@ -197,11 +306,22 @@ var line2 = line.new(na, na, na, na)
 line3 = line.new(bar_index - 1, high, bar_index, high, extend = extend.right)
 ```
 
----
-
 ## linefill
 
 Keyword used to explicitly declare the "linefill" type of a variable or a parameter. Linefill objects (or IDs) can be created with the linefill.new function.
+
+### Syntax
+
+```pine
+linefill
+linefill(x) → series linefill
+```
+
+### Arguments
+
+- `x` (*series linefill*) — 'na' to cast to linefill.
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 Linefill objects are always of "series" form.
@@ -221,8 +341,6 @@ if barstate.islastconfirmedhistory
     linefill3 = linefill.new(line1, line2, color = color.new(color.green, 80))
 ```
 
----
-
 ## map
 
 Keyword used to explicitly declare the "map" type of a variable or a parameter. Map objects (or IDs) can be created with the map.new<type,type> function.
@@ -239,8 +357,6 @@ a := map.new<int, float>()
 a.put(bar_index, close)
 label.new(bar_index, a.get(bar_index), "Current close")
 ```
-
----
 
 ## matrix
 
@@ -265,17 +381,21 @@ if barstate.islastconfirmedhistory
     label.new(bar_index, high, str.tostring(m2))
 ```
 
----
-
 ## polyline
 
 Keyword to explicitly declare the type of a variable or parameter as polyline. Scripts can produce polyline instances using the polyline.new function.
 
----
-
 ## series
 
 The series keyword explicitly assigns the "series" type qualifier to variables and function parameters. Variables and parameters that use the "series" qualifier can reference values that change throughout a script's execution.
+
+### Syntax
+
+```pine
+[series] <type> <variable_name> = <value>
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 To learn more, see our User Manual's section on type qualifiers.
@@ -318,11 +438,17 @@ series int myVar = 5
 plot(close, style = plot.style_histogram, histbase = myVar)
 ```
 
----
-
 ## simple
 
 The simple keyword explicitly assigns the "simple" type qualifier to variables and function parameters. Variables and parameters that use the "simple" qualifier can reference values established at the beginning of a script's execution that do not change later.
+
+### Syntax
+
+```pine
+[simple] <type> <variable_name> = <value>
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 To learn more, see our User Manual's section on type qualifiers.
@@ -366,11 +492,22 @@ myVar := close
 plot(myVar)
 ```
 
----
-
 ## string
 
 Keyword used to explicitly declare the "string" type of a variable or a parameter.
+
+### Syntax
+
+```pine
+string
+string(x) → series string
+```
+
+### Arguments
+
+- `x` (*series color*) — 'na' to cast to string.
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 Explicitly mentioning the type in a variable declaration is optional, except when it is initialized with na. Learn more about Pine Script® types in the User Manual page on the Type System.
@@ -384,11 +521,22 @@ string s = "Hello World!"    // Same as `s = "Hello world!"`
 plot(na, title=s)
 ```
 
----
-
 ## table
 
 Keyword used to explicitly declare the "table" type of a variable or a parameter. Table objects (or IDs) can be created with the table.new function.
+
+### Syntax
+
+```pine
+table
+table(x) → series table
+```
+
+### Arguments
+
+- `x` (*series table*) — 'na' to cast to table.
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Code Example
 ```pine

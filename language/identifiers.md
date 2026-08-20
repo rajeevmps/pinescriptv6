@@ -1,0 +1,38 @@
+<!--
+Source: https://www.tradingview.com/pine-script-docs/language/identifiers/
+Pine Script v6 — official TradingView documentation
+Retrieved: 2026-08-20
+-->
+
+# Identifiers
+
+Identifiers are names used for user-defined variables and functions:
+
+- They must begin with an uppercase (`A-Z`) or lowercase (`a-z`)
+  letter, or an underscore (`_`).
+- The next characters can be letters, underscores or digits (`0-9`).
+- They are case-sensitive.
+
+Here are some examples:
+
+```pine
+myVar
+_myVar
+my123Var
+functionName
+MAX_LEN
+max_len
+maxLen
+3barsDown  // NOT VALID!
+```
+
+The Pine Script® [Style Guide](https://www.tradingview.com/pine-script-docs/writing/style-guide/) recommends using uppercase SNAKE_CASE for constants, and
+camelCase for other identifiers:
+
+```pine
+GREEN_COLOR = #4CAF50
+MAX_LOOKBACK = 100
+int fastLength = 7
+// Returns 1 if the argument is `true`, 0 if it is `false` or `na`.
+zeroOne(boolValue) => boolValue ? 1 : 0
+```

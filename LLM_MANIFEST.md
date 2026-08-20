@@ -1,92 +1,167 @@
-# Pine Script v6 Documentation Manifest
+# Pine Script® v6 Documentation Manifest
 
-**Purpose:** This file acts as a directory map for Large Language Models (LLMs). Use this manifest to determine which specific documentation files to retrieve based on the user's request.
+**Purpose:** a directory map for LLMs and RAG pipelines. Identify the user's intent,
+locate the file below, retrieve *only* that file.
 
-**Protocol:** 1.  Identify the user's intent (e.g., "Drawing a line", "Calculating RSI", "Backtesting").
-2.  Locate the relevant file path below.
-3.  Retrieve ONLY that file to conserve context window.
+**Contents:** all 77 pages of the official
+[Pine Script® v6 User Manual](https://www.tradingview.com/pine-script-docs/welcome/)
+plus the [API reference dictionary](reference/README.md). Retrieved 2026-08-20.
+Every page carries its source URL in an HTML comment at the top.
 
-## 1. Syntax and Core Concepts
+**Always enforce `//@version=6`.** If an identifier is not in
+[`reference/`](reference/README.md), do not invent it.
 
-*Use these files when the user asks about language mechanics, execution flow, or type errors.*
+---
 
-* **`concepts/execution_model.md`**
-  * **Content:** How the script executes bar-by-bar, historical vs. real-time context, and the `var` keyword.
-  * **Keywords:** `barstate`, `history`, `realtime`, `calc_on_every_tick`, `var`, `varip`.
+## 0. Start here
 
-* **`concepts/timeframes.md`**
-  * **Content:** Handling multi-timeframe data and preventing repainting.
-  * **Keywords:** `request.security`, `timeframe.period`, `repainting`, `HTF`.
+| File | When to read it |
+| --- | --- |
+| [`welcome.md`](welcome.md) | What Pine Script is, at a glance |
+| [`primer/first-steps.md`](primer/first-steps.md) | Absolute beginner orientation |
+| [`primer/first-indicator.md`](primer/first-indicator.md) | Building a first working indicator |
+| [`primer/next-steps.md`](primer/next-steps.md) | Where to go after the first script |
 
-* **`concepts/colors_and_display.md`**
-  * **Content:** Defining colors, gradients, and transparency.
-  * **Keywords:** `color.new`, `color.from_gradient`, `bgcolor`.
+## 1. Language mechanics
 
-* **`concepts/common_errors.md`**
-  * **Content:** Explanations for common runtime and compile-time errors.
-  * **Keywords:** "Series string", "Undeclared identifier", "max_bars_back".
+*Read these when the question is about how the language itself behaves — execution
+order, types, scoping, control flow, or data structures.*
 
-## 2. API Reference (The Dictionary)
+| File | Keywords |
+| --- | --- |
+| [`language/execution-model.md`](language/execution-model.md) | bar-by-bar execution, historical vs realtime, rollback, `calc_on_every_tick` |
+| [`language/type-system.md`](language/type-system.md) | `const`/`input`/`simple`/`series`, qualifiers, auto-casting, `na` |
+| [`language/script-structure.md`](language/script-structure.md) | script anatomy, comments, line wrapping, compiler directives |
+| [`language/identifiers.md`](language/identifiers.md) | naming rules, camelCase vs SNAKE_CASE |
+| [`language/declaration-statements.md`](language/declaration-statements.md) | `indicator()`, `strategy()`, `library()` |
+| [`language/variable-declarations.md`](language/variable-declarations.md) | `var`, `varip`, `:=`, declaration modes, scope |
+| [`language/operators.md`](language/operators.md) | arithmetic, comparison, logical, `[]` history-reference, `?:` |
+| [`language/conditional-structures.md`](language/conditional-structures.md) | `if`, `switch`, as statements and as expressions |
+| [`language/loops.md`](language/loops.md) | `for`, `for...in`, `while`, `break`, `continue` |
+| [`language/built-ins.md`](language/built-ins.md) | how namespaces work, built-in variables vs functions |
+| [`language/user-defined-functions.md`](language/user-defined-functions.md) | `=>`, single-line and multi-line functions, scope |
+| [`language/objects.md`](language/objects.md) | user-defined types (`type`), `new()`, fields, `na` objects |
+| [`language/enums.md`](language/enums.md) | `enum`, enum fields, `input.enum()` |
+| [`language/methods.md`](language/methods.md) | built-in and user-defined `method`, dot-notation calls |
+| [`language/arrays.md`](language/arrays.md) | `array.*`, declaration, looping, history-referencing |
+| [`language/matrices.md`](language/matrices.md) | `matrix.*`, rows/columns, linear algebra |
+| [`language/maps.md`](language/maps.md) | `map.*`, key/value pairs, `map.put`, `map.get` |
 
-*Use these files for looking up built-in variables, constants, and keywords.*
+## 2. Visual output
 
-* **`reference/variables.md`**
-  * **Content:** Built-in read-only variables regarding the bar, symbol, or status.
-  * **Keywords:** `open`, `high`, `low`, `close`, `volume`, `time`, `syminfo.ticker`, `timeframe.multiplier`, `bar_index`.
+*Read these when the question is about what appears on the chart.*
 
-* **`reference/constants.md`**
-  * **Content:** Fixed constants used as arguments for functions.
-  * **Keywords:** `color.red`, `shape.triangle`, `plot.style_line`, `size.small`, `alert.freq_once_per_bar`.
+| File | Keywords |
+| --- | --- |
+| [`visuals/overview.md`](visuals/overview.md) | which drawing tool to reach for; limits on drawing counts |
+| [`visuals/plots.md`](visuals/plots.md) | `plot()` — every parameter, styles, offsets, scale |
+| [`visuals/fills.md`](visuals/fills.md) | `fill()`, gradient fills, fills between plots and hlines |
+| [`visuals/levels.md`](visuals/levels.md) | `hline()`, horizontal levels |
+| [`visuals/backgrounds.md`](visuals/backgrounds.md) | `bgcolor()` |
+| [`visuals/bar-coloring.md`](visuals/bar-coloring.md) | `barcolor()` |
+| [`visuals/bar-plotting.md`](visuals/bar-plotting.md) | `plotbar()`, `plotcandle()` |
+| [`visuals/colors.md`](visuals/colors.md) | `color.new()`, `color.rgb()`, `color.from_gradient()`, transparency |
+| [`visuals/lines-and-boxes.md`](visuals/lines-and-boxes.md) | `line.*`, `box.*`, `polyline.*`, `linefill.*` |
+| [`visuals/text-and-shapes.md`](visuals/text-and-shapes.md) | `label.*`, `plotshape()`, `plotchar()`, `plotarrow()` |
+| [`visuals/tables.md`](visuals/tables.md) | `table.*`, positioning, cell formatting |
 
-* **`reference/types.md`**
-  * **Content:** Data type definitions and type-casting functions.
-  * **Keywords:** `int`, `float`, `bool`, `color`, `string`, `line`, `label`, `box`, `simple`, `series`, `input`.
+## 3. Concepts
 
-* **`reference/keywords.md`**
-  * **Content:** Language keywords and control structures.
-  * **Keywords:** `if`, `else`, `switch`, `for`, `while`, `export`, `import`, `method`.
+*Read these for feature-level "how do I do X" questions.*
 
-## 3. Function Reference (By Namespace)
+| File | Keywords |
+| --- | --- |
+| [`concepts/alerts.md`](concepts/alerts.md) | `alert()`, `alertcondition()`, order-fill events, placeholders |
+| [`concepts/bar-states.md`](concepts/bar-states.md) | `barstate.isfirst`, `islast`, `isrealtime`, `isconfirmed` |
+| [`concepts/chart-information.md`](concepts/chart-information.md) | `syminfo.*`, `timeframe.*`, `chart.*`, session info |
+| [`concepts/inputs.md`](concepts/inputs.md) | `input.int()`, `input.source()`, `input.timeframe()`, groups, inline, tooltips |
+| [`concepts/libraries.md`](concepts/libraries.md) | `library()`, `export`, `import`, versioning |
+| [`concepts/non-standard-charts-data.md`](concepts/non-standard-charts-data.md) | Heikin Ashi, Renko, Kagi, `ticker.*` |
+| [`concepts/other-timeframes-and-data.md`](concepts/other-timeframes-and-data.md) | `request.security()`, `request.financial()`, MTF, lookahead |
+| [`concepts/repainting.md`](concepts/repainting.md) | why values change, `barmerge.*`, realtime vs historical |
+| [`concepts/sessions.md`](concepts/sessions.md) | session strings, `time()` with sessions, RTH/ETH |
+| [`concepts/strategies.md`](concepts/strategies.md) | broker emulator, order types, position sizing, strategy report |
+| [`concepts/strings.md`](concepts/strings.md) | `str.format()`, `str.tostring()`, concatenation, formatting |
+| [`concepts/time.md`](concepts/time.md) | timestamps, timezones, `time()`, `timestamp()`, date arithmetic |
+| [`concepts/timeframes.md`](concepts/timeframes.md) | timeframe strings, comparing timeframes, `timeframe.in_seconds()` |
 
-*Use these files to find syntax for specific function calls.*
+## 4. Writing better scripts
 
-* **`reference/functions/ta.md` (Technical Analysis)**
-  * **Content:** Math for indicators and signal generation.
-  * **Keywords:** `ta.rsi`, `ta.sma`, `ta.ema`, `ta.macd`, `ta.crossover`, `ta.lowest`, `ta.highest`, `ta.pivot`.
+| File | Keywords |
+| --- | --- |
+| [`writing/style-guide.md`](writing/style-guide.md) | naming, spacing, script organization |
+| [`writing/debugging.md`](writing/debugging.md) | `log.*`, plotting intermediate values, labels, Pine Logs |
+| [`writing/profiling-and-optimization.md`](writing/profiling-and-optimization.md) | Pine Profiler, runtime cost, memory |
+| [`writing/publishing.md`](writing/publishing.md) | house rules, script descriptions, publishing workflow |
+| [`writing/limitations.md`](writing/limitations.md) | plot counts, `max_bars_back`, loop limits, script size, run time |
 
-* **`reference/functions/strategy.md` (Backtesting)**
-  * **Content:** Strategy testing engine, orders, and trade management.
-  * **Keywords:** `strategy.entry`, `strategy.close`, `strategy.exit`, `strategy.position_size`, `strategy.equity`, `strategy.risk`.
+## 5. Errors and warnings
 
-* **`reference/functions/request.md` (External Data)**
-  * **Content:** Requesting data from other symbols, financial data, or seeds.
-  * **Keywords:** `request.security`, `request.financial`, `request.seed`, `request.currency_rate`.
+*Read these when the user pastes a compiler or runtime error.*
 
-* **`reference/functions/drawing.md` (Visuals)**
-  * **Content:** Plotting data on the chart and drawing geometric shapes.
-  * **Keywords:** `plot`, `plotshape`, `plotchar`, `line.new`, `box.new`, `label.new`, `polyline.new`, `fill`.
+- [`errors/overview.md`](errors/overview.md) — how error codes are structured
+- [`errors/CE10101.md`](errors/CE10101.md), [`errors/CE10117.md`](errors/CE10117.md) — compile errors
+- [`errors/CW10003.md`](errors/CW10003.md) — compile warning
+- [`errors/RE10139.md`](errors/RE10139.md), [`errors/RE10143.md`](errors/RE10143.md) — runtime errors
+- [`errors/legacy-error-messages.md`](errors/legacy-error-messages.md) — the retired "Error messages" page.
+  Covers nine errors the coded pages do not yet document ("if statement is too long",
+  "Script requesting too many securities", "Loop is too long", "Script has too many
+  local variables", "Memory limits exceeded", and others). Check here when an error
+  message has no `CE`/`CW`/`RE` code.
 
-* **`reference/functions/collections.md` (Arrays, Maps, Matrices)**
-  * **Content:** Advanced data structures for complex logic.
-  * **Keywords:** `array.new`, `array.push`, `matrix.new`, `matrix.mult`, `map.new`, `map.put`.
+## 6. FAQ
 
-* **`reference/functions/general.md` (Math, Strings, Inputs)**
-  * **Content:** Core math, string manipulation, and user inputs.
-  * **Keywords:** `math.abs`, `math.round`, `str.tostring`, `str.format`, `input.int`, `input.bool`, `alert()`.
+*Task-shaped recipes straight from TradingView. Often the fastest answer to
+"how do I …" questions.*
 
-## 🧭 Routing Logic for LLMs
+[`faq/general.md`](faq/general.md) ·
+[`faq/programming.md`](faq/programming.md) ·
+[`faq/techniques.md`](faq/techniques.md) ·
+[`faq/indicators.md`](faq/indicators.md) ·
+[`faq/strategies.md`](faq/strategies.md) ·
+[`faq/alerts.md`](faq/alerts.md) ·
+[`faq/visuals.md`](faq/visuals.md) ·
+[`faq/data-structures.md`](faq/data-structures.md) ·
+[`faq/functions.md`](faq/functions.md) ·
+[`faq/variables-and-operators.md`](faq/variables-and-operators.md) ·
+[`faq/strings-and-formatting.md`](faq/strings-and-formatting.md) ·
+[`faq/times-dates-and-sessions.md`](faq/times-dates-and-sessions.md) ·
+[`faq/other-data-and-timeframes.md`](faq/other-data-and-timeframes.md)
 
-* **IF** user asks "Write an RSI indicator":
-  * retrieve `reference/functions/ta.md` (for RSI math)
-  * retrieve `reference/functions/drawing.md` (for `plot` and `hline`)
+## 7. API reference (the dictionary)
 
-* **IF** user asks "Create a moving average crossover strategy":
-  * retrieve `reference/functions/ta.md` (for `ta.crossover`)
-  * retrieve `reference/functions/strategy.md` (for `strategy.entry`)
+See [`reference/README.md`](reference/README.md) for the full breakdown and the
+list of known gaps.
 
-* **IF** user asks "Draw a box around the high and low of the last 10 bars":
-  * retrieve `reference/functions/drawing.md` (for `box.new`)
-  * retrieve `reference/functions/ta.md` (for `ta.highest`, `ta.lowest`)
+- [`reference/variables.md`](reference/variables.md) — `close`, `bar_index`, `syminfo.*`
+- [`reference/constants.md`](reference/constants.md) — `color.red`, `shape.*`, `plot.style_*`
+- [`reference/keywords.md`](reference/keywords.md) · [`reference/types.md`](reference/types.md) · [`reference/operators.md`](reference/operators.md) · [`reference/annotations.md`](reference/annotations.md)
+- [`reference/functions/ta.md`](reference/functions/ta.md) · [`strategy.md`](reference/functions/strategy.md) · [`request.md`](reference/functions/request.md) · [`collections.md`](reference/functions/collections.md) · [`drawing.md`](reference/functions/drawing.md) · [`general.md`](reference/functions/general.md)
+- [`reference/full-reference.md`](reference/full-reference.md) — all 884 entries in one file
 
-* **IF** user asks "Why is my variable resetting every bar?":
-  * retrieve `concepts/execution_model.md` (check `var` usage)
+## 8. Version history and migration
+
+- [`release-notes.md`](release-notes.md) — what changed, newest first
+- [`migration-guides/to-pine-version-6.md`](migration-guides/to-pine-version-6.md) — v5 → v6 (the one that matters)
+- [`migration-guides/overview.md`](migration-guides/overview.md) and the v5/v4/v3/v2 guides
+- [`where-can-i-get-more-information.md`](where-can-i-get-more-information.md) — official community resources
+
+---
+
+## Routing logic
+
+| User asks | Retrieve |
+| --- | --- |
+| "Write an RSI indicator" | `reference/functions/ta.md` + `visuals/plots.md` |
+| "Moving average crossover strategy" | `reference/functions/ta.md` + `concepts/strategies.md` |
+| "Draw a box around the last 10 bars" | `visuals/lines-and-boxes.md` + `reference/functions/drawing.md` |
+| "Why does my variable reset every bar?" | `language/variable-declarations.md` + `language/execution-model.md` |
+| "My indicator repaints" | `concepts/repainting.md` + `concepts/other-timeframes-and-data.md` |
+| "Higher-timeframe data" | `concepts/other-timeframes-and-data.md` + `concepts/timeframes.md` |
+| "Send an alert with the price" | `concepts/alerts.md` + `concepts/strings.md` |
+| "Show a stats panel on the chart" | `visuals/tables.md` |
+| "Store values across bars" | `language/arrays.md` or `language/maps.md` |
+| "Convert my v5 script" | `migration-guides/to-pine-version-6.md` |
+| Pastes a compile/runtime error | `errors/overview.md`, then the specific code |
+| "How many plots can I have?" | `writing/limitations.md` |
+| "My script is too slow" | `writing/profiling-and-optimization.md` |

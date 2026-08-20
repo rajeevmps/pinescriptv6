@@ -1,8 +1,46 @@
+<!--
+Source: https://www.tradingview.com/pine-script-reference/v6/
+Pine Script v6 — official TradingView language reference manual
+Retrieved: 2026-08-20
+-->
+
 # Keywords
+
+Reserved words that form the language itself: control flow, declarations, and type qualifiers.
+
+**15 entries** · Source: [Pine Script® v6 Reference Manual](https://www.tradingview.com/pine-script-reference/v6/)
+
+## Index
+
+- [`and`](#and)
+- [`enum`](#enum)
+- [`export`](#export)
+- [`for`](#for)
+- [`for...in`](#forin)
+- [`if`](#if)
+- [`import`](#import)
+- [`method`](#method)
+- [`not`](#not)
+- [`or`](#or)
+- [`switch`](#switch)
+- [`type`](#type)
+- [`var`](#var)
+- [`varip`](#varip)
+- [`while`](#while)
+
+---
 
 ## and
 
 Logical AND. Applicable to boolean expressions.
+
+### Syntax
+
+```pine
+<booleanExpression1> and <booleanExpression2>
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Returns
 Boolean value, or series of boolean values.
@@ -10,11 +48,19 @@ Boolean value, or series of boolean values.
 ### Remarks
 If expr1 evaluates to false, the and operator returns false without evaluating expr2.
 
----
-
 ## enum
 
 This keyword allows the creation of an enumeration, enum for short. Enums are unique constructs that hold groups of predefined constants.
+
+### Syntax
+
+```pine
+enum EnumName
+    field_name1
+    field_name2 = "Display Title"
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Code Example
 ```pine
@@ -66,11 +112,22 @@ data.put(symbols.amzn, request.security(str.tostring(symbols.amzn), timeframe.pe
 plot(data.get(symbols.aapl))
 ```
 
----
-
 ## export
 
 Used in libraries to prefix the declaration of functions or user-defined type definitions that will be available from other scripts importing the library.
+
+### Syntax
+
+```pine
+export [method] <functionName>(<paramType> <paramName> [= <defaultValue>], …) =>
+    <functionBlock>
+
+export <type> <typeName>
+    <propertyType> <propertyName> [= <value>]
+    …
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 Each library must have at least one exported function or user-defined type (UDT). Exported functions cannot use variables from the global scope if they are arrays, mutable variables (reassigned with :=), or variables of 'input' form. Exported functions cannot use request.*() functions. Exported functions must explicitly declare each parameter's type and all parameters must be used in the function's body. By default, all arguments passed to exported functions are of the series form, unless they are explicitly specified as simple in the function's signature. The @description, @function, @param, @type, @field, and @returns compiler annotations are used to automatically generate the library's description and release notes, and in the Pine Script® Editor's tooltips.
@@ -91,11 +148,19 @@ export print(string txt) =>
 print("Library Test")
 ```
 
----
-
 ## for
 
 Creates a count-controlled loop, which uses a counter variable to manage the iterative executions of its local code block. The loop continues new iterations until the counter reaches a specified final value.
+
+### Syntax
+
+```pine
+[var_declaration =] for counter = from_num to to_num [by step_num]
+    statements | continue | break
+    return_expression
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 Modifying a loop's to_num value during an iteration does not change the direction of the loop's counter. For a loop that counts upward, setting the to_num to a value less than the from_num value on an iteration stops the loop immediately after that iteration ends. Likewise, a loop that counts downward stops after an iteration where the to_num value becomes greater than the from_num value.
@@ -129,11 +194,23 @@ for i = 0 to 9 by 5
 plot(sum)
 ```
 
----
-
 ## for...in
 
 The for...in structure allows the repeated execution of a number of statements for each element in an array. It can be used with either one argument: array_element, or with two: [index, array_element]. The second form doesn't affect the functionality of the loop. It tracks the current iteration's index in the tuple's first variable.
+
+### Syntax
+
+```pine
+[var_declaration =] for array_element in array_id
+    statements | continue | break
+    return_expression
+
+[var_declaration =] for [index, array_element] in array_id
+    statements | continue | break
+    return_expression
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Code Example
 ```pine
@@ -176,11 +253,23 @@ for rowArray in matrix1
 plot(sum)
 ```
 
----
-
 ## if
 
 If statement defines what block of statements must be executed when conditions of the expression are satisfied.
+
+### Syntax
+
+```pine
+[variable_declaration = ] if boolean_expression
+        …
+    [else if boolean_expression
+        … ]
+    [else
+        …
+        return_expression]
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Code Example
 ```pine
@@ -237,11 +326,24 @@ else
 plot(x)
 ```
 
----
-
 ## import
 
 Used to load an external library into a script and bind its functions to a namespace. The importing script can be an indicator, a strategy, or another library. A library must be published (privately or publicly) before it can be imported.
+
+### Syntax
+
+```pine
+import {username}/{libraryName}/{libraryVersion} as {alias}
+```
+
+### Arguments
+
+- `username` (*literal string*) — User name of the library’s author.
+- `libraryName` (*literal string*) — Name of the imported library, which corresponds to the `title` argument used by the author in his library script.
+- `libraryVersion` (*literal int*) — Version number of the imported library.
+- `alias` (*literal string*, optional, default `'libraryname'`) — Namespace used to refer to the library’s functions. Optional. The default is the libraryName string.
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 Using an alias that replaces a built-in namespace such as math.* or strategy.* is allowed, but if the library contains function names that shadow Pine Script®'s built-in functions, the built-ins will become unavailable. The same version of a library can only be imported once. Aliases must be distinct for each imported library. When calling library functions, casting their arguments to types other than their declared type is not allowed. An import statement cannot use 'as' or 'import' as username, libraryName, or alias identifiers.
@@ -258,11 +360,18 @@ y = m.sinh(3.14)
 plot(y)
 ```
 
----
-
 ## method
 
 This keyword is used to prefix a function declaration, indicating it can then be invoked using dot notation by appending its name to a variable of the type of its first parameter and omitting that first parameter. Alternatively, functions declared as methods can also be invoked like normal user-defined functions. In that case, an argument must be supplied for its first parameter.
+
+### Syntax
+
+```pine
+[export] method <functionName>(<paramType> <paramName> [= <defaultValue>], …) =>
+    <functionBlock>
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Code Example
 ```pine
@@ -289,20 +398,32 @@ prices.maintainArray(50, close)
 plot(prices.avg())
 ```
 
----
-
 ## not
 
 Logical negation (NOT). Applicable to boolean expressions.
 
+### Syntax
+
+```pine
+not <booleanExpression>
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
+
 ### Returns
 Boolean value, or series of boolean values.
-
----
 
 ## or
 
 Logical OR. Applicable to boolean expressions.
+
+### Syntax
+
+```pine
+<booleanExpression1> or <booleanExpression2>
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Returns
 Boolean value, or series of boolean values.
@@ -310,11 +431,27 @@ Boolean value, or series of boolean values.
 ### Remarks
 If expr1 evaluates to true, the or operator returns true without evaluating expr2.
 
----
-
 ## switch
 
 The switch operator transfers control to one of the several statements, depending on the values of a condition and expressions.
+
+### Syntax
+
+```pine
+[variable_declaration = ] switch expression
+    value1 => local_block
+    value2 => local_block
+    …
+    => default_local_block
+
+[variable_declaration = ] switch
+    boolean_expression1 => local_block
+    boolean_expression2 => local_block
+    …
+    => default_local_block
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Returns
 The value of the last expression in the local block of statements that is executed.
@@ -349,11 +486,19 @@ switch
     shortCondition => strategy.entry("Short ID", strategy.short)
 ```
 
----
-
 ## type
 
 This keyword allows the declaration of user-defined types (UDT) from which scripts can instantiate objects. UDTs are composite types that contain an arbitrary number of fields of any built-in or user-defined type, including the defined UDT itself. The syntax to define a UDT is:
+
+### Syntax
+
+```pine
+[export ]type <UDT_identifier>
+    [varip ]<field_type> <field_name> [= <value>]
+    …
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Code Example
 ```pine
@@ -400,11 +545,17 @@ if not na(secBar)
             updateBox(lastBox, secBar)
 ```
 
----
-
 ## var
 
 var is the keyword used for assigning and one-time initializing of the variable.
+
+### Syntax
+
+```pine
+var variable_name = expression
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Code Example
 ```pine
@@ -426,11 +577,20 @@ plot(b)
 plot(c)
 ```
 
----
-
 ## varip
 
 varip (var intrabar persist) is the keyword used for the assignment and one-time initialization of a variable or a field of a user-defined type. It’s similar to the var keyword, but variables and fields declared with varip retain their values between executions of the script on the same bar.
+
+### Syntax
+
+```pine
+varip [<variable_type> ]<variable_name> = <expression>
+
+[export ]type <UDT_identifier>
+    varip <field_type> <field_name> [= <value>]
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 When using varip to declare variables in strategies that may execute more than once per historical chart bar, the values of such variables are preserved across successive iterations of the script on the same bar. The effect of varip eliminates the rollback of variables before each successive execution of a script on the same bar.
@@ -459,11 +619,23 @@ plot(currBar.index)
 plot(currBar.ticks)
 ```
 
----
-
 ## while
 
 The while statement allows the conditional iteration of a local code block.
+
+### Syntax
+
+```pine
+variable_declaration = while boolean_expression
+    …
+    continue
+    …
+    break
+    …
+    return_expression
+```
+
+*Syntax and arguments from TradingView's Pine Editor docs data (early-v6 snapshot). Verify against the [live reference manual](https://www.tradingview.com/pine-script-reference/v6/).*
 
 ### Remarks
 The local code block after the initial while line must be indented with four spaces or a tab. For the while loop to terminate, the boolean expression following while must eventually become false, or a break must be executed.
@@ -482,5 +654,3 @@ while counter > 0
 
 plot(factorial)
 ```
-
----
